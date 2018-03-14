@@ -72,7 +72,7 @@ def get_data(file_name):
 Definition
 '''
 class RLenv(object):
-    def __init__(self,path = 'datasets/kddcup.data_10_percent_corrected'):
+    def __init__(self,path = '../datasets/kddcup.data_10_percent_corrected'):
         self.path = path
         self.data,self.labels = get_data(self.path)
         self.reset()
@@ -102,16 +102,17 @@ class RLenv(object):
         if self.labels.iloc[[self.state_numb]].values == action:
             self.reward = 1
             self.total_reward += 1
+            self.done = False
         else:
-            self.reward = -1
-            self.total_reward -= 1
+            self.reward = 0
+            self.done = True
                 
             
-        if(self.steps_in_episode>=50):
+        #if(self.steps_in_episode>=50):
         #if(abs(self.total_reward)>=50 or self.steps_in_episode>=200):
-            self.done = True
-        else:
-            self.done = False
+        #    self.done = True
+        #else:
+        #    self.done = False
         
         return self.state, self.reward, self.done
     
@@ -156,18 +157,19 @@ class ExperienceReplay(object):
 
 if __name__ == "__main__":
   
-    kdd_10_path = 'datasets/kddcup.data_10_percent_corrected'
-    micro_kdd = 'datasets/micro_kddcup.data'
+    kdd_10_path = '../datasets/kddcup.data_10_percent_corrected'
+    micro_kdd = '../datasets/micro_kddcup.data'
     # Valid actions = '0' supose no atack, '1' supose atack
     valid_actions = [0, 1]
     num_actions = len(valid_actions)
     epsilon = .1  # exploration
-    num_episodes = 300
-    max_memory = 100
+    num_episodes = 1000
+    #3max_memory = 100
     decay_rate = 0.99
+    discount_factor = 0.9
     
     
-    hidden_size = 10
+    hidden_size = 100
     batch_size = 50
 
     # Initialization of the enviroment
@@ -182,10 +184,6 @@ if __name__ == "__main__":
     model.compile(sgd(lr=.2), "mse")
     
     
-    
-    # Initialize experience replay object
-    exp_replay = ExperienceReplay(max_memory=max_memory)
-    
     reward_chain = []
     loss_chain = []
     # Initialize a win-counter
@@ -197,6 +195,7 @@ if __name__ == "__main__":
         done = False
         ones = 0
         zeros = 0
+        
         # Iteration in one episode
         while not done:
                 # get next action
@@ -209,6 +208,8 @@ if __name__ == "__main__":
         
             # apply action, get rewards and new state
             next_state, reward, done = env.act(action)
+            
+            # Test
             if(action==0):
                 zeros += 1
             else:
@@ -216,19 +217,25 @@ if __name__ == "__main__":
             
             total_reward_by_episode += reward
             
-    
-            # store experience SARS' Done uncorrelation of the episodes
-            exp_replay.remember([state, action, reward, next_state], done)
+                        
+            targets = model.predict(state)
+            Q_sa = np.max(model.predict(next_state))
+            if done:  # if done is True
+                targets[0][action] = reward
+            else:
+                # reward_t + gamma * max_a' Q(s', a')
+                targets[0][action] = reward + discount_factor * Q_sa            
             
-            # adapt model
-            inputs, targets = exp_replay.get_batch(model, batch_size=batch_size)
-            loss += model.train_on_batch(inputs, targets)
+            
+            
+            
+            loss += model.train_on_batch(state, targets)
             
             # Update the state
             state = next_state
             
             reward_chain.append(total_reward_by_episode)    
-            loss_chain.append(action)
+            loss_chain.append(loss)
             
         print("\rEpoch {:03d}/{:03d} | Loss {:4.4f} | Tot reward x episode {:03d}| Ones/Zeros: {}/{} ".format(i_episode,
               num_episodes ,loss, total_reward_by_episode,ones,zeros))
