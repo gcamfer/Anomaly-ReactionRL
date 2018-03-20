@@ -2,11 +2,6 @@
 Multiple anomaly detection file
 '''
 
-
-
-
-
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -46,9 +41,14 @@ class data_cls:
         #if (not os.path.exists('../datasets')):
         #    os.makedirs('../datasets')
         #    formated = False
-        self.data_path = '../datasets/formated_data.data'
-        if os.path.exists(self.data_path):
+        self.data_path = '../datasets/formated_multiple_data.data'
+        self.attack_names_path = '../datasets/attack_types.data'
+        
+        if os.path.exists(self.data_path) and os.path.exists(self.attack_names_path):
             formated = True
+            at_df = pd.read_csv(self.attack_names_path,sep=',')
+            self.attack_names = at_df['labels'].tolist()
+            
         # If it does not exist, it's needed to format the data
         if not formated:
             ''' Formating the dataset for ready-2-use data'''
@@ -72,18 +72,19 @@ class data_cls:
                     else:
                         df[indx] = (df[indx]-df[indx].min())/(df[indx].max()-df[indx].min())
                     
-            # One-hot-Encoding for reaction. 4 detection binary label 
-            # labels = pd.get_dummies(df['labels'])
-        
-            # Only save one column for atack
-            # '0' if the data is normal '1' if atack
+            # Name of the diferent columns attacks
+            self.attack_names = pd.unique(df['labels'])
+            
+            # One-hot-Encoding for reaction. 4 detection binary label             
             df = pd.concat([df.drop('labels', axis=1),
-                            1 - pd.get_dummies(df['labels'])['normal.']], axis=1)
-            #Only detectign label as normal = 0 atack = 1 -> reanaming column
-            df.rename(columns={'normal.': 'labels'},inplace=True)
+                            pd.get_dummies(df['labels'])], axis=1)
+            
             # suffle data
             df = shuffle(df,random_state=np.random.randint(0,100))
+            # Save data
             df.to_csv(self.data_path,sep=',',index=False)
+            # Save attack names 
+            (pd.DataFrame(self.attack_names)).to_csv(self.attack_names_path,index=False)
             
     ''' Get n-rows from the dataset'''
     def get_batch(self, batch_size=100):
@@ -96,7 +97,7 @@ class data_cls:
         
         self.index += batch_size
 
-        labels = df['labels']
+        labels = df[self.attack_names]
         del(df['labels'])
         return df,labels
     
@@ -162,7 +163,7 @@ if __name__ == "__main__":
   
     kdd_10_path = '../datasets/kddcup.data_10_percent_corrected'
     micro_kdd = '../datasets/micro_kddcup.data'
-    # Valid actions = '0' supose no atack, '1' supose atack
+    # Valid actions = '0' supose no attack, '1' supose attack
     valid_actions = [0, 1]
     num_actions = len(valid_actions)
     epsilon = .1  # exploration
