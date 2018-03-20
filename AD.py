@@ -98,20 +98,20 @@ class data_cls:
         del(df['labels'])
         return df,labels
         
-    def get_size(self):
-        df = pd.read_csv(self.data_path,sep=',',nrows=1)
+    def get_shape(self):
+        df = pd.read_csv(self.data_path,sep=',')
         # stata + labels
-        return df.shape[1]-1
+        return df.shape
 
 
 '''
 Definition
 '''
 class RLenv(data_cls):
-    def __init__(self,path,batch_size = 100):
+    def __init__(self,path,batch_size = 10):
         data_cls.__init__(self,path)
         self.batch_size = batch_size
-        self.state_size = data_cls.get_size(self)
+        self.state_shape = data_cls.get_shape(self)
 
     def _update_state(self):
         self.states,self.labels = data_cls.get_batch(self,self.batch_size)
@@ -174,7 +174,7 @@ if __name__ == "__main__":
     
     # Network arquitecture
     model = Sequential()
-    model.add(Dense(hidden_size, input_shape=(env.state_size,),batch_size=batch_size, activation='relu'))
+    model.add(Dense(hidden_size, input_shape=(env.state_shape[1]-1,),batch_size=batch_size, activation='relu'))
     model.add(Dense(hidden_size, activation='relu'))
     model.add(Dense(num_actions))
     model.compile(sgd(lr=.2), "mse")
