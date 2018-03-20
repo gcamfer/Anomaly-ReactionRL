@@ -176,27 +176,7 @@ if __name__ == "__main__":
     reward_chain = []
     loss_chain = []
     
-    
-    '''
-    for epochs  # las que quieras, tampoco te pases que no hacen falta muchas
-        s_next, a_true_next = next_batch()  # s es el estado (tus features), y, a es la accion (tu label)
-        for iterations # un numero que te asegure que con el batch_size recorres todo tu dataset
-            s , a_true = s_next, a_true_next  # actualiza s y a
-            s_next, a_true_next = next_batch() # obten un nuevo batch (random)
-            a_hat =  policy (s)  # policy es argmax de Q(s) ,y, a_hat es la acción predicha por tu red
-            r = reward (a_hat, a_true) # aqui el reward lo pones tu, el Environment no pinta nada. Usa +1,0.
-            q1 = Q.predict(s_next)  # q1 es una matrix de dimensiones (batch_size,2)
-            idx = vector de indices de argmax de q1, es decir un vector de 0 o 1’s, dependiendo de si el primer valor es mayor o al reves.
-            sx = np.arange(len(idx)) # secuencia de valores  0…batch_size
-            qref = r + lamda * q1[sx, idx]  # de esta manera q1[sx, idx] es un vector con los valores mas altos de cada fila de q1
-            q0_ref = Q.predict(s) # primero almacena en q0_ref la predicción con la red NN y el estado s, para entender esto mira: https://ai.intel.com/demystifying-deep-reinforcement-learning/ , si no lo entiendes, aplícalo porque es básico para que todo el tinglado funcione.
-            q0_ref[sx, idx] = qref  # actualiza q0_ref con qref para los valores seleccionados. qref es un vector.
-            Q.train_on_batch(s, q0_ref)
-        
-        
-        ''' 
-    
-    
+
     
     # Main loop
     for epoch in range(num_episodes):
