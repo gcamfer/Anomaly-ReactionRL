@@ -90,6 +90,13 @@ class data_cls:
         labels = df['labels']
         del(df['labels'])
         return df,labels
+    
+    
+    def get_full(self):
+        df = pd.read_csv(self.data_path,sep=',')        
+        labels = df['labels']
+        del(df['labels'])
+        return df,labels
         
     def get_size(self):
         df = pd.read_csv(self.data_path,sep=',',nrows=1)
