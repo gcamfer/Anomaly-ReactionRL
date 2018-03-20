@@ -26,8 +26,9 @@ class data_cls:
             "dst_host_same_srv_rate","dst_host_diff_srv_rate","dst_host_same_src_port_rate",
             "dst_host_srv_diff_host_rate","dst_host_serror_rate","dst_host_srv_serror_rate",
             "dst_host_rerror_rate","dst_host_srv_rerror_rate","labels"]
-         
-  
+        self.index = 0
+        self.headers = None
+        
         if (not path):
             print("Path: not path name provided", flush = True)
             sys.exit(0)
@@ -75,19 +76,25 @@ class data_cls:
             df = shuffle(df,random_state=np.random.randint(0,100))
             df.to_csv(self.data_path,sep=',',index=False)
             
-        ''' Get n-rows from the dataset'''
+    ''' Get n-rows from the dataset'''
     def get_batch(self, batch_size=100):
+        if self.headers is None:
+            df = pd.read_csv(self.data_path,sep=',', nrows = batch_size)
+            self.headers = list(df)
+        else:
+            df = pd.read_csv(self.data_path,sep=',', nrows = batch_size,
+                         skiprows = self.index,names = self.headers)
         
-        df = pd.read_csv(self.data_path,sep=',',
-                         nrows = batch_size)
-        
+        self.index += batch_size
+
         labels = df['labels']
         del(df['labels'])
-        
         return df,labels
+        
     def get_size(self):
         df = pd.read_csv(self.data_path,sep=',',nrows=1)
-        return df.shape[1]
+        # stata + labels
+        return df.shape[1]-1
 
 
 '''
@@ -100,8 +107,7 @@ class RLenv(data_cls):
         self.state_size = data_cls.get_size(self)
 
     def _update_state(self):
-        self.state_numb += 1
-        self.state = self.states.iloc[[self.state_numb]].values
+        self.states,self.labels = data_cls.get_batch(self,self.batch_size)
     '''
     Returns:
         + Observation of the enviroment
@@ -111,31 +117,27 @@ class RLenv(data_cls):
         self.states,self.labels = data_cls.get_batch(self,self.batch_size)
         self.total_reward = 0
         self.steps_in_episode = 0
-        return self.states.iloc[[self.state_numb]].values 
+        return self.states.values 
+   
     '''
     Returns:
         State: Next state for the game
         Reward: Actual reward
-        done: If the game ends
-    '''
-    def act(self,action):
-        self._update_state()
-        self.steps_in_episode += 1
-        if self.labels.iloc[[self.state_numb]].values == action:
-            self.reward = 1
-            self.total_reward += 1
-            self.done = False
-        else:
-            self.reward = 0
-            self.done = True
-                      
-        #if(self.steps_in_episode>=50):
-        #if(abs(self.total_reward)>=50 or self.steps_in_episode>=200):
-        #    self.done = True
-        #else:
-        #    self.done = False
+        done: If the game ends (no end in this case)
+    '''    
+    def act(self,actions):        
+        self.reward = np.zeros(self.batch_size)
+        for indx,a in enumerate(actions):
+            if a == self.labels[indx]:
+                self.reward[indx] = 1
         
-        return self.state, self.reward, self.done
+        # Get new state and new true values
+        self._update_state()
+        
+        # Done allways false in this continuous task       
+        self.done = False
+            
+        return self.states, self.reward, self.done
     
 
 
@@ -149,13 +151,15 @@ if __name__ == "__main__":
     num_actions = len(valid_actions)
     epsilon = .1  # exploration
     num_episodes = 1000
+    iterations_episode = 100
+    
     #3max_memory = 100
     decay_rate = 0.99
-    discount_factor = 0.001
+    gamma = 0.001
     
     
     hidden_size = 100
-    batch_size = 50
+    batch_size = 10
 
     # Initialization of the enviroment
     env = RLenv(kdd_10_path,batch_size)
@@ -163,7 +167,7 @@ if __name__ == "__main__":
     
     # Network arquitecture
     model = Sequential()
-    model.add(Dense(hidden_size, input_shape=(env.state_size,), activation='relu'))
+    model.add(Dense(hidden_size, input_shape=(env.state_size,),batch_size=batch_size, activation='relu'))
     model.add(Dense(hidden_size, activation='relu'))
     model.add(Dense(num_actions))
     model.compile(sgd(lr=.2), "mse")
@@ -173,17 +177,7 @@ if __name__ == "__main__":
     loss_chain = []
     
     
-    # Main loop
-    for epoch in range(num_episodes):
-        loss = 0.
-        total_reward_by_episode = 0
-        state = env.reset()
-        done = False
-        ones = 0
-        zeros = 0
-        
-        
-'''
+    '''
     for epochs  # las que quieras, tampoco te pases que no hacen falta muchas
         s_next, a_true_next = next_batch()  # s es el estado (tus features), y, a es la accion (tu label)
         for iterations # un numero que te asegure que con el batch_size recorres todo tu dataset
@@ -197,51 +191,56 @@ if __name__ == "__main__":
             qref = r + lamda * q1[sx, idx]  # de esta manera q1[sx, idx] es un vector con los valores mas altos de cada fila de q1
             q0_ref = Q.predict(s) # primero almacena en q0_ref la predicción con la red NN y el estado s, para entender esto mira: https://ai.intel.com/demystifying-deep-reinforcement-learning/ , si no lo entiendes, aplícalo porque es básico para que todo el tinglado funcione.
             q0_ref[sx, idx] = qref  # actualiza q0_ref con qref para los valores seleccionados. qref es un vector.
-
-Q.train_on_batch(s, q0_ref)
+            Q.train_on_batch(s, q0_ref)
         
         
         ''' 
+    
+    
+    
+    # Main loop
+    for epoch in range(num_episodes):
+        loss = 0.
+        total_reward_by_episode = 0
+        # Reset enviromet, actualize the data batch
+        states = env.reset()
         
-        
+        done = False
+        # Get control of the actions taken
+        ones = 0
+        zeros = 0
         
         # Iteration in one episode
-        while not done:
-                # get next action
+        for i_iteration in range(iterations_episode):
+            
+            # get next action
             exploration = epsilon*decay_rate**epoch
             if np.random.rand() <= exploration:
-                action = np.random.randint(0, num_actions)
+                actions = np.random.randint(0, num_actions,batch_size)
             else:
-                q = model.predict(state)
-                action = np.argmax(q[0])
-        
-            # apply action, get rewards and new state
-            next_state, reward, done = env.act(action)
+                q = model.predict(states)
+                actions = np.argmax(q,axis=1)
             
-            # Test
-            if(action==0):
-                zeros += 1
-            else:
-                ones += 1
+            # apply actions, get rewards and new state
+            next_states, reward, done = env.act(actions)
             
-            total_reward_by_episode += reward
+            q_prime = model.predict(next_states)
+            indx = np.argmax(q_prime,axis=1)
+            sx = np.arange(len(indx))
+            # Update q values
+            targets = reward + gamma * q[sx,indx]   
+            q[sx,indx] = targets         
             
-                        
-            targets = model.predict(state)
-            Q_sa = np.max(model.predict(next_state))
-            if done:  # if done is True
-                targets[0][action] = reward
-            else:
-                # reward_t + gamma * max_a' Q(s', a')
-                targets[0][action] = reward + discount_factor * Q_sa            
-            
-            
-            
-            
-            loss += model.train_on_batch(state, targets)
+            # Train network, update loss
+            loss += model.train_on_batch(states, q)
             
             # Update the state
-            state = next_state
+            states = next_states
+            
+            
+            #ones += int(sum(actions))
+            #zeros += batch_size - int(sum(actions))
+            #total_reward_by_episode += reward
             
             reward_chain.append(total_reward_by_episode)    
             loss_chain.append(loss)
