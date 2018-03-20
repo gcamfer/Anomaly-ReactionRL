@@ -150,7 +150,7 @@ if __name__ == "__main__":
     valid_actions = [0, 1]
     num_actions = len(valid_actions)
     epsilon = .1  # exploration
-    num_episodes = 1000
+    num_episodes = 100
     iterations_episode = 100
     
     #3max_memory = 100
@@ -238,9 +238,9 @@ if __name__ == "__main__":
             states = next_states
             
             
-            #ones += int(sum(actions))
-            #zeros += batch_size - int(sum(actions))
-            #total_reward_by_episode += reward
+            ones += int(sum(actions))
+            zeros += batch_size - int(sum(actions))
+            total_reward_by_episode += int(sum(reward))
             
             reward_chain.append(total_reward_by_episode)    
             loss_chain.append(loss)
