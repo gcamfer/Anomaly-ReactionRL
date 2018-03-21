@@ -84,7 +84,7 @@ class data_cls:
             # Save data
             df.to_csv(self.data_path,sep=',',index=False)
             # Save attack names 
-            (pd.DataFrame(self.attack_names)).to_csv(self.attack_names_path,index=False)
+            (pd.DataFrame({'labels':self.attack_names})).to_csv(self.attack_names_path,index=False)
             
     ''' Get n-rows from the dataset'''
     def get_batch(self, batch_size=100):
@@ -98,7 +98,8 @@ class data_cls:
         self.index += batch_size
 
         labels = df[self.attack_names]
-        del(df['labels'])
+        for att in self.attack_names:
+            del(df[att])
         return df,labels
     
     
@@ -144,8 +145,9 @@ class RLenv(data_cls):
     '''    
     def act(self,actions):        
         self.reward = np.zeros(self.batch_size)
+        
         for indx,a in enumerate(actions):
-            if a == self.labels[indx]:
+            if a == np.argmax(self.labels.iloc[0].values):
                 self.reward[indx] = 1
         
         # Get new state and new true values
@@ -164,8 +166,6 @@ if __name__ == "__main__":
     kdd_10_path = '../datasets/kddcup.data_10_percent_corrected'
     micro_kdd = '../datasets/micro_kddcup.data'
     # Valid actions = '0' supose no attack, '1' supose attack
-    valid_actions = [0, 1]
-    num_actions = len(valid_actions)
     epsilon = .1  # exploration
     num_episodes = 100
     iterations_episode = 100
@@ -181,10 +181,13 @@ if __name__ == "__main__":
     # Initialization of the enviroment
     env = RLenv(kdd_10_path,batch_size)
 
+    valid_actions = list(range(len(env.attack_names)))
+    num_actions = len(valid_actions)
     
     # Network arquitecture
     model = Sequential()
-    model.add(Dense(hidden_size, input_shape=(env.state_shape[1]-1,),batch_size=batch_size, activation='relu'))
+    model.add(Dense(hidden_size, input_shape=(env.state_shape[1]-len(env.attack_names),),
+                    batch_size=batch_size, activation='relu'))
     model.add(Dense(hidden_size, activation='relu'))
     model.add(Dense(num_actions))
     model.compile(sgd(lr=.2), "mse")
@@ -203,9 +206,7 @@ if __name__ == "__main__":
         states = env.reset()
         
         done = False
-        # Get control of the actions taken
-        ones = 0
-        zeros = 0
+       
         
         # Iteration in one episode
         for i_iteration in range(iterations_episode):
@@ -234,16 +235,13 @@ if __name__ == "__main__":
             # Update the state
             states = next_states
             
-            
-            ones += int(sum(actions))
-            zeros += batch_size - int(sum(actions))
+            # Update statistics
             total_reward_by_episode += int(sum(reward))
-            
             reward_chain.append(total_reward_by_episode)    
             loss_chain.append(loss)
             
-        print("\rEpoch {:03d}/{:03d} | Loss {:4.4f} | Tot reward x episode {:03d}| Ones/Zeros: {}/{} ".format(epoch,
-              num_episodes ,loss, total_reward_by_episode,ones,zeros))
+        print("\r|Epoch {:03d}/{:03d} | Loss {:4.4f} | Tot reward x episode {:03d}|".format(epoch,
+              num_episodes ,loss, total_reward_by_episode))
         
         
     # Save trained model weights and architecture, this will be used by the visualization code
