@@ -143,11 +143,12 @@ class RLenv(data_cls):
         Reward: Actual reward
         done: If the game ends (no end in this case)
     '''    
-    def act(self,actions):        
+    def act(self,actions):
+        # Clear previous rewards        
         self.reward = np.zeros(self.batch_size)
-        
+        # Actualize new rewards
         for indx,a in enumerate(actions):
-            if a == np.argmax(self.labels.iloc[0].values):
+            if a == np.argmax(self.labels.iloc[indx].values):
                 self.reward[indx] = 1
         
         # Get new state and new true values
@@ -175,7 +176,7 @@ if __name__ == "__main__":
     gamma = 0.001
     
     
-    hidden_size = 100
+    hidden_size = 150
     batch_size = 10
 
     # Initialization of the enviroment
@@ -212,7 +213,10 @@ if __name__ == "__main__":
         for i_iteration in range(iterations_episode):
             
             # get next action
-            exploration = epsilon*decay_rate**epoch
+            if i_iteration == 0 and epoch == 0:
+                exploration = 0
+            else:
+                exploration = epsilon*decay_rate**epoch
             if np.random.rand() <= exploration:
                 actions = np.random.randint(0, num_actions,batch_size)
             else:
@@ -237,16 +241,17 @@ if __name__ == "__main__":
             
             # Update statistics
             total_reward_by_episode += int(sum(reward))
-            reward_chain.append(total_reward_by_episode)    
-            loss_chain.append(loss)
-            
+        
+        # Update user view
+        reward_chain.append(total_reward_by_episode)    
+        loss_chain.append(loss)    
         print("\r|Epoch {:03d}/{:03d} | Loss {:4.4f} | Tot reward x episode {:03d}|".format(epoch,
               num_episodes ,loss, total_reward_by_episode))
         
         
-    # Save trained model weights and architecture, this will be used by the visualization code
-    model.save_weights("model.h5", overwrite=True)
-    with open("model.json", "w") as outfile:
+    # Save trained model weights and architecture, used in test
+    model.save_weights("multi_model.h5", overwrite=True)
+    with open("multi_model.json", "w") as outfile:
         json.dump(model.to_json(), outfile)
     
     plt.figure(1)

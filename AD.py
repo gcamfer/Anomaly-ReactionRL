@@ -201,7 +201,11 @@ if __name__ == "__main__":
         for i_iteration in range(iterations_episode):
             
             # get next action
-            exploration = epsilon*decay_rate**epoch
+            if i_iteration == 0 and epoch == 0:
+                exploration = 0
+            else:
+                exploration = epsilon*decay_rate**epoch            
+            
             if np.random.rand() <= exploration:
                 actions = np.random.randint(0, num_actions,batch_size)
             else:
@@ -236,7 +240,7 @@ if __name__ == "__main__":
               num_episodes ,loss, total_reward_by_episode,ones,zeros))
         
         
-    # Save trained model weights and architecture, this will be used by the visualization code
+    # Save trained model weights and architecture, used in test
     model.save_weights("model.h5", overwrite=True)
     with open("model.json", "w") as outfile:
         json.dump(model.to_json(), outfile)
