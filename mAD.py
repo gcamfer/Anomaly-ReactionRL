@@ -168,15 +168,16 @@ if __name__ == "__main__":
     micro_kdd = '../datasets/micro_kddcup.data'
     # Valid actions = '0' supose no attack, '1' supose attack
     epsilon = .1  # exploration
-    num_episodes = 100
+    num_episodes = 300
     iterations_episode = 100
     
     #3max_memory = 100
     decay_rate = 0.99
-    gamma = 0.001
+    gamma = 0.01
+    #gamma = 0.001
     
     
-    hidden_size = 150
+    hidden_size = 100
     batch_size = 10
 
     # Initialization of the enviroment
