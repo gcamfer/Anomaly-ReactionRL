@@ -197,14 +197,14 @@ if __name__ == "__main__":
         ones = 0
         zeros = 0
         
+        # Define exploration to improve performance
+        exploration = 1
         # Iteration in one episode
         for i_iteration in range(iterations_episode):
             
             # get next action
-            if i_iteration == 0 and epoch == 0:
-                exploration = 0
-            else:
-                exploration = epsilon*decay_rate**epoch            
+            if exploration > 0.001:
+                exploration = epsilon*decay_rate**(epoch*i_iteration)            
             
             if np.random.rand() <= exploration:
                 actions = np.random.randint(0, num_actions,batch_size)

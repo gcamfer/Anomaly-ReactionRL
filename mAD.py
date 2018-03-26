@@ -12,6 +12,7 @@ import json
 from sklearn.utils import shuffle
 import os
 import sys
+import time
 
 
 
@@ -168,7 +169,7 @@ if __name__ == "__main__":
     micro_kdd = '../datasets/micro_kddcup.data'
     # Valid actions = '0' supose no attack, '1' supose attack
     epsilon = .1  # exploration
-    num_episodes = 300
+    num_episodes = 500
     iterations_episode = 100
     
     #3max_memory = 100
@@ -177,7 +178,8 @@ if __name__ == "__main__":
     #gamma = 0.001
     
     
-    hidden_size = 100
+    hidden_size_1 = 100
+    hidden_size_2 = 300
     batch_size = 10
 
     # Initialization of the enviroment
@@ -188,9 +190,10 @@ if __name__ == "__main__":
     
     # Network arquitecture
     model = Sequential()
-    model.add(Dense(hidden_size, input_shape=(env.state_shape[1]-len(env.attack_names),),
+    model.add(Dense(hidden_size_1, input_shape=(env.state_shape[1]-len(env.attack_names),),
                     batch_size=batch_size, activation='relu'))
-    model.add(Dense(hidden_size, activation='relu'))
+    model.add(Dense(hidden_size_1, activation='relu'))
+    model.add(Dense(hidden_size_2, activation='relu'))
     model.add(Dense(num_actions))
     model.compile(sgd(lr=.2), "mse")
     
@@ -202,6 +205,7 @@ if __name__ == "__main__":
     
     # Main loop
     for epoch in range(num_episodes):
+        start_time = time.time()
         loss = 0.
         total_reward_by_episode = 0
         # Reset enviromet, actualize the data batch
@@ -209,23 +213,27 @@ if __name__ == "__main__":
         
         done = False
        
-        
+        # Define exploration to improve performance
+        exploration = 1
+        # Define q to avoid not defined in the q update
+        q = np.zeros([batch_size,num_actions])
         # Iteration in one episode
         for i_iteration in range(iterations_episode):
             
             # get next action
-            if i_iteration == 0 and epoch == 0:
-                exploration = 0
-            else:
-                exploration = epsilon*decay_rate**epoch
+            if exploration > 0.001:
+                exploration = epsilon*decay_rate**(epoch*i_iteration)            
             if np.random.rand() <= exploration:
                 actions = np.random.randint(0, num_actions,batch_size)
             else:
                 q = model.predict(states)
                 actions = np.argmax(q,axis=1)
             
+            
             # apply actions, get rewards and new state
+            act_time = time.time()
             next_states, reward, done = env.act(actions)
+            act_end_time = time.time()
             
             q_prime = model.predict(next_states)
             indx = np.argmax(q_prime,axis=1)
@@ -234,20 +242,26 @@ if __name__ == "__main__":
             targets = reward + gamma * q[sx,indx]   
             q[sx,indx] = targets         
             
+            update_end_time = time.time()
+            
             # Train network, update loss
             loss += model.train_on_batch(states, q)
-            
             # Update the state
             states = next_states
+            
             
             # Update statistics
             total_reward_by_episode += int(sum(reward))
         
         # Update user view
+        app_time = time.time()
         reward_chain.append(total_reward_by_episode)    
-        loss_chain.append(loss)    
-        print("\r|Epoch {:03d}/{:03d} | Loss {:4.4f} | Tot reward x episode {:03d}|".format(epoch,
-              num_episodes ,loss, total_reward_by_episode))
+        loss_chain.append(loss) 
+        app_end_time = time.time() - app_time
+        
+        end_time = time.time()
+        print("\r|Epoch {:03d}/{:03d} | Loss {:4.4f} | Tot reward x episode {:03d}| time: {:2.2f}|".format(epoch,
+              num_episodes ,loss, total_reward_by_episode,(end_time-start_time)))
         
         
     # Save trained model weights and architecture, used in test
