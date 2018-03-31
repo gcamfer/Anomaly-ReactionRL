@@ -44,6 +44,7 @@ class data_cls:
         #    formated = False
         self.data_path = '../datasets/formated_multiple_data.data'
         self.attack_names_path = '../datasets/attack_types.data'
+        self.test_path = '../datasets/formated_multiple_test_data.data'
         
         if os.path.exists(self.data_path) and os.path.exists(self.attack_names_path):
             formated = True
@@ -87,8 +88,12 @@ class data_cls:
             # Save attack names 
             (pd.DataFrame({'labels':self.attack_names})).to_csv(self.attack_names_path,index=False)
             
-    ''' Get n-rows from the dataset'''
-    def get_batch(self, batch_size=100):
+    ''' Get n-row batch from the dataset.
+        Return: df = n-rows
+                labels = correct labels for detection 
+    Sequential for largest datasets
+    '''
+    def get_sequential_batch(self, batch_size=100):
         if self.headers is None:
             df = pd.read_csv(self.data_path,sep=',', nrows = batch_size)
             self.headers = list(df)
@@ -104,16 +109,37 @@ class data_cls:
         return df,labels
     
     
+    ''' Get n-rows from loaded data 
+        The dataset must be loaded in RAM
+    '''
+    def get_batch(self, batch_size=100):
+        
+        if self.headers is None:
+            self.df = pd.read_csv(self.data_path,sep=',') # Read again the csv
+            self.headers = list(self.df)
+        
+        batch = self.df.iloc[self.index:self.index+batch_size]
+        self.index += batch_size
+        labels = self.df[self.attack_names]
+        
+        for att in self.attack_names:
+            del(batch[att])
+        return batch,labels
+    
+    def save_test(self):
+        test_df = self.df.iloc[self.index:self.data_shape[0] + 1]
+        test_df.to_csv(self.data_path,sep=',',index=False)
+    
     def get_full(self):
-        df = pd.read_csv(self.data_path,sep=',')        
-        labels = df['labels']
-        del(df['labels'])
-        return df,labels
+        self.df = pd.read_csv(self.data_path,sep=',')        
+        self.labels = self.df['labels']
+        del(self.df['labels'])
         
     def get_shape(self):
         df = pd.read_csv(self.data_path,sep=',')
+        self.data_shape = df.shape
         # stata + labels
-        return df.shape
+        return self.data_shape
 
 
 '''
@@ -123,7 +149,7 @@ class RLenv(data_cls):
     def __init__(self,path,batch_size = 10):
         data_cls.__init__(self,path)
         self.batch_size = batch_size
-        self.state_shape = data_cls.get_shape(self)
+        self.data_shape = data_cls.get_shape(self)
 
     def _update_state(self):
         self.states,self.labels = data_cls.get_batch(self,self.batch_size)
@@ -166,10 +192,11 @@ class RLenv(data_cls):
 if __name__ == "__main__":
   
     kdd_10_path = '../datasets/kddcup.data_10_percent_corrected'
-    micro_kdd = '../datasets/micro_kddcup.data'
+    kdd_path = '../datasets/kddcup.data'
+
     # Valid actions = '0' supose no attack, '1' supose attack
     epsilon = .1  # exploration
-    num_episodes = 500
+    num_episodes = 300
     iterations_episode = 100
     
     #3max_memory = 100
@@ -190,7 +217,7 @@ if __name__ == "__main__":
     
     # Network arquitecture
     model = Sequential()
-    model.add(Dense(hidden_size_1, input_shape=(env.state_shape[1]-len(env.attack_names),),
+    model.add(Dense(hidden_size_1, input_shape=(env.data_shape[1]-len(env.attack_names),),
                     batch_size=batch_size, activation='relu'))
     model.add(Dense(hidden_size_1, activation='relu'))
     model.add(Dense(hidden_size_2, activation='relu'))
@@ -268,7 +295,13 @@ if __name__ == "__main__":
     model.save_weights("multi_model.h5", overwrite=True)
     with open("multi_model.json", "w") as outfile:
         json.dump(model.to_json(), outfile)
+        
+    # Save test dataset deleting the data used to train
+    print("Shape: ",env.data_shape)
+    print("Used: ",num_episodes*iterations_episode*batch_size)
+    env.save_test()
     
+    # Plot training results
     plt.figure(1)
     plt.subplot(211)
     plt.plot(np.arange(len(reward_chain)),reward_chain)

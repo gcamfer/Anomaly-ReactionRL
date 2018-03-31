@@ -61,7 +61,7 @@ class data_cls:
                     if df[indx].max() == 0 and df[indx].min()== 0:
                         df[indx] = 0
                     else:
-                        df[indx] = (df[indx]-df[indx].min())/(df[indx].max()-df[indx].min())
+                        df[indx] = (df[indx]-df[indx].min())/(df[indx].max()-df[indx].min()).astype(np.float32)
                     
             # One-hot-Encoding for reaction. 4 detection binary label 
             # labels = pd.get_dummies(df['labels'])

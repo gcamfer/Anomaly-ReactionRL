@@ -1,5 +1,4 @@
 import json
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from keras.models import model_from_json
@@ -9,6 +8,8 @@ from mAD import RLenv
 if __name__ == "__main__":
     batch_size = 10
     kdd_10_path = 'datasets/kddcup.data_10_percent_corrected'
+    kdd_path = '../datasets/kddcup.data'
+    test_path = '../datasets/formated_multiple_test_data.data'
 
 
     with open("multi_model.json", "r") as jfile:
@@ -17,11 +18,11 @@ if __name__ == "__main__":
     model.compile("sgd", "mse")
 
     # Define environment, game, make sure the batch_size is the same in train
-    env = RLenv(kdd_10_path,batch_size)
+    env = RLenv(test_path,batch_size)
     
 
     total_reward = 0    
-    epochs = int(env.state_shape[0]/env.batch_size/2)
+    epochs = int(env.data_shape[0]/env.batch_size/2)
     
     true_labels = np.zeros(len(env.attack_names),dtype=int)
     estimated_labels = np.zeros(len(env.attack_names),dtype=int)
