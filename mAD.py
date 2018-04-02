@@ -32,10 +32,13 @@ class data_cls:
             "dst_host_srv_diff_host_rate","dst_host_serror_rate","dst_host_srv_serror_rate",
             "dst_host_rerror_rate","dst_host_srv_rerror_rate","labels"]
         self.index = 0
-        self.headers = None
+        # Data formated path and test path. 
+        self.formated_path = "../datasets/formated_multiple_data.data"
+        self.test_path = "../datasets/test_multiple_data.data"
+        self.loaded = False
         
-        attack_types = ['normal','DoS','Probe','R2L','U2R']
-        attack_map =   { 'normal.': 'normal',
+        self.attack_types = ['normal','DoS','Probe','R2L','U2R']
+        self.attack_map =   { 'normal.': 'normal',
                         
                         'back.': 'DoS',
                         'land.': 'DoS',
@@ -81,37 +84,36 @@ class data_cls:
                         'xterm.': 'U2R'
                     }
         
+        # If path is not provided system out error
         if (not path):
             print("Path: not path name provided", flush = True)
             sys.exit(0)
         formated = False     
-        # Search for a previous formated data:
-        #if (not os.path.exists('../datasets')):
-        #    os.makedirs('../datasets')
-        #    formated = False
-        
-        
-        if os.path.exists(self.path) and os.path.exists(self.attack_names_path):
+       
+        # If the formatted data path exists, is not needed to process it again
+        if os.path.exists(self.formated_path):
             formated = True
-            at_df = pd.read_csv(self.attack_names_path,sep=',')
-            self.attack_names = at_df['labels'].tolist() 
+            
 
         # If it does not exist, it's needed to format the data
         if not formated:
             ''' Formating the dataset for ready-2-use data'''
             df = pd.read_csv(path,sep=',',names=col_names)
             
+            # Data now is in RAM
+            self.loaded = True
+            
             # Dataframe processing
             df = pd.concat([df.drop('protocol_type', axis=1), pd.get_dummies(df['protocol_type'])], axis=1)
             df = pd.concat([df.drop('service', axis=1), pd.get_dummies(df['service'])], axis=1)
             df = pd.concat([df.drop('flag', axis=1), pd.get_dummies(df['flag'])], axis=1)
               
-            #normalized_df=(df-df.mean())/df.std()
             
             # 1 if ``su root'' command attempted; 0 otherwise 
             df['su_attempted'] = df['su_attempted'].replace(2.0, 0.0)
             
             # Normalization of the df
+            #normalized_df=(df-df.mean())/df.std()
             for indx,dtype in df.dtypes.iteritems():
                 if dtype == 'float64' or dtype == 'int64':
                     if df[indx].max() == 0 and df[indx].min()== 0:
@@ -119,37 +121,35 @@ class data_cls:
                     else:
                         df[indx] = (df[indx]-df[indx].min())/(df[indx].max()-df[indx].min())
                     
-            # Name of the diferent columns attacks
-            self.attack_names = pd.unique(df['labels'])
-            
-            # One-hot-Encoding for reaction. 4 detection binary label             
+                      
+            # One-hot-Encoding for reaction.  
+            all_labels = df['labels'] # Get all labels in df
+            mapped_labels = np.vectorize(self.attack_map.get)(all_labels) # Map attacks
             df = pd.concat([df.drop('labels', axis=1),
-                            pd.get_dummies(df['labels'])], axis=1)
+                            pd.get_dummies(mapped_labels)], axis=1)
             
             # suffle data
             df = shuffle(df,random_state=np.random.randint(0,100))
             # Save data
-            df.to_csv(self.data_path,sep=',',index=False)
-            # Save attack names 
-            (pd.DataFrame({'labels':self.attack_names})).to_csv(self.attack_names_path,index=False)
+            df.to_csv(self.formated_path,sep=',',index=False)
             
-    ''' Get n-row batch from the dataset: need path
+    ''' Get n-row batch from the dataset
         Return: df = n-rows
                 labels = correct labels for detection 
     Sequential for largest datasets
     '''
-    def get_sequential_batch(self, path, batch_size=100):
-        if self.headers is None:
-            df = pd.read_csv(path,sep=',', nrows = batch_size)
-            self.headers = list(df)
+    def get_sequential_batch(self, batch_size=100):
+        if self.loaded is False:
+            df = pd.read_csv(self.formated_path,sep=',', nrows = batch_size)
+            self.loaded = True
         else:
-            df = pd.read_csv(path,sep=',', nrows = batch_size,
-                         skiprows = self.index,names = self.headers)
+            df = pd.read_csv(self.formated_path,sep=',', nrows = batch_size,
+                         skiprows = self.index)
         
         self.index += batch_size
 
-        labels = df[self.attack_names]
-        for att in self.attack_names:
+        labels = df[self.attack_types]
+        for att in self.attack_types:
             del(df[att])
         return df,labels
     
@@ -159,30 +159,35 @@ class data_cls:
     '''
     def get_batch(self, batch_size=100):
         
-        if self.headers is None:
-            self.df = pd.read_csv(self.data_path,sep=',') # Read again the csv
-            self.headers = list(self.df)
+        if self.loaded is False:
+            self.df = pd.read_csv(self.formated_path,sep=',') # Read again the csv
+            self.loaded = True
+            #self.headers = list(self.df)
         
         batch = self.df.iloc[self.index:self.index+batch_size]
         self.index += batch_size
-        labels = self.df[self.attack_names]
+        labels = batch[self.attack_types]
         
-        for att in self.attack_names:
+        for att in self.attack_types:
             del(batch[att])
         return batch,labels
     
     def save_test(self):
         test_df = self.df.iloc[self.index:self.data_shape[0] + 1]
-        test_df.to_csv(self.data_path,sep=',',index=False)
+        test_df.to_csv(self.test_path,sep=',',index=False)
     
     def get_full(self):
         self.df = pd.read_csv(self.data_path,sep=',')        
         self.labels = self.df['labels']
+        self.loaded = True
         del(self.df['labels'])
         
     def get_shape(self):
-        df = pd.read_csv(self.data_path,sep=',')
-        self.data_shape = df.shape
+        if self.loaded is False:
+            self.df = pd.read_csv(self.formated_path,sep=',') # Read again the csv
+            self.loaded = True
+        
+        self.data_shape = self.df.shape
         # stata + labels
         return self.data_shape
 
@@ -198,13 +203,27 @@ class RLenv(data_cls):
 
     def _update_state(self):
         self.states,self.labels = data_cls.get_batch(self,self.batch_size)
+        
+        # Update statistics
+        self.true_labels += np.sum(self.labels).values
+
     '''
     Returns:
         + Observation of the enviroment
     '''
     def reset(self):
+        # Statistics
+        self.true_labels = np.zeros(len(env.attack_types),dtype=int)
+        self.estimated_labels = np.zeros(len(env.attack_types),dtype=int)
+        
         self.state_numb = 0
+        
+        #self.states,self.labels = data_cls.get_sequential_batch(self,self.batch_size)
         self.states,self.labels = data_cls.get_batch(self,self.batch_size)
+        
+        # Update statistics
+        self.true_labels += np.sum(self.labels).values
+        
         self.total_reward = 0
         self.steps_in_episode = 0
         return self.states.values 
@@ -218,8 +237,10 @@ class RLenv(data_cls):
     def act(self,actions):
         # Clear previous rewards        
         self.reward = np.zeros(self.batch_size)
-        # Actualize new rewards
+        
+        # Actualize new rewards == get_reward
         for indx,a in enumerate(actions):
+            self.estimated_labels[a] += 1              
             if a == np.argmax(self.labels.iloc[indx].values):
                 self.reward[indx] = 1
         
@@ -246,8 +267,7 @@ if __name__ == "__main__":
     
     #3max_memory = 100
     decay_rate = 0.99
-    gamma = 0.01
-    #gamma = 0.001
+    gamma = 0.001
     
     
     hidden_size_1 = 100
@@ -255,14 +275,14 @@ if __name__ == "__main__":
     batch_size = 10
 
     # Initialization of the enviroment
-    env = RLenv(kdd_10_path,batch_size)
+    env = RLenv(kdd_path,batch_size)
 
-    valid_actions = list(range(len(env.attack_names)))
+    valid_actions = list(range(len(env.attack_types))) # only detect type of attack
     num_actions = len(valid_actions)
     
     # Network arquitecture
     model = Sequential()
-    model.add(Dense(hidden_size_1, input_shape=(env.data_shape[1]-len(env.attack_names),),
+    model.add(Dense(hidden_size_1, input_shape=(env.data_shape[1]-len(env.attack_types),),
                     batch_size=batch_size, activation='relu'))
     model.add(Dense(hidden_size_1, activation='relu'))
     model.add(Dense(hidden_size_2, activation='relu'))
@@ -270,6 +290,7 @@ if __name__ == "__main__":
     model.compile(sgd(lr=.2), "mse")
     
     
+    # Statistics
     reward_chain = []
     loss_chain = []
     
@@ -332,9 +353,11 @@ if __name__ == "__main__":
         app_end_time = time.time() - app_time
         
         end_time = time.time()
-        print("\r|Epoch {:03d}/{:03d} | Loss {:4.4f} | Tot reward x episode {:03d}| time: {:2.2f}|".format(epoch,
-              num_episodes ,loss, total_reward_by_episode,(end_time-start_time)))
-        
+        print("\r|Epoch {:03d}/{:03d} | Loss {:4.4f} |" 
+                "Tot reward in ep {:03d}| time: {:2.2f}|"
+                .format(epoch, num_episodes 
+                ,loss, total_reward_by_episode,(end_time-start_time)))
+        print("\r|Estimated: {}|Labels: {}".format(env.estimated_labels,env.true_labels))
         
     # Save trained model weights and architecture, used in test
     model.save_weights("multi_model.h5", overwrite=True)

@@ -7,9 +7,7 @@ from mAD import RLenv
 
 if __name__ == "__main__":
     batch_size = 10
-    kdd_10_path = '../datasets/kddcup.data_10_percent_corrected'
-    kdd_path = '../datasets/kddcup.data'
-    test_path = '../datasets/formated_multiple_test_data.data'
+    test_path = '../datasets/test_multiple_data.data'
 
 
     with open("multi_model.json", "r") as jfile:
@@ -22,16 +20,16 @@ if __name__ == "__main__":
     
 
     total_reward = 0    
-    #epochs = int(env.data_shape[0]/env.batch_size/2)
-    epochs = 1000000
+    epochs = int(env.data_shape[0]/env.batch_size/4)
     
     
-    true_labels = np.zeros(len(env.attack_names),dtype=int)
-    estimated_labels = np.zeros(len(env.attack_names),dtype=int)
-    estimated_correct_labels = np.zeros(len(env.attack_names),dtype=int)
+    true_labels = np.zeros(len(env.attack_types),dtype=int)
+    estimated_labels = np.zeros(len(env.attack_types),dtype=int)
+    estimated_correct_labels = np.zeros(len(env.attack_types),dtype=int)
     
     for e in range(epochs):
-        states , labels = env.get_sequential_batch(test_path,batch_size = env.batch_size)
+        #states , labels = env.get_sequential_batch(test_path,batch_size = env.batch_size)
+        states , labels = env.get_batch(batch_size = env.batch_size)
         q = model.predict(states)
         actions = np.argmax(q,axis=1)        
         
@@ -49,13 +47,17 @@ if __name__ == "__main__":
         total_reward += int(sum(reward))
         print("\rEpoch {}/{} | Tot Rew -- > {}".format(e,epochs,total_reward), end="")
         
-    Err = estimated_correct_labels / true_labels
-    print('\r\nTotal reward: {} | Number of samples: {} | Error = {}%'.format(total_reward,
+    Accuracy = estimated_correct_labels / true_labels
+    print('\r\nTotal reward: {} | Number of samples: {} | Accuracy = {}%'.format(total_reward,
           int(epochs*env.batch_size),float(100*total_reward/(epochs*env.batch_size))))
-    outputs_df = pd.DataFrame(index = env.attack_names,columns = ["Clasification","Acuracy"])
-    for indx,att in enumerate(env.attack_names):
-       outputs_df.iloc[indx].Clasification = "{}/{}".format(estimated_correct_labels[indx],true_labels[indx])
-       outputs_df.iloc[indx].Acuracy = Err[indx]*100
+    outputs_df = pd.DataFrame(index = env.attack_types,columns = ["Estimated","Correct","Total","Acuracy"])
+    for indx,att in enumerate(env.attack_types):
+       outputs_df.iloc[indx].Estimated = estimated_labels[indx]
+       outputs_df.iloc[indx].Estimated = estimated_correct_labels[indx]
+       outputs_df.iloc[indx].Estimated = true_labels[indx]
+
+       
+       outputs_df.iloc[indx].Acuracy = Accuracy[indx]*100
 
         
     print(outputs_df)
