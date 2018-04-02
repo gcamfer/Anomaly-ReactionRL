@@ -7,7 +7,7 @@ from mAD import RLenv
 
 if __name__ == "__main__":
     batch_size = 10
-    kdd_10_path = 'datasets/kddcup.data_10_percent_corrected'
+    kdd_10_path = '../datasets/kddcup.data_10_percent_corrected'
     kdd_path = '../datasets/kddcup.data'
     test_path = '../datasets/formated_multiple_test_data.data'
 
@@ -22,14 +22,16 @@ if __name__ == "__main__":
     
 
     total_reward = 0    
-    epochs = int(env.data_shape[0]/env.batch_size/2)
+    #epochs = int(env.data_shape[0]/env.batch_size/2)
+    epochs = 1000000
+    
     
     true_labels = np.zeros(len(env.attack_names),dtype=int)
     estimated_labels = np.zeros(len(env.attack_names),dtype=int)
     estimated_correct_labels = np.zeros(len(env.attack_names),dtype=int)
     
     for e in range(epochs):
-        states , labels = env.get_batch(batch_size = env.batch_size)
+        states , labels = env.get_sequential_batch(test_path,batch_size = env.batch_size)
         q = model.predict(states)
         actions = np.argmax(q,axis=1)        
         

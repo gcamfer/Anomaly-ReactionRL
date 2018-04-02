@@ -34,6 +34,53 @@ class data_cls:
         self.index = 0
         self.headers = None
         
+        attack_types = ['normal','DoS','Probe','R2L','U2R']
+        attack_map =   { 'normal.': 'normal',
+                        
+                        'back.': 'DoS',
+                        'land.': 'DoS',
+                        'neptune.': 'DoS',
+                        'pod.': 'DoS',
+                        'smurf.': 'DoS',
+                        'teardrop.': 'DoS',
+                        'mailbomb.': 'DoS',
+                        'apache2.': 'DoS',
+                        'processtable.': 'DoS',
+                        'udpstorm.': 'DoS',
+                        
+                        'ipsweep.': 'Probe',
+                        'nmap.': 'Probe',
+                        'portsweep.': 'Probe',
+                        'satan.': 'Probe',
+                        'mscan.': 'Probe',
+                        'saint.': 'Probe',
+                    
+                        'ftp_write.': 'R2L',
+                        'guess_passwd.': 'R2L',
+                        'imap.': 'R2L',
+                        'multihop.': 'R2L',
+                        'phf.': 'R2L',
+                        'spy.': 'R2L',
+                        'warezclient.': 'R2L',
+                        'warezmaster.': 'R2L',
+                        'sendmail.': 'R2L',
+                        'named.': 'R2L',
+                        'snmpgetattack.': 'R2L',
+                        'snmpguess.': 'R2L',
+                        'xlock.': 'R2L',
+                        'xsnoop.': 'R2L',
+                        'worm.': 'R2L',
+                        
+                        'buffer_overflow.': 'U2R',
+                        'loadmodule.': 'U2R',
+                        'perl.': 'U2R',
+                        'rootkit.': 'U2R',
+                        'httptunnel.': 'U2R',
+                        'ps.': 'U2R',    
+                        'sqlattack.': 'U2R',
+                        'xterm.': 'U2R'
+                    }
+        
         if (not path):
             print("Path: not path name provided", flush = True)
             sys.exit(0)
@@ -42,15 +89,13 @@ class data_cls:
         #if (not os.path.exists('../datasets')):
         #    os.makedirs('../datasets')
         #    formated = False
-        self.data_path = '../datasets/formated_multiple_data.data'
-        self.attack_names_path = '../datasets/attack_types.data'
-        self.test_path = '../datasets/formated_multiple_test_data.data'
         
-        if os.path.exists(self.data_path) and os.path.exists(self.attack_names_path):
+        
+        if os.path.exists(self.path) and os.path.exists(self.attack_names_path):
             formated = True
             at_df = pd.read_csv(self.attack_names_path,sep=',')
-            self.attack_names = at_df['labels'].tolist()
-            
+            self.attack_names = at_df['labels'].tolist() 
+
         # If it does not exist, it's needed to format the data
         if not formated:
             ''' Formating the dataset for ready-2-use data'''
@@ -88,17 +133,17 @@ class data_cls:
             # Save attack names 
             (pd.DataFrame({'labels':self.attack_names})).to_csv(self.attack_names_path,index=False)
             
-    ''' Get n-row batch from the dataset.
+    ''' Get n-row batch from the dataset: need path
         Return: df = n-rows
                 labels = correct labels for detection 
     Sequential for largest datasets
     '''
-    def get_sequential_batch(self, batch_size=100):
+    def get_sequential_batch(self, path, batch_size=100):
         if self.headers is None:
-            df = pd.read_csv(self.data_path,sep=',', nrows = batch_size)
+            df = pd.read_csv(path,sep=',', nrows = batch_size)
             self.headers = list(df)
         else:
-            df = pd.read_csv(self.data_path,sep=',', nrows = batch_size,
+            df = pd.read_csv(path,sep=',', nrows = batch_size,
                          skiprows = self.index,names = self.headers)
         
         self.index += batch_size
