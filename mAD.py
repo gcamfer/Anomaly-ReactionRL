@@ -7,7 +7,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from keras.models import Sequential
 from keras.layers.core import Dense
-from keras.optimizers import sgd
+from keras import optimizers
 import json
 from sklearn.utils import shuffle
 import os
@@ -17,7 +17,9 @@ import time
 
 
 
-
+'''
+Data class processing
+'''
 
 class data_cls:
     def __init__(self, path):
@@ -192,8 +194,169 @@ class data_cls:
         return self.data_shape
 
 
+
+
+class QNetwork():
+    """
+    Q-Network Estimator
+    Represents the global model for the table
+    """
+
+    def __init__(self,obs_size,num_actions,batch_size=1,hidden_size = 100,
+                 hidden_layers = 1,learning_rate=.2):
+        """
+        Initialize the network with the provided shape
+        """
+        # Network arquitecture
+        self.model = Sequential()
+        # Add imput layer
+        self.model.add(Dense(hidden_size, input_shape=(obs_size,),
+                             activation='relu'))
+        # Add hidden layers
+        for layers in range(hidden_layers):
+            self.model.add(Dense(hidden_size, activation='relu'))
+        # Add output layer    
+        self.model.add(Dense(num_actions))
+        
+        optimizer = optimizers.SGD(learning_rate)
+        # optimizer = optimizers.Adam(alpha=learning_rate)
+        # optimizer = optimizers.AdaGrad(learning_rate)
+        # optimizer = optimizers.RMSpropGraves(learning_rate, 0.95, self.momentum, 1e-2)
+        
+        # Compilation of the model with optimizer and loss
+        self.model_network.model.compile(optimizer,"mse")
+
+    def predict(self,state,batch_size=1):
+        """
+        Predicts action values.
+        """
+        return self.model.predict(state,batch_size=batch_size)
+
+    def update(self, states, q):
+        """
+        Updates the estimator with the targets.
+
+        Args:
+          states: Target states
+          q: Estimated values
+
+        Returns:
+          The calculated loss on the batch.
+        """
+        loss = self.model.train_on_batch(states, q)
+        return loss
+
+
+
+
+#Policy interface
+class Policy:
+    def __init__(self, num_actions, estimator,batch_size):
+        self.num_actions = num_actions
+        self.estimator = estimator
+        self.batch_size = batch_size
+    
+class Epsilon_greedy(Policy):
+    def __init__(self, num_actions,estimator,batch_size,epsilon,decay_rate, epoch_length):
+        Policy.__init__(self, num_actions, estimator,batch_size)
+        self.name = "Epsilon Greedy"
+        if (epsilon is None or epsilon < 0 or epsilon > 1):
+            print("EpsilonGreedy: Invalid value of epsilon", flush = True)
+            sys.exit(0)
+        self.epsilon = epsilon
+        self.step_counter = 0
+        self.epoch_length
+        self.batch_size
+        
+        # if epsilon set to 1, it will be decayed over time
+        if self.epsilon == 1:
+            self.epsilon_decay = True
+        else:
+            self.epsilon_decay = False
+    
+    def get_action(self,states):
+        # get next action
+        if np.random.rand() <= self.epsilon:
+            actions = np.random.randint(0, self.num_actions,self.batch_size)
+        else:
+            self.Q = self.estimator.predict(states,self.batch_size)
+            actions = np.argmax(self.Q,axis=1)
+            
+        self.step_counter += 1 
+        # decay epsilon after each epoch
+        if self.epsilon_decay:
+            if self.step_counter % self.epoch_length == 0:
+                self.epsilon = max(.001, self.epsilon * decay_rate**self.step_counter)
+            
+        return actions
+    
+
+
+
 '''
-Definition
+Reinforcement learning Agent definition
+'''
+
+class Agent(object):  
+        
+    def __init__(self, actions):
+        self.actions = actions
+        self.num_actions = len(actions)
+
+    def act(self, state,policy):
+        raise NotImplementedError
+
+class AttackerAgent(Agent):
+
+    def __init__(self, actions, obs_size, **kwargs):
+        super().__init__(actions)
+
+
+class DefenderAgent(Agent, policy="EpsilonGredy"):      
+    def __init__(self, actions, obs_size, **kwargs):
+        super().__init__(actions)
+        
+        self.epsilon = kwargs.get('epsilon', .01)
+        
+        self.gamma = kwargs.get('gamma', .001)
+        
+        self.batch_size = kwargs.get('batch_size', 1)
+        self.epoch_length = kwargs.get('epoch_length', 100)
+        self.decay_rate = kwargs.get('decay_rate',0.99)
+        self.tau = kwargs.get('tau', .001)
+        
+        
+        self.model_network = QNetwork(self.obs_size, self.num_actions,
+                                      kwargs.get('batch_size',1),
+                                      kwargs.get('hidden_size', 100),
+                                      kwargs.get('hidden_layers',1),
+                                      kwargs.get('learning_rate',.2))
+        
+        self.policy = Epsilon_greedy(self.model_network,len(actions),
+                                     self.batch_size,self.epsilon,
+                                     self.decay_rate,self.epoch_length)
+        
+        
+    def act(self,states):
+        # Get actions under the policy
+        actions = self.policy.get_actions(self,states)
+        return actions
+    
+    def update_model(self,states,actions,next_states,reward):
+        # Compute Q targets
+        Q_prime = self.model_network.predict(next_states)
+        indx = np.argmax(Q_prime,axis=1)
+        sx = np.arange(len(indx))
+        # Compute Q(s,a)
+        Q = self.model_network.predict(states)
+        
+        # Q-learning update
+        targets = reward + self.gamma * self.Q[sx,indx]   
+        Q[sx,indx] = targets        
+        
+
+'''
+Reinforcement learning Enviroment Definition
 '''
 class RLenv(data_cls):
     def __init__(self,path,batch_size = 10):
@@ -264,30 +427,26 @@ if __name__ == "__main__":
     epsilon = .1  # exploration
     num_episodes = 300
     iterations_episode = 100
-    
+    batch_size = 20
+
     #3max_memory = 100
     decay_rate = 0.99
     gamma = 0.001
     
     
-    hidden_size_1 = 100
-    hidden_size_2 = 300
-    batch_size = 10
+    hidden_size = 100
+
+    
 
     # Initialization of the enviroment
     env = RLenv(kdd_path,batch_size)
-
+    
     valid_actions = list(range(len(env.attack_types))) # only detect type of attack
     num_actions = len(valid_actions)
     
-    # Network arquitecture
-    model = Sequential()
-    model.add(Dense(hidden_size_1, input_shape=(env.data_shape[1]-len(env.attack_types),),
-                    batch_size=batch_size, activation='relu'))
-    model.add(Dense(hidden_size_1, activation='relu'))
-    model.add(Dense(hidden_size_2, activation='relu'))
-    model.add(Dense(num_actions))
-    model.compile(sgd(lr=.2), "mse")
+    # Initialization of the Agent
+    obs_size = env.data_shape[1]-len(env.attack_types)
+    agent = DefenderAgent(valid_actions,obs_size)    
     
     
     # Statistics
@@ -308,37 +467,26 @@ if __name__ == "__main__":
        
         # Define exploration to improve performance
         exploration = 1
-        # Define q to avoid not defined in the q update
-        q = np.zeros([batch_size,num_actions])
+        
         # Iteration in one episode
         for i_iteration in range(iterations_episode):
-            
-            # get next action
-            if exploration > 0.001:
-                exploration = epsilon*decay_rate**(epoch*i_iteration)            
-            if np.random.rand() <= exploration:
-                actions = np.random.randint(0, num_actions,batch_size)
-            else:
-                q = model.predict(states)
-                actions = np.argmax(q,axis=1)
             
             
             # apply actions, get rewards and new state
             act_time = time.time()
+            
+            # Get actions for actual states following the policy
+            actions = agent.act(states)
+            #Enviroment actuation for this actions
             next_states, reward, done = env.act(actions)
+            
             act_end_time = time.time()
             
-            q_prime = model.predict(next_states)
-            indx = np.argmax(q_prime,axis=1)
-            sx = np.arange(len(indx))
-            # Update q values
-            targets = reward + gamma * q[sx,indx]   
-            q[sx,indx] = targets         
+            # Train network, update loss
+            loss += agent.update_model(states,actions,next_states,reward)
             
             update_end_time = time.time()
-            
-            # Train network, update loss
-            loss += model.train_on_batch(states, q)
+
             # Update the state
             states = next_states
             
@@ -347,10 +495,8 @@ if __name__ == "__main__":
             total_reward_by_episode += int(sum(reward))
         
         # Update user view
-        app_time = time.time()
         reward_chain.append(total_reward_by_episode)    
         loss_chain.append(loss) 
-        app_end_time = time.time() - app_time
         
         end_time = time.time()
         print("\r|Epoch {:03d}/{:03d} | Loss {:4.4f} |" 
@@ -360,9 +506,9 @@ if __name__ == "__main__":
         print("\r|Estimated: {}|Labels: {}".format(env.estimated_labels,env.true_labels))
         
     # Save trained model weights and architecture, used in test
-    model.save_weights("multi_model.h5", overwrite=True)
+    agent.model_network.model.save_weights("multi_model.h5", overwrite=True)
     with open("multi_model.json", "w") as outfile:
-        json.dump(model.to_json(), outfile)
+        json.dump(agent.model_network.model.to_json(), outfile)
         
     # Save test dataset deleting the data used to train
     print("Shape: ",env.data_shape)

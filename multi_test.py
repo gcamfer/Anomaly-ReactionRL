@@ -6,7 +6,7 @@ from mAD import RLenv
 
 
 if __name__ == "__main__":
-    batch_size = 10
+    batch_size = 20
     test_path = '../datasets/test_multiple_data.data'
 
 
@@ -53,8 +53,8 @@ if __name__ == "__main__":
     outputs_df = pd.DataFrame(index = env.attack_types,columns = ["Estimated","Correct","Total","Acuracy"])
     for indx,att in enumerate(env.attack_types):
        outputs_df.iloc[indx].Estimated = estimated_labels[indx]
-       outputs_df.iloc[indx].Estimated = estimated_correct_labels[indx]
-       outputs_df.iloc[indx].Estimated = true_labels[indx]
+       outputs_df.iloc[indx].Correct = estimated_correct_labels[indx]
+       outputs_df.iloc[indx].Total = true_labels[indx]
 
        
        outputs_df.iloc[indx].Acuracy = Accuracy[indx]*100
