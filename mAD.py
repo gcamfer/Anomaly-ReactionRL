@@ -267,12 +267,16 @@ class Epsilon_greedy(Policy):
         self.step_counter = 0
         self.epoch_length = epoch_length
         self.batch_size = batch_size
+        self.decay_rate = decay_rate
         
-        # if epsilon set to 1, it will be decayed over time
-        if self.epsilon == 1:
-            self.epsilon_decay = True
-        else:
-            self.epsilon_decay = False
+#        # if epsilon set to 1, it will be decayed over time
+#        if self.epsilon == 1:
+#            self.epsilon_decay = True
+#        else:
+#            self.epsilon_decay = False
+        # Always decay
+        self.epsilon_decay = True
+        
     
     def get_actions(self,states):
         # get next action
@@ -286,7 +290,7 @@ class Epsilon_greedy(Policy):
         # decay epsilon after each epoch
         if self.epsilon_decay:
             if self.step_counter % self.epoch_length == 0:
-                self.epsilon = max(.001, self.epsilon * decay_rate**self.step_counter)
+                self.epsilon = max(.001, self.epsilon * self.decay_rate**self.step_counter)
             
         return actions
     
