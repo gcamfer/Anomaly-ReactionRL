@@ -100,40 +100,40 @@ class data_cls:
         # If it does not exist, it's needed to format the data
         if not formated:
             ''' Formating the dataset for ready-2-use data'''
-            df = pd.read_csv(path,sep=',',names=col_names)
+            self.df = pd.read_csv(path,sep=',',names=col_names)
             
             # Data now is in RAM
             self.loaded = True
             
             # Dataframe processing
-            df = pd.concat([df.drop('protocol_type', axis=1), pd.get_dummies(df['protocol_type'])], axis=1)
-            df = pd.concat([df.drop('service', axis=1), pd.get_dummies(df['service'])], axis=1)
-            df = pd.concat([df.drop('flag', axis=1), pd.get_dummies(df['flag'])], axis=1)
+            self.df = pd.concat([self.df.drop('protocol_type', axis=1), pd.get_dummies(self.df['protocol_type'])], axis=1)
+            self.df = pd.concat([self.df.drop('service', axis=1), pd.get_dummies(self.df['service'])], axis=1)
+            self.df = pd.concat([self.df.drop('flag', axis=1), pd.get_dummies(self.df['flag'])], axis=1)
               
             
             # 1 if ``su root'' command attempted; 0 otherwise 
-            df['su_attempted'] = df['su_attempted'].replace(2.0, 0.0)
+            self.df['su_attempted'] = self.df['su_attempted'].replace(2.0, 0.0)
             
             # Normalization of the df
             #normalized_df=(df-df.mean())/df.std()
-            for indx,dtype in df.dtypes.iteritems():
+            for indx,dtype in self.df.dtypes.iteritems():
                 if dtype == 'float64' or dtype == 'int64':
-                    if df[indx].max() == 0 and df[indx].min()== 0:
-                        df[indx] = 0
+                    if self.df[indx].max() == 0 and self.df[indx].min()== 0:
+                        self.df[indx] = 0
                     else:
-                        df[indx] = (df[indx]-df[indx].min())/(df[indx].max()-df[indx].min())
+                        self.df[indx] = (self.df[indx]-self.df[indx].min())/(self.df[indx].max()-self.df[indx].min())
                     
                       
             # One-hot-Encoding for reaction.  
-            all_labels = df['labels'] # Get all labels in df
+            all_labels = self.df['labels'] # Get all labels in df
             mapped_labels = np.vectorize(self.attack_map.get)(all_labels) # Map attacks
-            df = pd.concat([df.drop('labels', axis=1),
+            self.df = pd.concat([self.df.drop('labels', axis=1),
                             pd.get_dummies(mapped_labels)], axis=1)
             
             # suffle data
-            df = shuffle(df,random_state=np.random.randint(0,100))
+            self.df = shuffle(self.df,random_state=np.random.randint(0,100))
             # Save data
-            df.to_csv(self.formated_path,sep=',',index=False)
+            self.df.to_csv(self.formated_path,sep=',',index=False)
             
     ''' Get n-row batch from the dataset
         Return: df = n-rows
@@ -142,18 +142,18 @@ class data_cls:
     '''
     def get_sequential_batch(self, batch_size=100):
         if self.loaded is False:
-            df = pd.read_csv(self.formated_path,sep=',', nrows = batch_size)
+            self.df = pd.read_csv(self.formated_path,sep=',', nrows = batch_size)
             self.loaded = True
         else:
-            df = pd.read_csv(self.formated_path,sep=',', nrows = batch_size,
+            self.df = pd.read_csv(self.formated_path,sep=',', nrows = batch_size,
                          skiprows = self.index)
         
         self.index += batch_size
 
-        labels = df[self.attack_types]
+        labels = self.df[self.attack_types]
         for att in self.attack_types:
-            del(df[att])
-        return df,labels
+            del(self.df[att])
+        return self.df,labels
     
     
     ''' Get n-rows from loaded data 
@@ -224,7 +224,7 @@ class QNetwork():
         # optimizer = optimizers.RMSpropGraves(learning_rate, 0.95, self.momentum, 1e-2)
         
         # Compilation of the model with optimizer and loss
-        self.model_network.model.compile(optimizer,"mse")
+        self.model.compile(optimizer,"mse")
 
     def predict(self,state,batch_size=1):
         """
@@ -257,7 +257,7 @@ class Policy:
         self.batch_size = batch_size
     
 class Epsilon_greedy(Policy):
-    def __init__(self, num_actions,estimator,batch_size,epsilon,decay_rate, epoch_length):
+    def __init__(self,estimator ,num_actions ,batch_size,epsilon,decay_rate, epoch_length):
         Policy.__init__(self, num_actions, estimator,batch_size)
         self.name = "Epsilon Greedy"
         if (epsilon is None or epsilon < 0 or epsilon > 1):
@@ -265,8 +265,8 @@ class Epsilon_greedy(Policy):
             sys.exit(0)
         self.epsilon = epsilon
         self.step_counter = 0
-        self.epoch_length
-        self.batch_size
+        self.epoch_length = epoch_length
+        self.batch_size = batch_size
         
         # if epsilon set to 1, it will be decayed over time
         if self.epsilon == 1:
@@ -274,7 +274,7 @@ class Epsilon_greedy(Policy):
         else:
             self.epsilon_decay = False
     
-    def get_action(self,states):
+    def get_actions(self,states):
         # get next action
         if np.random.rand() <= self.epsilon:
             actions = np.random.randint(0, self.num_actions,self.batch_size)
@@ -299,31 +299,30 @@ Reinforcement learning Agent definition
 
 class Agent(object):  
         
-    def __init__(self, actions):
+    def __init__(self, actions,obs_size):
         self.actions = actions
         self.num_actions = len(actions)
+        self.obs_size = obs_size
+        
 
     def act(self, state,policy):
         raise NotImplementedError
 
-class AttackerAgent(Agent):
+#class AttackerAgent(Agent):
+#
+#    def __init__(self, actions, obs_size, **kwargs):
+#        super().__init__(actions)
 
-    def __init__(self, actions, obs_size, **kwargs):
-        super().__init__(actions)
 
-
-class DefenderAgent(Agent, policy="EpsilonGredy"):      
-    def __init__(self, actions, obs_size, **kwargs):
-        super().__init__(actions)
+class DefenderAgent(Agent):      
+    def __init__(self, actions, obs_size, policy="EpsilonGreedy", **kwargs):
+        super().__init__(actions,obs_size)
         
         self.epsilon = kwargs.get('epsilon', .01)
-        
         self.gamma = kwargs.get('gamma', .001)
-        
         self.batch_size = kwargs.get('batch_size', 1)
         self.epoch_length = kwargs.get('epoch_length', 100)
         self.decay_rate = kwargs.get('decay_rate',0.99)
-        self.tau = kwargs.get('tau', .001)
         
         
         self.model_network = QNetwork(self.obs_size, self.num_actions,
@@ -331,15 +330,15 @@ class DefenderAgent(Agent, policy="EpsilonGredy"):
                                       kwargs.get('hidden_size', 100),
                                       kwargs.get('hidden_layers',1),
                                       kwargs.get('learning_rate',.2))
-        
-        self.policy = Epsilon_greedy(self.model_network,len(actions),
-                                     self.batch_size,self.epsilon,
-                                     self.decay_rate,self.epoch_length)
+        if policy == "EpsilonGreedy":
+            self.policy = Epsilon_greedy(self.model_network,len(actions),
+                                         self.batch_size,self.epsilon,
+                                         self.decay_rate,self.epoch_length)
         
         
     def act(self,states):
         # Get actions under the policy
-        actions = self.policy.get_actions(self,states)
+        actions = self.policy.get_actions(states)
         return actions
     
     def update_model(self,states,actions,next_states,reward):
@@ -351,8 +350,13 @@ class DefenderAgent(Agent, policy="EpsilonGredy"):
         Q = self.model_network.predict(states)
         
         # Q-learning update
-        targets = reward + self.gamma * self.Q[sx,indx]   
-        Q[sx,indx] = targets        
+        targets = reward + self.gamma * Q[sx,indx]   
+        Q[sx,indx] = targets  
+        
+        loss = self.model_network.model.train_on_batch(states,Q)
+        
+        return loss
+        
         
 
 '''
@@ -427,7 +431,7 @@ if __name__ == "__main__":
     epsilon = .1  # exploration
     num_episodes = 300
     iterations_episode = 100
-    batch_size = 20
+    batch_size = 1
 
     #3max_memory = 100
     decay_rate = 0.99
@@ -435,7 +439,7 @@ if __name__ == "__main__":
     
     
     hidden_size = 100
-
+    hidden_layers = 3
     
 
     # Initialization of the enviroment
@@ -446,7 +450,14 @@ if __name__ == "__main__":
     
     # Initialization of the Agent
     obs_size = env.data_shape[1]-len(env.attack_types)
-    agent = DefenderAgent(valid_actions,obs_size)    
+    agent = DefenderAgent(valid_actions,obs_size,"EpsilonGreedy",
+                          batch_size=batch_size,
+                          epoch_length = iterations_episode,
+                          epsilon = epsilon,
+                          decay_rate = decay_rate,
+                          gamma = gamma,
+                          hidden_size=hidden_size,
+                          hidden_layers=hidden_layers)    
     
     
     # Statistics
@@ -465,9 +476,7 @@ if __name__ == "__main__":
         
         done = False
        
-        # Define exploration to improve performance
-        exploration = 1
-        
+
         # Iteration in one episode
         for i_iteration in range(iterations_episode):
             
@@ -513,7 +522,7 @@ if __name__ == "__main__":
     # Save test dataset deleting the data used to train
     print("Shape: ",env.data_shape)
     print("Used: ",num_episodes*iterations_episode*batch_size)
-    env.save_test()
+    #env.save_test()
     
     # Plot training results
     plt.figure(1)
