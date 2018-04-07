@@ -40,51 +40,53 @@ class data_cls:
         self.loaded = False
         
         self.attack_types = ['normal','DoS','Probe','R2L','U2R']
-        self.attack_map =   { 'normal.': 'normal',
+        self.attack_names = []
+        self.attack_map =   { 
+                'normal.': 'normal',
                         
-                        'back.': 'DoS',
-                        'land.': 'DoS',
-                        'neptune.': 'DoS',
-                        'pod.': 'DoS',
-                        'smurf.': 'DoS',
-                        'teardrop.': 'DoS',
-                        'mailbomb.': 'DoS',
-                        'apache2.': 'DoS',
-                        'processtable.': 'DoS',
-                        'udpstorm.': 'DoS',
-                        
-                        'ipsweep.': 'Probe',
-                        'nmap.': 'Probe',
-                        'portsweep.': 'Probe',
-                        'satan.': 'Probe',
-                        'mscan.': 'Probe',
-                        'saint.': 'Probe',
-                    
-                        'ftp_write.': 'R2L',
-                        'guess_passwd.': 'R2L',
-                        'imap.': 'R2L',
-                        'multihop.': 'R2L',
-                        'phf.': 'R2L',
-                        'spy.': 'R2L',
-                        'warezclient.': 'R2L',
-                        'warezmaster.': 'R2L',
-                        'sendmail.': 'R2L',
-                        'named.': 'R2L',
-                        'snmpgetattack.': 'R2L',
-                        'snmpguess.': 'R2L',
-                        'xlock.': 'R2L',
-                        'xsnoop.': 'R2L',
-                        'worm.': 'R2L',
-                        
-                        'buffer_overflow.': 'U2R',
-                        'loadmodule.': 'U2R',
-                        'perl.': 'U2R',
-                        'rootkit.': 'U2R',
-                        'httptunnel.': 'U2R',
-                        'ps.': 'U2R',    
-                        'sqlattack.': 'U2R',
-                        'xterm.': 'U2R'
-                    }
+                'back.': 'DoS',
+                'land.': 'DoS',
+                'neptune.': 'DoS',
+                'pod.': 'DoS',
+                'smurf.': 'DoS',
+                'teardrop.': 'DoS',
+                'mailbomb.': 'DoS',
+                'apache2.': 'DoS',
+                'processtable.': 'DoS',
+                'udpstorm.': 'DoS',
+                
+                'ipsweep.': 'Probe',
+                'nmap.': 'Probe',
+                'portsweep.': 'Probe',
+                'satan.': 'Probe',
+                'mscan.': 'Probe',
+                'saint.': 'Probe',
+            
+                'ftp_write.': 'R2L',
+                'guess_passwd.': 'R2L',
+                'imap.': 'R2L',
+                'multihop.': 'R2L',
+                'phf.': 'R2L',
+                'spy.': 'R2L',
+                'warezclient.': 'R2L',
+                'warezmaster.': 'R2L',
+                'sendmail.': 'R2L',
+                'named.': 'R2L',
+                'snmpgetattack.': 'R2L',
+                'snmpguess.': 'R2L',
+                'xlock.': 'R2L',
+                'xsnoop.': 'R2L',
+                'worm.': 'R2L',
+                
+                'buffer_overflow.': 'U2R',
+                'loadmodule.': 'U2R',
+                'perl.': 'U2R',
+                'rootkit.': 'U2R',
+                'httptunnel.': 'U2R',
+                'ps.': 'U2R',    
+                'sqlattack.': 'U2R',
+                'xterm.': 'U2R'
+                }
         
         # If path is not provided system out error
         if (not path):
@@ -122,39 +124,36 @@ class data_cls:
                         self.df[indx] = 0
                     else:
                         self.df[indx] = (self.df[indx]-self.df[indx].min())/(self.df[indx].max()-self.df[indx].min())
-                    
-                      
-            # One-hot-Encoding for reaction.  
-            all_labels = self.df['labels'] # Get all labels in df
-            mapped_labels = np.vectorize(self.attack_map.get)(all_labels) # Map attacks
+            
+            # One hot encoding for labels
             self.df = pd.concat([self.df.drop('labels', axis=1),
-                            pd.get_dummies(mapped_labels)], axis=1)
+                            pd.get_dummies(self.df['labels'])], axis=1)
+            
+            # Create a list with the existent attacks in the df
+            for att in self.attack_map:
+                if att in self.df.columns:
+                    self.attack_names.append(att)
             
             # suffle data
             self.df = shuffle(self.df,random_state=np.random.randint(0,100))
-            # Save data
-            self.df.to_csv(self.formated_path,sep=',',index=False)
+            self.df = self.df.reset_index()
             
-    ''' Get n-row batch from the dataset
-        Return: df = n-rows
-                labels = correct labels for detection 
-    Sequential for largest datasets
-    '''
-    def get_sequential_batch(self, batch_size=100):
-        if self.loaded is False:
-            self.df = pd.read_csv(self.formated_path,sep=',', nrows = batch_size)
-            self.loaded = True
-        else:
-            self.df = pd.read_csv(self.formated_path,sep=',', nrows = batch_size,
-                         skiprows = self.index)
-        
-        self.index += batch_size
+            # Save data
+            # 70% train 30% test
+            train_indx = np.int32(self.df.shape[0]*0.7)
+            test_df = self.df.iloc[train_indx:self.df.shape[0]]
+            self.df = self.df[:train_indx]
+            test_df.to_csv(self.test_path,sep=',',index=False)
+            self.df.to_csv(self.formated_path,sep=',',index=False)
 
-        labels = self.df[self.attack_types]
-        for att in self.attack_types:
-            del(self.df[att])
-        return self.df,labels
-    
+
+    def get_shape(self):
+        if self.loaded is False:
+            self._load_df()
+        
+        self.data_shape = self.df.shape
+        # stata + labels
+        return self.data_shape
     
     ''' Get n-rows from loaded data 
         The dataset must be loaded in RAM
@@ -162,38 +161,53 @@ class data_cls:
     def get_batch(self, batch_size=100):
         
         if self.loaded is False:
-            self.df = pd.read_csv(self.formated_path,sep=',') # Read again the csv
-            self.loaded = True
-            #self.headers = list(self.df)
+            self._load_df()
         
+        # Read the df rows
         batch = self.df.iloc[self.index:self.index+batch_size]
+        
         self.index += batch_size
-        labels = batch[self.attack_types]
+        labels = batch[self.attack_names]
         
-        for att in self.attack_types:
+        for att in self.attack_names:
             del(batch[att])
+            
         return batch,labels
+
+            
+    ''' Get n-row batch from the dataset
+        Return: df = n-rows
+                labels = correct labels for detection 
+    Sequential for largest datasets
+    '''
+#    def get_sequential_batch(self, batch_size=100):
+#        if self.loaded is False:
+#            self.df = pd.read_csv(self.formated_path,sep=',', nrows = batch_size)
+#            self.loaded = True
+#        else:
+#            self.df = pd.read_csv(self.formated_path,sep=',', nrows = batch_size,
+#                         skiprows = self.index)
+#        
+#        self.index += batch_size
+#
+#        labels = self.df[self.attack_types]
+#        for att in self.attack_names:
+#            if att in self.df.columns:
+#                del(self.df[att])
+#        return self.df,labels
+
+
+        
     
-    def save_test(self):
-        test_df = self.df.iloc[self.index:self.data_shape[0] + 1]
-        test_df.to_csv(self.test_path,sep=',',index=False)
-    
-    def get_full(self):
-        self.df = pd.read_csv(self.data_path,sep=',')        
-        self.labels = self.df['labels']
+
+    def _load_df(self):
+        self.df = pd.read_csv(self.formated_path,sep=',') # Read again the csv
         self.loaded = True
-        del(self.df['labels'])
-        
-    def get_shape(self):
-        if self.loaded is False:
-            self.df = pd.read_csv(self.formated_path,sep=',') # Read again the csv
-            self.loaded = True
-        
-        self.data_shape = self.df.shape
-        # stata + labels
-        return self.data_shape
-
-
+         # Create a list with the existent attacks in the df
+        for att in self.attack_map:
+            if att in self.df.columns:
+                self.attack_names.append(att)
+        #self.headers = list(self.df)
 
 
 class QNetwork():
@@ -276,7 +290,6 @@ class Epsilon_greedy(Policy):
 #            self.epsilon_decay = False
         # Always decay
         self.epsilon_decay = True
-        
     
     def get_actions(self,states):
         # get next action
@@ -303,24 +316,10 @@ Reinforcement learning Agent definition
 
 class Agent(object):  
         
-    def __init__(self, actions,obs_size):
+    def __init__(self, actions,obs_size, policy="EpsilonGreedy", **kwargs):
         self.actions = actions
         self.num_actions = len(actions)
         self.obs_size = obs_size
-        
-
-    def act(self, state,policy):
-        raise NotImplementedError
-
-#class AttackerAgent(Agent):
-#
-#    def __init__(self, actions, obs_size, **kwargs):
-#        super().__init__(actions)
-
-
-class DefenderAgent(Agent):      
-    def __init__(self, actions, obs_size, policy="EpsilonGreedy", **kwargs):
-        super().__init__(actions,obs_size)
         
         self.epsilon = kwargs.get('epsilon', .01)
         self.gamma = kwargs.get('gamma', .001)
@@ -340,11 +339,6 @@ class DefenderAgent(Agent):
                                          self.decay_rate,self.epoch_length)
         
         
-    def act(self,states):
-        # Get actions under the policy
-        actions = self.policy.get_actions(states)
-        return actions
-    
     def update_model(self,states,actions,next_states,reward):
         # Compute Q targets
         Q_prime = self.model_network.predict(next_states)
@@ -359,7 +353,29 @@ class DefenderAgent(Agent):
         
         loss = self.model_network.model.train_on_batch(states,Q)
         
-        return loss
+        return loss    
+
+    def act(self, state,policy):
+        raise NotImplementedError
+
+
+class DefenderAgent(Agent):      
+    def __init__(self, actions, obs_size, policy="EpsilonGreedy", **kwargs):
+        super().__init__(actions,obs_size, policy="EpsilonGreedy", **kwargs)
+        
+    def act(self,states):
+        # Get actions under the policy
+        actions = self.policy.get_actions(states)
+        return actions
+    
+class AttackAgent(Agent):      
+    def __init__(self, actions, obs_size, policy="EpsilonGreedy", **kwargs):
+        super().__init__(actions,obs_size, policy="EpsilonGreedy", **kwargs)
+        
+    def act(self,states):
+        # Get actions under the policy
+        actions = self.policy.get_actions(states)
+        return actions
         
         
 
@@ -368,11 +384,19 @@ Reinforcement learning Enviroment Definition
 '''
 class RLenv(data_cls):
     def __init__(self,path,batch_size = 10):
-        data_cls.__init__(self,path)
+        data_cls.__init__(self,path) # df loaded
         self.batch_size = batch_size
         self.data_shape = data_cls.get_shape(self)
 
     def _update_state(self):
+        ###########################################################
+        ##########################################################
+        # TODO
+        #
+        # Modificar el actualizar estado para que no devuelva  un estado
+        # Ya no me inteeresa saber el siguiente estado.
+        #############################################################
+        
         self.states,self.labels = data_cls.get_batch(self,self.batch_size)
         
         # Update statistics
@@ -384,8 +408,10 @@ class RLenv(data_cls):
     '''
     def reset(self):
         # Statistics
-        self.true_labels = np.zeros(len(env.attack_types),dtype=int)
-        self.estimated_labels = np.zeros(len(env.attack_types),dtype=int)
+        self.defender_true_labels = np.zeros(len(env.attack_types),dtype=int)
+        self.defender_estimated_labels = np.zeros(len(env.attack_types),dtype=int)
+        self.attack_true_labels = np.zeros(len(env.attack_names),dtype=int)
+        self.attack_estimated_labels = np.zeros(len(env.attack_names),dtype=int)
         
         self.state_numb = 0
         
@@ -393,7 +419,7 @@ class RLenv(data_cls):
         self.states,self.labels = data_cls.get_batch(self,self.batch_size)
         
         # Update statistics
-        self.true_labels += np.sum(self.labels).values
+        self.attack_true_labels += np.sum(self.labels).values
         
         self.total_reward = 0
         self.steps_in_episode = 0
@@ -405,13 +431,21 @@ class RLenv(data_cls):
         Reward: Actual reward
         done: If the game ends (no end in this case)
     '''    
-    def act(self,actions):
+    def act(self,defender_actions,attack_actions):
         # Clear previous rewards        
         self.reward = np.zeros(self.batch_size)
         
         # Actualize new rewards == get_reward
-        for indx,a in enumerate(actions):
-            self.estimated_labels[a] += 1              
+        for indx,a in enumerate(defender_actions):
+            self.defender_estimated_labels[a] += 1
+            self.attack_estimated_labels[attack_actions[indx]] +=1
+            #########################################################
+            #########################################################
+            ##########################################################
+            # TODO
+            # cambiar la forma en la que se reciben los rewards
+            ###########################################################
+            
             if a == np.argmax(self.labels.iloc[indx].values):
                 self.reward[indx] = 1
         
@@ -423,6 +457,42 @@ class RLenv(data_cls):
             
         return self.states, self.reward, self.done
     
+    '''
+    Provide the actual states for the selected attacker actions
+    Parameters:
+        self:
+        attacker_actions: optimum attacks selected by the attacker
+            it can be one of attack_names list and select random of this
+    Returns:
+        State: Actual state for the selected attacks
+    '''
+    def get_states(self,attacker_actions):
+        first = True
+        for attack in attacker_actions:
+            if first:
+                minibatch = (self.df[self.df[self.attack_names[attack]]==1].sample(1))
+                first = False
+            else:
+                minibatch.add(self.df[self.df[self.attack_names[attack]]==1].sample(1))
+            
+        self.labels = minibatch[self.attack_names]
+    
+        for att in self.attack_names:
+            del(minibatch[att])
+            
+        self.states = minibatch
+        
+        return self.states
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -447,14 +517,17 @@ if __name__ == "__main__":
     
 
     # Initialization of the enviroment
-    env = RLenv(kdd_path,batch_size)
+    env = RLenv('../datasets/micro_kddcup.data',batch_size)
     
-    valid_actions = list(range(len(env.attack_types))) # only detect type of attack
-    num_actions = len(valid_actions)
+    # obs_size = size of the state
+    obs_size = env.data_shape[1]-len(env.attack_names)
+    '''
+    Definition for the defensor agent.
+    '''
+    defender_valid_actions = list(range(len(env.attack_types))) # only detect type of attack
+    defender_num_actions = len(defender_valid_actions)    
     
-    # Initialization of the Agent
-    obs_size = env.data_shape[1]-len(env.attack_types)
-    agent = DefenderAgent(valid_actions,obs_size,"EpsilonGreedy",
+    defender_agent = DefenderAgent(defender_valid_actions,obs_size,"EpsilonGreedy",
                           batch_size=batch_size,
                           epoch_length = iterations_episode,
                           epsilon = epsilon,
@@ -462,6 +535,23 @@ if __name__ == "__main__":
                           gamma = gamma,
                           hidden_size=hidden_size,
                           hidden_layers=hidden_layers)    
+    
+    '''
+    Definition for the attacker agent.
+    '''
+    attack_valid_actions = list(range(len(env.attack_names)))
+    attack_num_actions = len(attack_valid_actions)
+    
+    attacker_agent = AttackAgent(attack_valid_actions,obs_size,"EpsilonGreedy",
+                          batch_size=batch_size,
+                          epoch_length = iterations_episode,
+                          epsilon = epsilon,
+                          decay_rate = decay_rate,
+                          gamma = gamma,
+                          hidden_size=hidden_size,
+                          hidden_layers=hidden_layers) 
+    
+    
     
     
     # Statistics
@@ -475,7 +565,7 @@ if __name__ == "__main__":
         start_time = time.time()
         loss = 0.
         total_reward_by_episode = 0
-        # Reset enviromet, actualize the data batch
+        # Reset enviromet, actualize the data batch with random state/attacks
         states = env.reset()
         
         done = False
@@ -489,14 +579,18 @@ if __name__ == "__main__":
             act_time = time.time()
             
             # Get actions for actual states following the policy
-            actions = agent.act(states)
+            attack_actions = attacker_agent.act(states)
+            
+            states = env.get_states(attack_actions)            
+            
+            defender_actions = defender_agent.act(states)
             #Enviroment actuation for this actions
-            next_states, reward, done = env.act(actions)
+            next_states, reward, done = env.act(defender_actions,attack_actions)
             
             act_end_time = time.time()
             
             # Train network, update loss
-            loss += agent.update_model(states,actions,next_states,reward)
+            loss += defender_agent.update_model(states,defender_actions,next_states,reward)
             
             update_end_time = time.time()
 
@@ -519,14 +613,13 @@ if __name__ == "__main__":
         print("\r|Estimated: {}|Labels: {}".format(env.estimated_labels,env.true_labels))
         
     # Save trained model weights and architecture, used in test
-    agent.model_network.model.save_weights("multi_model.h5", overwrite=True)
-    with open("multi_model.json", "w") as outfile:
-        json.dump(agent.model_network.model.to_json(), outfile)
+    defender_agent.model_network.model.save_weights("defender_agent_model.h5", overwrite=True)
+    with open("defender_agent_model.json", "w") as outfile:
+        json.dump(defender_agent.model_network.model.to_json(), outfile)
         
     # Save test dataset deleting the data used to train
     print("Shape: ",env.data_shape)
     print("Used: ",num_episodes*iterations_episode*batch_size)
-    #env.save_test()
     
     # Plot training results
     plt.figure(1)
