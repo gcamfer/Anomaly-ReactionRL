@@ -28,6 +28,9 @@ class data_cls:
             "dst_host_rerror_rate","dst_host_srv_rerror_rate","labels"]
         self.index = 0
         self.headers = None
+        self.loaded = False
+        self.formated_path = "../datasets/formated_data.data"
+        self.test_path = "../datasets/test_data.data"
         
         if (not path):
             print("Path: not path name provided", flush = True)
@@ -37,47 +40,76 @@ class data_cls:
         #if (not os.path.exists('../datasets')):
         #    os.makedirs('../datasets')
         #    formated = False
-        self.data_path = '../datasets/formated_data.data'
-        if os.path.exists(self.data_path):
+        if os.path.exists(self.formated_path):
             formated = True
         # If it does not exist, it's needed to format the data
         if not formated:
             ''' Formating the dataset for ready-2-use data'''
-            df = pd.read_csv(path,sep=',',names=col_names)
+            self.df = pd.read_csv(path,sep=',',names=col_names)
+            
+            # Data now is in RAM
+            self.loaded = True
             
             # Dataframe processing
-            df = pd.concat([df.drop('protocol_type', axis=1), pd.get_dummies(df['protocol_type'])], axis=1)
-            df = pd.concat([df.drop('service', axis=1), pd.get_dummies(df['service'])], axis=1)
-            df = pd.concat([df.drop('flag', axis=1), pd.get_dummies(df['flag'])], axis=1)
+            self.df = pd.concat([self.df.drop('protocol_type', axis=1), pd.get_dummies(self.df['protocol_type'])], axis=1)
+            self.df = pd.concat([self.df.drop('service', axis=1), pd.get_dummies(self.df['service'])], axis=1)
+            self.df = pd.concat([self.df.drop('flag', axis=1), pd.get_dummies(self.df['flag'])], axis=1)
               
             #normalized_df=(df-df.mean())/df.std()
             
             # 1 if ``su root'' command attempted; 0 otherwise 
-            df['su_attempted'] = df['su_attempted'].replace(2.0, 0.0)
+            self.df['su_attempted'] = self.df['su_attempted'].replace(2.0, 0.0)
             
             # Normalization of the df
-            for indx,dtype in df.dtypes.iteritems():
+            for indx,dtype in self.df.dtypes.iteritems():
                 if dtype == 'float64' or dtype == 'int64':
-                    if df[indx].max() == 0 and df[indx].min()== 0:
-                        df[indx] = 0
+                    if self.df[indx].max() == 0 and self.df[indx].min()== 0:
+                        self.df[indx] = 0
                     else:
-                        df[indx] = (df[indx]-df[indx].min())/(df[indx].max()-df[indx].min()).astype(np.float32)
+                        self.df[indx] = (self.df[indx]-self.df[indx].min())/(self.df[indx].max()-self.df[indx].min()).astype(np.float32)
                     
             # One-hot-Encoding for reaction. 4 detection binary label 
             # labels = pd.get_dummies(df['labels'])
         
             # Only save one column for atack
             # '0' if the data is normal '1' if atack
-            df = pd.concat([df.drop('labels', axis=1),
-                            1 - pd.get_dummies(df['labels'])['normal.']], axis=1)
+            self.df = pd.concat([self.df.drop('labels', axis=1),
+                            1 - pd.get_dummies(self.df['labels'])['normal.']], axis=1)
             #Only detectign label as normal = 0 atack = 1 -> reanaming column
-            df.rename(columns={'normal.': 'labels'},inplace=True)
+            self.df.rename(columns={'normal.': 'labels'},inplace=True)
             # suffle data
-            df = shuffle(df,random_state=np.random.randint(0,100))
-            df.to_csv(self.data_path,sep=',',index=False)
+            self.df = shuffle(self.df,random_state=np.random.randint(0,100))            
+            
+            # Save data
+            # 70% train 30% test
+            train_indx = np.int32(self.df.shape[0]*0.7)
+            test_df = self.df.iloc[train_indx:self.df.shape[0]]
+            self.df = self.df[:train_indx]
+            test_df.to_csv(self.test_path,sep=',',index=False)
+            self.df.to_csv(self.formated_path,sep=',',index=False)
+            
+            
+    ''' Get n-rows from loaded data 
+        The dataset must be loaded in RAM
+    '''
+    def get_batch(self, batch_size=100):
+        
+        if self.loaded is False:
+            self._load_df()
+        
+        # Read the df rows
+        batch = self.df.iloc[self.index:self.index+batch_size]
+        
+        self.index += batch_size
+        
+        labels = batch['labels'].values
+        
+        del(batch['labels'])
+            
+        return batch,labels       
             
     ''' Get n-rows from the dataset'''
-    def get_batch(self, batch_size=100):
+    def get_seq_batch(self, batch_size=100):
         if self.headers is None:
             df = pd.read_csv(self.data_path,sep=',', nrows = batch_size)
             self.headers = list(df)
@@ -91,18 +123,19 @@ class data_cls:
         del(df['labels'])
         return df,labels
     
-    
-    def get_full(self):
-        df = pd.read_csv(self.data_path,sep=',')        
-        labels = df['labels']
-        del(df['labels'])
-        return df,labels
         
     def get_shape(self):
-        df = pd.read_csv(self.data_path,sep=',')
+        
+        if self.loaded is False:
+            self._load_df()
+        
+        self.data_shape = self.df.shape
         # stata + labels
-        return df.shape
-
+        return self.data_shape
+    
+    def _load_df(self):
+        self.df = pd.read_csv(self.formated_path,sep=',') # Read again the csv
+        self.loaded = True
 
 '''
 Definition
@@ -150,14 +183,15 @@ class RLenv(data_cls):
 
 
 if __name__ == "__main__":
-  
+
+    kdd_path = '../datasets/kddcup.data'
     kdd_10_path = '../datasets/kddcup.data_10_percent_corrected'
     micro_kdd = '../datasets/micro_kddcup.data'
     # Valid actions = '0' supose no atack, '1' supose atack
     valid_actions = [0, 1]
     num_actions = len(valid_actions)
     epsilon = .1  # exploration
-    num_episodes = 100
+    num_episodes = 300
     iterations_episode = 100
     
     #3max_memory = 100
@@ -169,7 +203,7 @@ if __name__ == "__main__":
     batch_size = 10
 
     # Initialization of the enviroment
-    env = RLenv(kdd_10_path,batch_size)
+    env = RLenv(kdd_path,batch_size)
 
     
     # Network arquitecture
@@ -233,8 +267,8 @@ if __name__ == "__main__":
             zeros += batch_size - int(sum(actions))
             total_reward_by_episode += int(sum(reward))
             
-            reward_chain.append(total_reward_by_episode)    
-            loss_chain.append(loss)
+        reward_chain.append(total_reward_by_episode)    
+        loss_chain.append(loss)
             
         print("\rEpoch {:03d}/{:03d} | Loss {:4.4f} | Tot reward x episode {:03d}| Ones/Zeros: {}/{} ".format(epoch,
               num_episodes ,loss, total_reward_by_episode,ones,zeros))
@@ -257,6 +291,7 @@ if __name__ == "__main__":
     plt.title('Loss by episode')
     plt.xlabel('n Episode')
     plt.ylabel('loss')
-
+    plt.tight_layout()
+    plt.show()
 
 

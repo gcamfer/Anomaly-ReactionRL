@@ -136,7 +136,7 @@ class data_cls:
             
             # suffle data
             self.df = shuffle(self.df,random_state=np.random.randint(0,100))
-            self.df = self.df.reset_index()
+            self.df = self.df.reset_index(drop=True)
             
             # Save data
             # 70% train 30% test
@@ -195,10 +195,6 @@ class data_cls:
 #            if att in self.df.columns:
 #                del(self.df[att])
 #        return self.df,labels
-
-
-        
-    
 
     def _load_df(self):
         self.df = pd.read_csv(self.formated_path,sep=',') # Read again the csv
@@ -388,15 +384,16 @@ class RLenv(data_cls):
         self.batch_size = batch_size
         self.data_shape = data_cls.get_shape(self)
 
-    def _update_state(self):
-        ###########################################################
-        ##########################################################
-        # TODO
-        #
-        # Modificar el actualizar estado para que no devuelva  un estado
-        # Ya no me inteeresa saber el siguiente estado.
-        #############################################################
-        
+
+    '''
+    _update_state: function to update the current state
+    Returns:
+        None
+    Modifies the self parameters involved in the state:
+        self.state and self.labels
+    Also modifies the true labels to get learning knowledge
+    '''
+    def _update_state(self):        
         self.states,self.labels = data_cls.get_batch(self,self.batch_size)
         
         # Update statistics
@@ -408,10 +405,9 @@ class RLenv(data_cls):
     '''
     def reset(self):
         # Statistics
-        self.defender_true_labels = np.zeros(len(env.attack_types),dtype=int)
-        self.defender_estimated_labels = np.zeros(len(env.attack_types),dtype=int)
-        self.attack_true_labels = np.zeros(len(env.attack_names),dtype=int)
-        self.attack_estimated_labels = np.zeros(len(env.attack_names),dtype=int)
+        self.def_true_labels = np.zeros(len(self.attack_types),dtype=int)
+        self.def_estimated_labels = np.zeros(len(self.attack_types),dtype=int)
+        self.att_true_labels = np.zeros(len(self.attack_names),dtype=int)
         
         self.state_numb = 0
         
@@ -419,7 +415,11 @@ class RLenv(data_cls):
         self.states,self.labels = data_cls.get_batch(self,self.batch_size)
         
         # Update statistics
-        self.attack_true_labels += np.sum(self.labels).values
+        self.att_true_labels += np.sum(self.labels).values
+        for att, n in (np.sum(self.labels)).iteritems():
+            self.def_true_labels[self.attack_types.index(self.attack_map[att])] += n
+        
+        
         
         self.total_reward = 0
         self.steps_in_episode = 0
@@ -430,32 +430,51 @@ class RLenv(data_cls):
         State: Next state for the game
         Reward: Actual reward
         done: If the game ends (no end in this case)
+    
+    In the adversarial enviroment, it's only needed to return the actual reward
     '''    
     def act(self,defender_actions,attack_actions):
         # Clear previous rewards        
-        self.reward = np.zeros(self.batch_size)
+        self.def_reward = np.zeros(self.batch_size)
+        self.att_reward = np.zeros(self.batch_size)
         
         # Actualize new rewards == get_reward
         for indx,a in enumerate(defender_actions):
-            self.defender_estimated_labels[a] += 1
-            self.attack_estimated_labels[attack_actions[indx]] +=1
-            #########################################################
-            #########################################################
-            ##########################################################
-            # TODO
-            # cambiar la forma en la que se reciben los rewards
-            ###########################################################
+            self.def_estimated_labels[a] += 1
             
-            if a == np.argmax(self.labels.iloc[indx].values):
-                self.reward[indx] = 1
+            # The defense wins
+            if self.attack_map[self.attack_names[attack_actions[indx]]] == self.attack_types[a]:
+                self.def_reward[indx] = 5
+                self.att_reward[indx] = -1
+            # No attack but defense say attack
+            elif self.attack_map[self.attack_names[attack_actions[indx]]] == 'normal':
+                self.def_reward[indx] = -1
+                self.att_reward[indx] = 1
+            # There is an attack but the defense mistaken the attack 
+            elif self.attack_types[a] != 'normal':
+                self.def_reward[indx] = 0
+                self.att_reward[indx] = 1
+            # There is an attack and the defense say normal
+            else:
+                self.def_reward[indx] = -1
+                self.att_reward[indx] = 5
+         
+            
+        # Update statistics
+        for att in attack_actions:
+            self.att_true_labels[att] += 1
+            self.def_true_labels[self.attack_types.index(self.attack_map[self.attack_names[att]])] += 1    
+            
         
-        # Get new state and new true values
-        self._update_state()
+        # Get new state and new true values 
+        #self._update_state()
+        attack_actions = attacker_agent.act(self.states)
+        self.states = self.get_states(attack_actions)    
         
         # Done allways false in this continuous task       
         self.done = False
             
-        return self.states, self.reward, self.done
+        return self.states, self.def_reward,self.att_reward, attack_actions, self.done
     
     '''
     Provide the actual states for the selected attacker actions
@@ -473,7 +492,7 @@ class RLenv(data_cls):
                 minibatch = (self.df[self.df[self.attack_names[attack]]==1].sample(1))
                 first = False
             else:
-                minibatch.add(self.df[self.df[self.attack_names[attack]]==1].sample(1))
+                minibatch=minibatch.append(self.df[self.df[self.attack_names[attack]]==1].sample(1))
             
         self.labels = minibatch[self.attack_names]
     
@@ -502,8 +521,8 @@ if __name__ == "__main__":
     kdd_path = '../datasets/kddcup.data'
 
     # Valid actions = '0' supose no attack, '1' supose attack
-    epsilon = .1  # exploration
-    num_episodes = 300
+    epsilon = .2  # exploration
+    num_episodes = 100
     iterations_episode = 100
     batch_size = 1
 
@@ -515,9 +534,11 @@ if __name__ == "__main__":
     hidden_size = 100
     hidden_layers = 3
     
-
+    # dataset for prgram
+    # '../datasets/micro_kddcup.data'
+    
     # Initialization of the enviroment
-    env = RLenv('../datasets/micro_kddcup.data',batch_size)
+    env = RLenv(kdd_10_path,batch_size)
     
     # obs_size = size of the state
     obs_size = env.data_shape[1]-len(env.attack_names)
@@ -538,6 +559,8 @@ if __name__ == "__main__":
     
     '''
     Definition for the attacker agent.
+    In this case the exploration is better to be greater
+    The correlation sould be greater too so gamma bigger
     '''
     attack_valid_actions = list(range(len(env.attack_names)))
     attack_num_actions = len(attack_valid_actions)
@@ -545,9 +568,9 @@ if __name__ == "__main__":
     attacker_agent = AttackAgent(attack_valid_actions,obs_size,"EpsilonGreedy",
                           batch_size=batch_size,
                           epoch_length = iterations_episode,
-                          epsilon = epsilon,
-                          decay_rate = decay_rate,
-                          gamma = gamma,
+                          epsilon = .01,
+                          decay_rate = 1,
+                          gamma = 0.2,
                           hidden_size=hidden_size,
                           hidden_layers=hidden_layers) 
     
@@ -555,18 +578,29 @@ if __name__ == "__main__":
     
     
     # Statistics
-    reward_chain = []
-    loss_chain = []
+    att_reward_chain = []
+    def_reward_chain = []
+    att_loss_chain = []
+    def_loss_chain = []
+    def_total_reward_chain = []
+    att_total_reward_chain = []
     
 
     
     # Main loop
     for epoch in range(num_episodes):
         start_time = time.time()
-        loss = 0.
-        total_reward_by_episode = 0
+        att_loss = 0.
+        def_loss = 0.
+        def_total_reward_by_episode = 0
+        att_total_reward_by_episode = 0
         # Reset enviromet, actualize the data batch with random state/attacks
         states = env.reset()
+        
+        # Get actions for actual states following the policy
+        attack_actions = attacker_agent.act(states)
+        states = env.get_states(attack_actions)    
+        
         
         done = False
        
@@ -576,41 +610,50 @@ if __name__ == "__main__":
             
             
             # apply actions, get rewards and new state
-            act_time = time.time()
-            
-            # Get actions for actual states following the policy
-            attack_actions = attacker_agent.act(states)
-            
-            states = env.get_states(attack_actions)            
+            act_time = time.time()  
             
             defender_actions = defender_agent.act(states)
             #Enviroment actuation for this actions
-            next_states, reward, done = env.act(defender_actions,attack_actions)
+            next_states,def_reward, att_reward,next_attack_actions, done = env.act(defender_actions,attack_actions)
             
             act_end_time = time.time()
             
             # Train network, update loss
-            loss += defender_agent.update_model(states,defender_actions,next_states,reward)
+            def_loss += defender_agent.update_model(states,defender_actions,next_states,def_reward)
             
+            att_loss += attacker_agent.update_model(states,attack_actions,next_states,att_reward)
+
             update_end_time = time.time()
 
             # Update the state
             states = next_states
+            attack_actions = next_attack_actions
             
             
             # Update statistics
-            total_reward_by_episode += int(sum(reward))
+            def_total_reward_by_episode += int(sum(def_reward))
+            att_total_reward_by_episode += int(sum(att_reward))
         
         # Update user view
-        reward_chain.append(total_reward_by_episode)    
-        loss_chain.append(loss) 
+        def_reward_chain.append(def_total_reward_by_episode) 
+        att_reward_chain.append(att_total_reward_by_episode) 
+        def_loss_chain.append(def_loss)
+        att_loss_chain.append(att_loss) 
+
         
         end_time = time.time()
-        print("\r|Epoch {:03d}/{:03d} | Loss {:4.4f} |" 
-                "Tot reward in ep {:03d}| time: {:2.2f}|"
-                .format(epoch, num_episodes 
-                ,loss, total_reward_by_episode,(end_time-start_time)))
-        print("\r|Estimated: {}|Labels: {}".format(env.estimated_labels,env.true_labels))
+        print("\r\n|Epoch {:03d}/{:03d}| time: {:2.2f}|\r\n"
+                "|Def Loss {:4.4f} | Def Reward in ep {:03d}|\r\n"
+                "|Att Loss {:4.4f} | Att Reward in ep {:03d}|"
+                .format(epoch, num_episodes,(end_time-start_time), 
+                def_loss, def_total_reward_by_episode,
+                att_loss, att_total_reward_by_episode))
+        
+        
+        print("|Def Estimated: {}| Def Labels: {}"
+              "\r\n|Att Labels:\r\n{:}".format(env.def_estimated_labels,
+                                 env.def_true_labels,
+                                 env.att_true_labels))
         
     # Save trained model weights and architecture, used in test
     defender_agent.model_network.model.save_weights("defender_agent_model.h5", overwrite=True)
@@ -624,16 +667,23 @@ if __name__ == "__main__":
     # Plot training results
     plt.figure(1)
     plt.subplot(211)
-    plt.plot(np.arange(len(reward_chain)),reward_chain)
+    plt.plot(np.arange(len(def_reward_chain)),def_reward_chain,label='Defense')
+    plt.plot(np.arange(len(att_reward_chain)),att_reward_chain,label='Attack')
     plt.title('Total reward by episode')
     plt.xlabel('n Episode')
     plt.ylabel('Total reward')
+    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+           ncol=2, mode="expand", borderaxespad=0.)
     
     plt.subplot(212)
-    plt.plot(np.arange(len(loss_chain)),loss_chain)
+    plt.plot(np.arange(len(def_loss_chain)),def_loss_chain,label='Defense')
+    plt.plot(np.arange(len(att_loss_chain)),att_loss_chain,label='Attack')
     plt.title('Loss by episode')
     plt.xlabel('n Episode')
     plt.ylabel('loss')
-
+    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+           ncol=2, mode="expand", borderaxespad=0.)
+    plt.tight_layout()
+    plt.show()
 
 
