@@ -22,7 +22,7 @@ Data class processing
 '''
 
 class data_cls:
-    def __init__(self, path):
+    def __init__(self, path,train_test,**kwargs):
         col_names = ["duration","protocol_type","service","flag","src_bytes",
             "dst_bytes","land","wrong_fragment","urgent","hot","num_failed_logins",
             "logged_in","num_compromised","root_shell","su_attempted","num_root",
@@ -35,9 +35,12 @@ class data_cls:
             "dst_host_rerror_rate","dst_host_srv_rerror_rate","labels"]
         self.index = 0
         # Data formated path and test path. 
-        self.formated_path = "../datasets/formated_data_type.data"
-        self.test_path = "../datasets/test_data_type.data"
+        self.formated_path = "../datasets/formated/formated_data_type.data"
+        self.test_path = "../datasets/formated/test_data_type.data"
         self.loaded = False
+        self.train_test = train_test
+        self.second_path = kwargs.get('join_path', '../datasets/KDDTest+.txt')
+
         
         self.attack_types = ['normal','DoS','Probe','R2L','U2R']
         self.attack_map =   { 'normal.': 'normal',
@@ -91,6 +94,15 @@ class data_cls:
             print("Path: not path name provided", flush = True)
             sys.exit(0)
         formated = False     
+        
+        
+        if os.path.exists(self.formated_path) and train_test=="train":
+            formated = True
+        elif os.path.exists(self.test_path) and train_test=="test":
+            formated = True
+        elif os.path.exists(self.test_path) and os.path.exists(self.formated_path) and (train_test == 'full' or train_test=='join'):
+            formated = True
+            
        
         # If the formatted data path exists, is not needed to process it again
         if os.path.exists(self.formated_path):
@@ -101,7 +113,15 @@ class data_cls:
         if not formated:
             ''' Formating the dataset for ready-2-use data'''
             self.df = pd.read_csv(path,sep=',',names=col_names)
+            del(self.df['dificulty']) #in case of difficulty
             
+            if train_test == 'join':
+                data2 = pd.read_csv(self.second_path,sep=',',names=col_names)
+                if 'dificulty' in data2:
+                    del(data2['dificulty'])
+                train_indx = self.df.shape[0]
+                frames = [self.df,data2]
+                self.df = pd.concat(frames)
             # Data now is in RAM
             self.loaded = True
             
@@ -130,16 +150,31 @@ class data_cls:
             self.df = pd.concat([self.df.drop('labels', axis=1),
                             pd.get_dummies(mapped_labels)], axis=1)
             
-            # suffle data
-            self.df = shuffle(self.df,random_state=np.random.randint(0,100))
-
-            # Save data
+             # Save data
+            # suffle data: if join shuffled before in order to save train/test
+            if train_test != 'join':
+                self.df = shuffle(self.df,random_state=np.random.randint(0,100))            
+            
+           
+            if train_test == 'train':
+                self.df.to_csv(self.formated_path,sep=',',index=False)
+            elif train_test == 'test':
+                self.df.to_csv(self.test_path,sep=',',index=False)
+            elif train_test == 'full':
             # 70% train 30% test
-            train_indx = np.int32(self.df.shape[0]*0.7)
-            test_df = self.df.iloc[train_indx:self.df.shape[0]]
-            self.df = self.df[:train_indx]
-            test_df.to_csv(self.test_path,sep=',',index=False)
-            self.df.to_csv(self.formated_path,sep=',',index=False) 
+                train_indx = np.int32(self.df.shape[0]*0.7)
+                test_df = self.df.iloc[train_indx:self.df.shape[0]]
+                self.df = self.df[:train_indx]
+                test_df.to_csv(self.test_path,sep=',',index=False)
+                self.df.to_csv(self.formated_path,sep=',',index=False)
+            else: #join: index calculated before
+                test_df = self.df.iloc[train_indx:self.df.shape[0]]
+                test_df = shuffle(test_df,random_state=np.random.randint(0,100))
+                self.df = self.df[:train_indx]
+                self.df = shuffle(self.df,random_state=np.random.randint(0,100))
+                test_df.to_csv(self.test_path,sep=',',index=False)
+                self.df.to_csv(self.formated_path,sep=',',index=False)
+            
             
         
     ''' Get n-row batch from the dataset
@@ -374,8 +409,8 @@ class DefenderAgent(Agent):
 Reinforcement learning Enviroment Definition
 '''
 class RLenv(data_cls):
-    def __init__(self,path,batch_size = 10):
-        data_cls.__init__(self,path)
+    def __init__(self,path,train_test,batch_size = 10,**kwargs):
+        data_cls.__init__(self,path,train_test,**kwargs)
         self.batch_size = batch_size
         self.data_shape = data_cls.get_shape(self)
 
@@ -453,7 +488,7 @@ if __name__ == "__main__":
     
 
     # Initialization of the enviroment
-    env = RLenv(kdd_path,batch_size)
+    env = RLenv(kdd_10_path,'join',batch_size,join_path='../datasets/corrected')
     
     iterations_episode = 100
     #num_episodes = int(env.data_shape[0]/(iterations_episode*batch_size)/10)
@@ -531,8 +566,8 @@ if __name__ == "__main__":
         print("\r|Estimated: {}|Labels: {}".format(env.estimated_labels,env.true_labels))
         
     # Save trained model weights and architecture, used in test
-    agent.model_network.model.save_weights("multi_model.h5", overwrite=True)
-    with open("multi_model.json", "w") as outfile:
+    agent.model_network.model.save_weights("models/type_model.h5", overwrite=True)
+    with open("models/type_model.json", "w") as outfile:
         json.dump(agent.model_network.model.to_json(), outfile)
         
     # Save test dataset deleting the data used to train

@@ -2,7 +2,7 @@ import json
 import numpy as np
 import pandas as pd
 from keras.models import model_from_json
-from mAD import RLenv
+from adversarialAD import RLenv
 from sklearn.metrics import f1_score
 
 if __name__ == "__main__":

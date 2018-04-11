@@ -2,21 +2,20 @@ import json
 import numpy as np
 import pandas as pd
 from keras.models import model_from_json
-from mAD import RLenv
+from multiAD import RLenv
 
 
 if __name__ == "__main__":
     batch_size = 10
-    test_path = '../datasets/test_data.data'
+    test_path = '../datasets/corrected'
 
-
-    with open("multi_model.json", "r") as jfile:
+    with open("models/multi_model.json", "r") as jfile:
         model = model_from_json(json.load(jfile))
-    model.load_weights("multi_model.h5")
+    model.load_weights("models/multi_model.h5")
     model.compile("sgd", "mse")
 
     # Define environment, game, make sure the batch_size is the same in train
-    env = RLenv(test_path,batch_size)
+    env = RLenv(test_path,'test',batch_size)
     
 
     total_reward = 0    

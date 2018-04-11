@@ -29,8 +29,8 @@ class data_cls:
         self.index = 0
         self.headers = None
         self.loaded = False
-        self.formated_path = "../datasets/formated_data.data"
-        self.test_path = "../datasets/test_data.data"
+        self.formated_path = "../datasets/formated/formated_data.data"
+        self.test_path = "../datasets/formated/test_data.data"
         self.train_test = train_test
         
         self.second_path = kwargs.get('join_path', '../datasets/KDDTest+.txt')
@@ -55,7 +55,8 @@ class data_cls:
         if not formated:
             ''' Formating the dataset for ready-2-use data'''
             self.df = pd.read_csv(path,sep=',',names=col_names)
-            del(self.df['dificulty'])
+            if 'dificulty' in self.df.columns:
+                del(self.df['dificulty'])
             
             if train_test == 'join':
                 data2 = pd.read_csv(self.second_path,sep=',',names=col_names)
@@ -322,8 +323,8 @@ if __name__ == "__main__":
         
         
     # Save trained model weights and architecture, used in test
-    model.save_weights("model.h5", overwrite=True)
-    with open("model.json", "w") as outfile:
+    model.save_weights("models/model.h5", overwrite=True)
+    with open("models/model.json", "w") as outfile:
         json.dump(model.to_json(), outfile)
     
     plt.figure(1)

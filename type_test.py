@@ -2,7 +2,7 @@ import json
 import numpy as np
 import pandas as pd
 from keras.models import model_from_json
-from mAD import RLenv
+from typeAD import RLenv
 
 
 if __name__ == "__main__":
@@ -10,9 +10,9 @@ if __name__ == "__main__":
     test_path = '../datasets/test_multiple_data.data'
 
 
-    with open("multi_model.json", "r") as jfile:
+    with open("models/type_model.json", "r") as jfile:
         model = model_from_json(json.load(jfile))
-    model.load_weights("multi_model.h5")
+    model.load_weights("models/type_model.h5")
     model.compile("sgd", "mse")
 
     # Define environment, game, make sure the batch_size is the same in train

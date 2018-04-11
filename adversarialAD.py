@@ -22,7 +22,7 @@ Data class processing
 '''
 
 class data_cls:
-    def __init__(self, path):
+    def __init__(self, path,train_test,**kwargs):
         col_names = ["duration","protocol_type","service","flag","src_bytes",
             "dst_bytes","land","wrong_fragment","urgent","hot","num_failed_logins",
             "logged_in","num_compromised","root_shell","su_attempted","num_root",
@@ -35,9 +35,10 @@ class data_cls:
             "dst_host_rerror_rate","dst_host_srv_rerror_rate","labels"]
         self.index = 0
         # Data formated path and test path. 
-        self.formated_path = "../datasets/formated_multiple_data.data"
-        self.test_path = "../datasets/test_multiple_data.data"
+        self.formated_path = "../datasets/formated/formated_data_multi.data"
+        self.test_path = "../datasets/formated/test_data_multi.data"
         self.loaded = False
+        self.second_path = kwargs.get('join_path', '../datasets/KDDTest+.txt')
         
         self.attack_types = ['normal','DoS','Probe','R2L','U2R']
         self.attack_names = []
@@ -103,7 +104,15 @@ class data_cls:
         if not formated:
             ''' Formating the dataset for ready-2-use data'''
             self.df = pd.read_csv(path,sep=',',names=col_names)
+            del(self.df['dificulty']) #in case of difficulty
             
+            if train_test == 'join':
+                data2 = pd.read_csv(self.second_path,sep=',',names=col_names)
+                if 'dificulty' in data2:
+                    del(data2['dificulty'])
+                train_indx = self.df.shape[0]
+                frames = [self.df,data2]
+                self.df = pd.concat(frames)
             # Data now is in RAM
             self.loaded = True
             
@@ -133,6 +142,47 @@ class data_cls:
             for att in self.attack_map:
                 if att in self.df.columns:
                     self.attack_names.append(att)
+            
+            
+            
+             # Save data
+            # suffle data: if join shuffled before in order to save train/test
+            if train_test != 'join':
+                self.df = shuffle(self.df,random_state=np.random.randint(0,100))            
+                self.df = self.df.reset_index(drop=True)
+
+           
+            if train_test == 'train':
+                self.df.to_csv(self.formated_path,sep=',',index=False)
+            elif train_test == 'test':
+                self.df.to_csv(self.test_path,sep=',',index=False)
+            elif train_test == 'full':
+            # 70% train 30% test
+                train_indx = np.int32(self.df.shape[0]*0.7)
+                test_df = self.df.iloc[train_indx:self.df.shape[0]]
+                self.df = self.df[:train_indx]
+                test_df.to_csv(self.test_path,sep=',',index=False)
+                self.df.to_csv(self.formated_path,sep=',',index=False)
+            else: #join: index calculated before
+                test_df = self.df.iloc[train_indx:self.df.shape[0]]
+                test_df = shuffle(test_df,random_state=np.random.randint(0,100))
+                test_df = test_df.reset_index(drop=True)
+                self.df = self.df[:train_indx]
+                self.df = shuffle(self.df,random_state=np.random.randint(0,100))
+                self.df = self.df.reset_index(drop=True)
+                
+                test_df.to_csv(self.test_path,sep=',',index=False)
+                self.df.to_csv(self.formated_path,sep=',',index=False)
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             
             # suffle data
             self.df = shuffle(self.df,random_state=np.random.randint(0,100))
@@ -379,8 +429,8 @@ class AttackAgent(Agent):
 Reinforcement learning Enviroment Definition
 '''
 class RLenv(data_cls):
-    def __init__(self,path,batch_size = 10):
-        data_cls.__init__(self,path) # df loaded
+    def __init__(self,path,train_test,batch_size = 10,**kwargs):
+        data_cls.__init__(self,path,train_test,**kwargs)
         self.batch_size = batch_size
         self.data_shape = data_cls.get_shape(self)
 
@@ -532,7 +582,7 @@ if __name__ == "__main__":
     # '../datasets/micro_kddcup.data'
     
     # Initialization of the enviroment
-    env = RLenv(kdd_path,batch_size)
+    env = RLenv(kdd_path,'join',batch_size,join_path='../datasets/corrected')
     
     # obs_size = size of the state
     obs_size = env.data_shape[1]-len(env.attack_names)
@@ -684,8 +734,8 @@ if __name__ == "__main__":
                                  env.att_true_labels))
         
     # Save trained model weights and architecture, used in test
-    defender_agent.model_network.model.save_weights("defender_agent_model.h5", overwrite=True)
-    with open("defender_agent_model.json", "w") as outfile:
+    defender_agent.model_network.model.save_weights("models/defender_agent_model.h5", overwrite=True)
+    with open("models/defender_agent_model.json", "w") as outfile:
         json.dump(defender_agent.model_network.model.to_json(), outfile)
         
     

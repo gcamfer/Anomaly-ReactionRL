@@ -9,9 +9,9 @@ if __name__ == "__main__":
     test_path = '../datasets/corrected'
     #test_path = '../datasets/KDDTest+.txt'
 
-    with open("model.json", "r") as jfile:
+    with open("models/model.json", "r") as jfile:
         model = model_from_json(json.load(jfile))
-    model.load_weights("model.h5")
+    model.load_weights("models/model.h5")
     model.compile("sgd", "mse")
 
     batch_size = 10
