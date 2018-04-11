@@ -1,3 +1,7 @@
+'''
+Multiple anomaly detection file
+'''
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -15,7 +19,7 @@ import sys
 
 
 class data_cls:
-    def __init__(self, path,train_test,**kwargs):
+    def __init__(self, path):
         col_names = ["duration","protocol_type","service","flag","src_bytes",
             "dst_bytes","land","wrong_fragment","urgent","hot","num_failed_logins",
             "logged_in","num_compromised","root_shell","su_attempted","num_root",
@@ -25,46 +29,33 @@ class data_cls:
             "diff_srv_rate","srv_diff_host_rate","dst_host_count","dst_host_srv_count",
             "dst_host_same_srv_rate","dst_host_diff_srv_rate","dst_host_same_src_port_rate",
             "dst_host_srv_diff_host_rate","dst_host_serror_rate","dst_host_srv_serror_rate",
-            "dst_host_rerror_rate","dst_host_srv_rerror_rate","labels","dificulty"]
+            "dst_host_rerror_rate","dst_host_srv_rerror_rate","labels"]
         self.index = 0
         self.headers = None
+        self.formated_path = "../datasets/formated_data_multi.data"
+        self.test_path = "../datasets/test_data_multi.data"
         self.loaded = False
-        self.formated_path = "../datasets/formated_data.data"
-        self.test_path = "../datasets/test_data.data"
-        self.train_test = train_test
-        
-        self.second_path = kwargs.get('join_path', '../datasets/KDDTest+.txt')
         
         if (not path):
             print("Path: not path name provided", flush = True)
             sys.exit(0)
-        formated = False     
+        formated = False
         # Search for a previous formated data:
         #if (not os.path.exists('../datasets')):
         #    os.makedirs('../datasets')
         #    formated = False
-        if os.path.exists(self.formated_path) and train_test=="train":
+        self.attack_names_path = '../datasets/attack_types.data'
+        
+        if os.path.exists(self.formated_path) and os.path.exists(self.attack_names_path):
             formated = True
-        elif os.path.exists(self.test_path) and train_test=="test":
-            formated = True
-        elif os.path.exists(self.test_path) and os.path.exists(self.formated_path) and (train_test == 'full' or train_test=='join'):
-            formated = True
-
+            at_df = pd.read_csv(self.attack_names_path,sep=',')
+            self.attack_names = at_df['labels'].tolist()
             
         # If it does not exist, it's needed to format the data
         if not formated:
             ''' Formating the dataset for ready-2-use data'''
             self.df = pd.read_csv(path,sep=',',names=col_names)
-            del(self.df['dificulty'])
             
-            if train_test == 'join':
-                data2 = pd.read_csv(self.second_path,sep=',',names=col_names)
-                del(data2['dificulty'])
-                train_indx = self.df.shape[0]
-                frames = [self.df,data2]
-                self.df = pd.concat(frames)
-                
-                
             # Data now is in RAM
             self.loaded = True
             
@@ -75,6 +66,8 @@ class data_cls:
               
             #normalized_df=(df-df.mean())/df.std()
             
+
+            
             # 1 if ``su root'' command attempted; 0 otherwise 
             self.df['su_attempted'] = self.df['su_attempted'].replace(2.0, 0.0)
             
@@ -84,55 +77,33 @@ class data_cls:
                     if self.df[indx].max() == 0 and self.df[indx].min()== 0:
                         self.df[indx] = 0
                     else:
-                        self.df[indx] = (self.df[indx]-self.df[indx].min())/(self.df[indx].max()-self.df[indx].min()).astype(np.float32)
+                        self.df[indx] = (self.df[indx]-self.df[indx].min())/(self.df[indx].max()-self.df[indx].min())
                     
-            # One-hot-Encoding for reaction. 4 detection binary label 
-            # labels = pd.get_dummies(df['labels'])
-        
-            # Only save one column for atack
-            # '0' if the data is normal '1' if atack
+            # Name of the diferent columns attacks
+            self.attack_names = pd.unique(self.df['labels'])
             
+            # One-hot-Encoding for reaction. 4 detection binary label             
             self.df = pd.concat([self.df.drop('labels', axis=1),
-                            1 - pd.get_dummies(self.df['labels'])['normal.']], axis=1)
-            #Only detectign label as normal = 0 atack = 1 -> reanaming column
-            self.df.rename(columns={'normal.': 'labels'},inplace=True)
+                            pd.get_dummies(self.df['labels'])], axis=1)
             
-#            self.df = pd.concat([self.df.drop('labels', axis=1),
-#                            1 - pd.get_dummies(self.df['labels'])['normal']], axis=1)
-#            #Only detectign label as normal = 0 atack = 1 -> reanaming column
-#            self.df.rename(columns={'normal': 'labels'},inplace=True)
-            
-            
+            # suffle data
+            self.df = shuffle(self.df,random_state=np.random.randint(0,100))
+            # Save data
             
             
             # Save data
-            # suffle data: if join shuffled before in order to save train/test
-            if train_test != 'join':
-                self.df = shuffle(self.df,random_state=np.random.randint(0,100))            
-            
-           
-            if train_test == 'train':
-                self.df.to_csv(self.formated_path,sep=',',index=False)
-            elif train_test == 'test':
-                self.df.to_csv(self.test_path,sep=',',index=False)
-            elif train_test == 'full':
             # 70% train 30% test
-                train_indx = np.int32(self.df.shape[0]*0.7)
-                test_df = self.df.iloc[train_indx:self.df.shape[0]]
-                self.df = self.df[:train_indx]
-                test_df.to_csv(self.test_path,sep=',',index=False)
-                self.df.to_csv(self.formated_path,sep=',',index=False)
-            else: #join: index calculated before
-                test_df = self.df.iloc[train_indx:self.df.shape[0]]
-                test_df = shuffle(test_df,random_state=np.random.randint(0,100))
-                self.df = self.df[:train_indx]
-                self.df = shuffle(self.df,random_state=np.random.randint(0,100))
-                test_df.to_csv(self.test_path,sep=',',index=False)
-                self.df.to_csv(self.formated_path,sep=',',index=False)
+            train_indx = np.int32(self.df.shape[0]*0.7)
+            test_df = self.df.iloc[train_indx:self.df.shape[0]]
+            self.df = self.df[:train_indx]
+            test_df.to_csv(self.test_path,sep=',',index=False)
+            self.df.to_csv(self.formated_path,sep=',',index=False)            
             
-    ''' Get n-rows from loaded data 
-        The dataset must be loaded in RAM
-    '''
+            
+            # Save attack names 
+            (pd.DataFrame({'labels':self.attack_names})).to_csv(self.attack_names_path,index=False)
+            
+    ''' Get n-rows from the dataset'''
     def get_batch(self, batch_size=100):
         
         if self.loaded is False:
@@ -143,28 +114,14 @@ class data_cls:
         
         self.index += batch_size
         
-        labels = batch['labels'].values
+        labels = batch[self.attack_names]
         
-        del(batch['labels'])
+        for att in self.attack_names:
+            del(batch[att])   
             
-        return batch,labels       
-            
-    ''' Get n-rows from the dataset'''
-    def get_seq_batch(self, batch_size=100):
-        if self.headers is None:
-            df = pd.read_csv(self.data_path,sep=',', nrows = batch_size)
-            self.headers = list(df)
-        else:
-            df = pd.read_csv(self.data_path,sep=',', nrows = batch_size,
-                         skiprows = self.index,names = self.headers)
-        
-        self.index += batch_size
-
-        labels = df['labels']
-        del(df['labels'])
-        return df,labels
+        return batch,labels  
     
-        
+    
     def get_shape(self):
         
         if self.loaded is False:
@@ -174,19 +131,18 @@ class data_cls:
         # stata + labels
         return self.data_shape
     
+    
     def _load_df(self):
-        if self.train_test == 'train' or self.train_test == 'full':
-            self.df = pd.read_csv(self.formated_path,sep=',') # Read again the csv
-        else:
-            self.df = pd.read_csv(self.test_path,sep=',')
+        self.df = pd.read_csv(self.formated_path,sep=',') # Read again the csv
         self.loaded = True
+
 
 '''
 Definition
 '''
 class RLenv(data_cls):
-    def __init__(self,path,train_test,batch_size = 10,**kwargs):
-        data_cls.__init__(self,path,train_test,**kwargs)
+    def __init__(self,path,batch_size = 10):
+        data_cls.__init__(self,path)
         self.batch_size = batch_size
         self.state_shape = data_cls.get_shape(self)
 
@@ -209,10 +165,12 @@ class RLenv(data_cls):
         Reward: Actual reward
         done: If the game ends (no end in this case)
     '''    
-    def act(self,actions):        
+    def act(self,actions):
+        # Clear previous rewards        
         self.reward = np.zeros(self.batch_size)
+        # Actualize new rewards
         for indx,a in enumerate(actions):
-            if a == self.labels[indx]:
+            if a == np.argmax(self.labels.iloc[indx].values):
                 self.reward[indx] = 1
         
         # Get new state and new true values
@@ -227,36 +185,40 @@ class RLenv(data_cls):
 
 
 if __name__ == "__main__":
-
+  
     kdd_path = '../datasets/kddcup.data'
     kdd_10_path = '../datasets/kddcup.data_10_percent_corrected'
     micro_kdd = '../datasets/micro_kddcup.data'
-    
-    new_kdd = '../datasets/KDDTrain+.txt'
-    # Valid actions = '0' supose no atack, '1' supose atack
-    valid_actions = [0, 1]
-    num_actions = len(valid_actions)
+    # Valid actions = '0' supose no attack, '1' supose attack
     epsilon = .1  # exploration
-    num_episodes = 300
-    iterations_episode = 100
+    
     
     #3max_memory = 100
     decay_rate = 0.99
-    gamma = 0.001
+    gamma = 0.01
     
     
     hidden_size = 100
     batch_size = 10
 
     # Initialization of the enviroment
-    # '../datasets/KDDTest+.txt'
-    env = RLenv(kdd_path,'join',batch_size,join_path='../datasets/corrected')
+    env = RLenv(kdd_path,batch_size)
+    
+    iterations_episode = 100
+    num_episodes = int(env.state_shape[0]/(iterations_episode*batch_size)/10)
 
+
+    valid_actions = list(range(len(env.attack_names)))
+    num_actions = len(valid_actions)
     
     # Network arquitecture
     model = Sequential()
-    model.add(Dense(hidden_size, input_shape=(env.state_shape[1]-1,),batch_size=batch_size, activation='relu'))
+    model.add(Dense(hidden_size, input_shape=(env.state_shape[1]-len(env.attack_names),),
+                    batch_size=batch_size, activation='relu'))
     model.add(Dense(hidden_size, activation='relu'))
+    model.add(Dense(hidden_size, activation='relu'))
+    model.add(Dense(hidden_size, activation='relu'))
+
     model.add(Dense(num_actions))
     model.compile(sgd(lr=.2), "mse")
     
@@ -274,19 +236,16 @@ if __name__ == "__main__":
         states = env.reset()
         
         done = False
-        # Get control of the actions taken
-        ones = 0
-        zeros = 0
+       
         
-        # Define exploration to improve performance
-        exploration = 1
         # Iteration in one episode
         for i_iteration in range(iterations_episode):
             
             # get next action
-            if exploration > 0.001:
-                exploration = epsilon*decay_rate**(epoch*i_iteration)            
-            
+            if i_iteration == 0 and epoch == 0:
+                exploration = 0
+            else:
+                exploration = epsilon*decay_rate**epoch
             if np.random.rand() <= exploration:
                 actions = np.random.randint(0, num_actions,batch_size)
             else:
@@ -309,21 +268,19 @@ if __name__ == "__main__":
             # Update the state
             states = next_states
             
-            
-            ones += int(sum(actions))
-            zeros += batch_size - int(sum(actions))
+            # Update statistics
             total_reward_by_episode += int(sum(reward))
-            
+        
+        # Update user view
         reward_chain.append(total_reward_by_episode)    
-        loss_chain.append(loss)
-            
-        print("\rEpoch {:03d}/{:03d} | Loss {:4.4f} | Tot reward x episode {:03d}| Ones/Zeros: {}/{} ".format(epoch,
-              num_episodes ,loss, total_reward_by_episode,ones,zeros))
+        loss_chain.append(loss)    
+        print("\r|Epoch {:03d}/{:03d} | Loss {:4.4f} | Tot reward x episode {:03d}|".format(epoch,
+              num_episodes ,loss, total_reward_by_episode))
         
         
     # Save trained model weights and architecture, used in test
-    model.save_weights("model.h5", overwrite=True)
-    with open("model.json", "w") as outfile:
+    model.save_weights("multi_model.h5", overwrite=True)
+    with open("multi_model.json", "w") as outfile:
         json.dump(model.to_json(), outfile)
     
     plt.figure(1)
@@ -340,5 +297,6 @@ if __name__ == "__main__":
     plt.ylabel('loss')
     plt.tight_layout()
     plt.show()
+
 
 

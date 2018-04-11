@@ -520,42 +520,48 @@ if __name__ == "__main__":
     kdd_10_path = '../datasets/kddcup.data_10_percent_corrected'
     kdd_path = '../datasets/kddcup.data'
 
-    # Valid actions = '0' supose no attack, '1' supose attack
-    epsilon = .2  # exploration
-    num_episodes = 100
-    iterations_episode = 100
-    batch_size = 1
+    
+    batch_size = 10
 
-    #3max_memory = 100
-    decay_rate = 0.99
-    gamma = 0.001
+
     
     
-    hidden_size = 100
-    hidden_layers = 3
+    
     
     # dataset for prgram
     # '../datasets/micro_kddcup.data'
     
     # Initialization of the enviroment
-    env = RLenv(kdd_10_path,batch_size)
+    env = RLenv(kdd_path,batch_size)
     
     # obs_size = size of the state
     obs_size = env.data_shape[1]-len(env.attack_names)
+    
+    iterations_episode = 100
+    num_episodes = int(env.data_shape[0]/(iterations_episode*batch_size)/10)
+
+    
     '''
     Definition for the defensor agent.
     '''
     defender_valid_actions = list(range(len(env.attack_types))) # only detect type of attack
     defender_num_actions = len(defender_valid_actions)    
+	
+	def_decay_rate = 0.99
+    def_gamma = 0.001
+	def_hidden_size = 100
+    def_hidden_layers = 3
+    def_epsilon = .2  # exploration
+
     
     defender_agent = DefenderAgent(defender_valid_actions,obs_size,"EpsilonGreedy",
                           batch_size=batch_size,
                           epoch_length = iterations_episode,
-                          epsilon = epsilon,
-                          decay_rate = decay_rate,
-                          gamma = gamma,
-                          hidden_size=hidden_size,
-                          hidden_layers=hidden_layers)    
+                          epsilon = def_epsilon,
+                          decay_rate = def_decay_rate,
+                          gamma = def_gamma,
+                          hidden_size=def_hidden_size,
+                          hidden_layers=def_hidden_layers)    
     
     '''
     Definition for the attacker agent.
@@ -564,15 +570,21 @@ if __name__ == "__main__":
     '''
     attack_valid_actions = list(range(len(env.attack_names)))
     attack_num_actions = len(attack_valid_actions)
+	
+	att_epsilon = 0.01
+	att_gamma = 0.2
+	att_decay_rate = 1
+	att_hidden_layers = 100
+	att_hidden_size = 3
     
     attacker_agent = AttackAgent(attack_valid_actions,obs_size,"EpsilonGreedy",
                           batch_size=batch_size,
                           epoch_length = iterations_episode,
-                          epsilon = .01,
-                          decay_rate = 1,
-                          gamma = 0.2,
-                          hidden_size=hidden_size,
-                          hidden_layers=hidden_layers) 
+                          epsilon = attack_epsilon,
+                          decay_rate = att_decay_rate,
+                          gamma = att_gamma,
+                          hidden_size=att_hidden_size,
+                          hidden_layers=att_hidden_layers) 
     
     
     
@@ -585,7 +597,23 @@ if __name__ == "__main__":
     def_total_reward_chain = []
     att_total_reward_chain = []
     
-
+	# Print parameters
+	print("------------------------------------------------------------------------------")
+	print("Total epoch: {} | Iterations in epoch: {}"
+		"| Batch size: {} | Total Samples: {}|".format(num_episodes,
+		iterations_episode,batch_size,num_episodes*iterations_episode*batch_size))
+	
+	print("Dataset shape: {}".format(env.data_shape))
+	
+	print("\r\nAttacker parameters: Num_actions={} |"
+		"gamma={} | epsilon={} | ANN hidden size={} |"
+		" ANN hidden layers={}|".format(len(attack_num_actions),att_gamma,att_epsilon,
+		att_hidden_size,att_hidden_layers)
+	
+	print("\r\nDefense parameters: Num_actions={} |"
+		"gamma={} | epsilon={} | ANN hidden size={} |"
+		" ANN hidden layers={}|\r\n".format(len(defender_num_actions),def_gamma,def_epsilon,
+		def_hidden_size,def_hidden_layers)
     
     # Main loop
     for epoch in range(num_episodes):
@@ -660,9 +688,6 @@ if __name__ == "__main__":
     with open("defender_agent_model.json", "w") as outfile:
         json.dump(defender_agent.model_network.model.to_json(), outfile)
         
-    # Save test dataset deleting the data used to train
-    print("Shape: ",env.data_shape)
-    print("Used: ",num_episodes*iterations_episode*batch_size)
     
     # Plot training results
     plt.figure(1)
