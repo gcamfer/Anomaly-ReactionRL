@@ -113,8 +113,9 @@ class data_cls:
         if not formated:
             ''' Formating the dataset for ready-2-use data'''
             self.df = pd.read_csv(path,sep=',',names=col_names)
-            del(self.df['dificulty']) #in case of difficulty
-            
+            if 'dificulty' in self.df.columns:
+                self.df.drop('dificulty', axis=1, inplace=True) #in case of difficulty     
+                
             if train_test == 'join':
                 data2 = pd.read_csv(self.second_path,sep=',',names=col_names)
                 if 'dificulty' in data2:
@@ -147,8 +148,8 @@ class data_cls:
             # One-hot-Encoding for reaction.  
             all_labels = self.df['labels'] # Get all labels in df
             mapped_labels = np.vectorize(self.attack_map.get)(all_labels) # Map attacks
-            self.df = pd.concat([self.df.drop('labels', axis=1),
-                            pd.get_dummies(mapped_labels)], axis=1)
+            self.df = self.df.reset_index(drop=True)
+            self.df = pd.concat([self.df.drop('labels', axis=1),pd.get_dummies(mapped_labels)], axis=1)
             
              # Save data
             # suffle data: if join shuffled before in order to save train/test
@@ -216,24 +217,22 @@ class data_cls:
             del(batch[att])
         return batch,labels
     
-    def save_test(self):
-        test_df = self.df.iloc[self.index:self.data_shape[0] + 1]
-        test_df.to_csv(self.test_path,sep=',',index=False)
     
-    def get_full(self):
-        self.df = pd.read_csv(self.data_path,sep=',')        
-        self.labels = self.df['labels']
-        self.loaded = True
-        del(self.df['labels'])
-        
+    
     def get_shape(self):
         if self.loaded is False:
-            self.df = pd.read_csv(self.formated_path,sep=',') # Read again the csv
-            self.loaded = True
+            self._load_df()
         
         self.data_shape = self.df.shape
         # stata + labels
         return self.data_shape
+    
+    def _load_df(self):
+        if self.train_test == 'train' or self.train_test == 'full':
+            self.df = pd.read_csv(self.formated_path,sep=',') # Read again the csv
+        else:
+            self.df = pd.read_csv(self.test_path,sep=',')
+        self.loaded = True
 
 
 
@@ -488,11 +487,10 @@ if __name__ == "__main__":
     
 
     # Initialization of the enviroment
-    env = RLenv(kdd_10_path,'join',batch_size,join_path='../datasets/corrected')
+    env = RLenv(kdd_path,'join',batch_size,join_path='../datasets/corrected')
     
     iterations_episode = 100
-    #num_episodes = int(env.data_shape[0]/(iterations_episode*batch_size)/10)
-    num_episodes = 100
+    num_episodes = int(env.data_shape[0]/(iterations_episode*batch_size)/4)
 	
 	
     valid_actions = list(range(len(env.attack_types))) # only detect type of attack
@@ -531,16 +529,15 @@ if __name__ == "__main__":
         # Iteration in one episode
         for i_iteration in range(iterations_episode):
             
-            
-            # apply actions, get rewards and new state
-            act_time = time.time()
-            
+
             # Get actions for actual states following the policy
             actions = agent.act(states)
             #Enviroment actuation for this actions
             next_states, reward, done = env.act(actions)
+            # If the epoch*batch_size*iterations_episode is largest than the df
+            if next_states.shape[0] != batch_size:
+                break # finished df
             
-            act_end_time = time.time()
             
             # Train network, update loss
             loss += agent.update_model(states,actions,next_states,reward)
@@ -554,6 +551,8 @@ if __name__ == "__main__":
             # Update statistics
             total_reward_by_episode += int(sum(reward))
         
+        if next_states.shape[0] != batch_size:
+                break # finished df
         # Update user view
         reward_chain.append(total_reward_by_episode)    
         loss_chain.append(loss) 
@@ -590,6 +589,8 @@ if __name__ == "__main__":
     plt.ylabel('loss')
     plt.tight_layout()
     plt.show()
+    plt.savefig('results/train_type.eps', format='eps', dpi=1000)
+
 
 
 

@@ -296,6 +296,10 @@ if __name__ == "__main__":
             
             # apply actions, get rewards and new state
             next_states, reward, done = env.act(actions)
+            # If the epoch*batch_size*iterations_episode is largest than the df
+            if next_states.shape[0] != batch_size:
+                break # finished df
+            
             
             q_prime = model.predict(next_states)
             indx = np.argmax(q_prime,axis=1)
@@ -314,7 +318,9 @@ if __name__ == "__main__":
             ones += int(sum(actions))
             zeros += batch_size - int(sum(actions))
             total_reward_by_episode += int(sum(reward))
-            
+        
+        if next_states.shape[0] != batch_size:
+                break # finished df
         reward_chain.append(total_reward_by_episode)    
         loss_chain.append(loss)
             
@@ -341,5 +347,5 @@ if __name__ == "__main__":
     plt.ylabel('loss')
     plt.tight_layout()
     plt.show()
-
+    plt.savefig('results/train_simple.eps', format='eps', dpi=1000)
 

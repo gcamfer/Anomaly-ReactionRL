@@ -158,7 +158,6 @@ class data_cls:
     
     
     def get_shape(self):
-        
         if self.loaded is False:
             self._load_df()
         
@@ -168,7 +167,10 @@ class data_cls:
     
     
     def _load_df(self):
-        self.df = pd.read_csv(self.formated_path,sep=',') # Read again the csv
+        if self.train_test == 'train' or self.train_test == 'full':
+            self.df = pd.read_csv(self.formated_path,sep=',') # Read again the csv
+        else:
+            self.df = pd.read_csv(self.test_path,sep=',')
         self.loaded = True
 
 
@@ -289,6 +291,9 @@ if __name__ == "__main__":
             
             # apply actions, get rewards and new state
             next_states, reward, done = env.act(actions)
+            # If the epoch*batch_size*iterations_episode is largest than the df
+            if next_states.shape[0] != batch_size:
+                break # finished df
             
             q_prime = model.predict(next_states)
             indx = np.argmax(q_prime,axis=1)
@@ -306,6 +311,8 @@ if __name__ == "__main__":
             # Update statistics
             total_reward_by_episode += int(sum(reward))
         
+        if next_states.shape[0] != batch_size:
+                break # finished df
         # Update user view
         reward_chain.append(total_reward_by_episode)    
         loss_chain.append(loss)    
@@ -332,6 +339,8 @@ if __name__ == "__main__":
     plt.ylabel('loss')
     plt.tight_layout()
     plt.show()
+    plt.savefig('results/train_multi.eps', format='eps', dpi=1000)
+
 
 
 

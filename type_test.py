@@ -6,8 +6,8 @@ from typeAD import RLenv
 
 
 if __name__ == "__main__":
-    batch_size = 20
-    test_path = '../datasets/test_multiple_data.data'
+    batch_size = 10
+    test_path = '../datasets/formated/test_data_type.data'
 
 
     with open("models/type_model.json", "r") as jfile:
@@ -16,7 +16,7 @@ if __name__ == "__main__":
     model.compile("sgd", "mse")
 
     # Define environment, game, make sure the batch_size is the same in train
-    env = RLenv(test_path,batch_size)
+    env = RLenv(test_path,'test',batch_size)
     
 
     total_reward = 0    
