@@ -221,8 +221,7 @@ class data_cls:
         self.index += batch_size
         labels = batch[self.attack_names]
         
-        for att in self.attack_names:
-            del(batch[att])
+        batch.drop(self.attack_names,axis=1,inplace=True)
             
         return batch,labels
 
@@ -343,7 +342,7 @@ class Epsilon_greedy(Policy):
 #        else:
 #            self.epsilon_decay = False
         # Always decay
-        self.epsilon_decay = True
+        self.epsilon_decay = False
     
     def get_actions(self,states):
         # get next action
@@ -472,10 +471,6 @@ class RLenv(data_cls):
         #self.states,self.labels = data_cls.get_sequential_batch(self,self.batch_size)
         self.states,self.labels = data_cls.get_batch(self,self.batch_size)
         
-        # Update statistics
-        self.att_true_labels += np.sum(self.labels).values
-        for att, n in (np.sum(self.labels)).iteritems():
-            self.def_true_labels[self.attack_types.index(self.attack_map[att])] += n
         
         
         
@@ -493,36 +488,47 @@ class RLenv(data_cls):
     '''    
     def act(self,defender_actions,attack_actions):
         # Clear previous rewards        
-        self.def_reward = np.zeros(self.batch_size)
-        self.att_reward = np.zeros(self.batch_size)
+        self.def_reward = np.zeros(self.batch_size,dtype=np.int32)
+        self.att_reward = np.ones(self.batch_size,dtype=np.int32)
         
-        # Actualize new rewards == get_reward
-        for indx,a in enumerate(defender_actions):
-            self.def_estimated_labels[a] += 1
-            
-            # The defense wins
-            if self.attack_map[self.attack_names[attack_actions[indx]]] == self.attack_types[a]:
-                self.def_reward[indx] = 1
-                self.att_reward[indx] = -1
-            # No attack but defense say attack
-            elif self.attack_map[self.attack_names[attack_actions[indx]]] == 'normal':
-                self.def_reward[indx] = -1
-                self.att_reward[indx] = 1
-            # There is an attack but the defense mistaken the attack 
-            elif self.attack_types[a] != 'normal':
-                self.def_reward[indx] = 0
-                self.att_reward[indx] = 1
-            # There is an attack and the defense say normal
-            else:
-                self.def_reward[indx] = -1
-                self.att_reward[indx] = 1
+        self.def_reward = (defender_actions==attack_actions)*1
+#       self.att_reward = (defender_actions==attack_actions)*-1
+        self.att_reward -= self.def_reward
+
+#        # Actualize new rewards == get_reward
+#        for indx,a in enumerate(defender_actions):
+#            self.def_estimated_labels[a] += 1
+#            
+#            # The defense wins
+#            if self.attack_map[self.attack_names[attack_actions[indx]]] == self.attack_types[a]:
+#                self.def_reward[indx] = 1
+#                self.att_reward[indx] = -1
+#            # No attack but defense say attack
+#            elif self.attack_map[self.attack_names[attack_actions[indx]]] == 'normal':
+#                self.def_reward[indx] = -1
+#                self.att_reward[indx] = 1
+#            # There is an attack but the defense mistaken the attack 
+#            elif self.attack_types[a] != 'normal':
+#                self.def_reward[indx] = 0
+#                self.att_reward[indx] = 1
+#            # There is an attack and the defense say normal
+#            else:
+#                self.def_reward[indx] = -1
+#                self.att_reward[indx] = 1
          
+        for act in defender_actions:
+            self.def_estimated_labels[act] +=1
+#        for act in attack_actions:
+#            self.def_true_labels[self.attack_types.index(self.attack_map[self.attack_names[act]])] +=1
+        
+        for att, n in (np.sum(self.labels)).iteritems():
+            self.def_true_labels[self.attack_types.index(self.attack_map[att])] += n
             
-        # Update statistics
-        for att in attack_actions:
-            self.att_true_labels[att] += 1
-            self.def_true_labels[self.attack_types.index(self.attack_map[self.attack_names[att]])] += 1    
-            
+#        # Update statistics
+#        for att in attack_actions:
+#            self.att_true_labels[att] += 1
+#            self.def_true_labels[self.attack_types.index(self.attack_map[self.attack_names[att]])] += 1    
+#            
         
         # Get new state and new true values 
         #self._update_state()
@@ -565,13 +571,11 @@ class RLenv(data_cls):
                     acquired = False
                     break
                 minibatch=minibatch.append(self.df[self.df[self.attack_names[attack]]==1].sample(1))
-            
-        self.labels = minibatch[self.attack_names]
-    
-        for att in self.attack_names:
-            del(minibatch[att])
-            
-        self.states = minibatch
+        
+        if acquired:
+            self.labels = minibatch[self.attack_names]
+            minibatch.drop(self.attack_names,axis=1,inplace=True)
+            self.states = minibatch
         
         return self.states,acquired
 
@@ -593,7 +597,7 @@ if __name__ == "__main__":
     kdd_path = '../datasets/kddcup.data'
 
     
-    batch_size = 10
+    batch_size = 5
 
 
     
@@ -609,7 +613,7 @@ if __name__ == "__main__":
     # obs_size = size of the state
     obs_size = env.data_shape[1]-len(env.attack_names)
     
-    iterations_episode = 100
+    iterations_episode = 10
     num_episodes = int(env.data_shape[0]/(iterations_episode*batch_size)/10)
 
     
@@ -702,6 +706,8 @@ if __name__ == "__main__":
         states = env.reset()
         
         # Get actions for actual states following the policy
+        # Acquired an other needed to avoid attack with an action that 
+        # not exists in the train/test dataset
         acquired = False
         other = False
         while not acquired:
@@ -715,8 +721,6 @@ if __name__ == "__main__":
         
         
         
-        
-        
         done = False
        
 
@@ -726,7 +730,6 @@ if __name__ == "__main__":
             
             # apply actions, get rewards and new state
             act_time = time.time()  
-            
             defender_actions = defender_agent.act(states)
             #Enviroment actuation for this actions
             next_states,def_reward, att_reward,next_attack_actions, done = env.act(defender_actions,attack_actions)
@@ -771,10 +774,8 @@ if __name__ == "__main__":
                 att_loss, att_total_reward_by_episode))
         
         
-        print("|Def Estimated: {}| Def Labels: {}"
-              "\r\n|Att Labels:\r\n{:}".format(env.def_estimated_labels,
-                                 env.def_true_labels,
-                                 env.att_true_labels))
+        print("|Def Estimated: {}| Def Labels: {}".format(env.def_estimated_labels,
+              env.def_true_labels))
         
     # Save trained model weights and architecture, used in test
     defender_agent.model_network.model.save_weights("models/defender_agent_model.h5", overwrite=True)
@@ -802,7 +803,7 @@ if __name__ == "__main__":
     plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
            ncol=2, mode="expand", borderaxespad=0.)
     plt.tight_layout()
-    plt.show()
+    #plt.show()
     plt.savefig('results/train_adv.eps', format='eps', dpi=1000)
 
 

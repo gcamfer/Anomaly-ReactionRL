@@ -338,7 +338,7 @@ if __name__ == "__main__":
     plt.xlabel('n Episode')
     plt.ylabel('loss')
     plt.tight_layout()
-    plt.show()
+    #plt.show()
     plt.savefig('results/train_multi.eps', format='eps', dpi=1000)
 
 

@@ -1,0 +1,6 @@
+2018-04-13 15:41:04.716818: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-13 15:41:04.716873: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX2 instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-13 15:41:04.716879: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX512F instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-13 15:41:04.716884: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use FMA instructions, but these are available on your machine and could speed up CPU computations.
+=>> PBS: job killed: walltime 21644 exceeded limit 21600
+/var/spool/torque/mom_priv/epilogue.parallel: line 6: /usr/local/bin/kill-illegit-procs: No such file or directory
