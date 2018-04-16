@@ -1,0 +1,329 @@
+
+########################################################################
+# Colfax Cluster - https://colfaxresearch.com/
+#      Date:           Fri Apr 13 15:41:42 PDT 2018
+#    Job ID:           58860.c009
+#      User:           u12785
+# Resources:           neednodes=1:ppn=2,nodes=1:ppn=2,walltime=06:00:00
+########################################################################
+
+|Epoch 000/155 | Loss 3.0782 |Tot reward in ep 182| time: 8.67|
+|Estimated: [217 178 218 182 205]|Labels: [204 736  10  59   1]
+|Epoch 001/155 | Loss 1.4739 |Tot reward in ep 075| time: 10.31|
+|Estimated: [ 64  77 318  66 475]|Labels: [194 757   5  54   0]
+|Epoch 002/155 | Loss 0.5968 |Tot reward in ep 032| time: 8.95|
+|Estimated: [  3   5 393 276 323]|Labels: [199 740  17  54   0]
+|Epoch 003/155 | Loss 0.7121 |Tot reward in ep 043| time: 9.42|
+|Estimated: [  0   0 307 326 367]|Labels: [212 731  13  52   2]
+|Epoch 004/155 | Loss 0.7370 |Tot reward in ep 049| time: 8.70|
+|Estimated: [  2   4 306 365 323]|Labels: [201 744  10  55   0]
+|Epoch 005/155 | Loss 0.5383 |Tot reward in ep 035| time: 9.75|
+|Estimated: [  0   0 273 434 293]|Labels: [214 743   9  43   1]
+|Epoch 006/155 | Loss 0.4260 |Tot reward in ep 021| time: 9.07|
+|Estimated: [  3   2 615 292  88]|Labels: [191 744  19  55   1]
+|Epoch 007/155 | Loss 0.1012 |Tot reward in ep 005| time: 8.99|
+|Estimated: [  2   0 265 455 278]|Labels: [198 735   9  66   2]
+|Epoch 008/155 | Loss 0.3234 |Tot reward in ep 018| time: 10.38|
+|Estimated: [  5   1 311 231 452]|Labels: [202 747  18  42   1]
+|Epoch 009/155 | Loss 0.8339 |Tot reward in ep 055| time: 8.91|
+|Estimated: [  0   0 233 340 427]|Labels: [191 736  15  67   1]
+|Epoch 010/155 | Loss 0.6061 |Tot reward in ep 045| time: 8.86|
+|Estimated: [  0   0 451 264 285]|Labels: [190 760   4  51   5]
+|Epoch 011/155 | Loss 0.6549 |Tot reward in ep 053| time: 8.18|
+|Estimated: [  0   0 414 350 236]|Labels: [196 749  12  52   1]
+|Epoch 012/155 | Loss 0.6955 |Tot reward in ep 063| time: 8.05|
+|Estimated: [  1   0  19 464 516]|Labels: [198 731  21  58   2]
+|Epoch 013/155 | Loss 0.7019 |Tot reward in ep 053| time: 9.07|
+|Estimated: [  4   0 688 284  24]|Labels: [198 742  15  53   2]
+|Epoch 014/155 | Loss 0.6043 |Tot reward in ep 048| time: 8.87|
+|Estimated: [ 79   0 621 215  85]|Labels: [185 763  16  46   0]
+|Epoch 015/155 | Loss 1.4283 |Tot reward in ep 165| time: 8.75|
+|Estimated: [577   0 174  69 180]|Labels: [216 734  12  48   0]
+|Epoch 016/155 | Loss 1.1997 |Tot reward in ep 197| time: 8.43|
+|Estimated: [684   4 141  28 143]|Labels: [200 728  14  67   1]
+|Epoch 017/155 | Loss 1.0129 |Tot reward in ep 207| time: 8.30|
+|Estimated: [772   0  90   7 131]|Labels: [201 745  13  50   1]
+|Epoch 018/155 | Loss 1.1113 |Tot reward in ep 168| time: 8.94|
+|Estimated: [516   0 148   9 327]|Labels: [181 752  18  59   0]
+|Epoch 019/155 | Loss 0.9043 |Tot reward in ep 211| time: 7.95|
+|Estimated: [648   0  86 252  14]|Labels: [207 728  16  58   1]
+|Epoch 020/155 | Loss 0.9050 |Tot reward in ep 219| time: 8.54|
+|Estimated: [743   0   4 253   0]|Labels: [206 726  11  66   1]
+|Epoch 021/155 | Loss 0.8740 |Tot reward in ep 216| time: 9.47|
+|Estimated: [832   1   2 165   0]|Labels: [207 729  13  58   3]
+|Epoch 022/155 | Loss 0.7730 |Tot reward in ep 204| time: 8.44|
+|Estimated: [733   1 139 126   1]|Labels: [184 750  16  58   2]
+|Epoch 023/155 | Loss 1.0544 |Tot reward in ep 189| time: 9.16|
+|Estimated: [349   0 364 191  96]|Labels: [188 752  14  56   0]
+|Epoch 024/155 | Loss 0.7728 |Tot reward in ep 174| time: 8.44|
+|Estimated: [423   0 156 255 166]|Labels: [184 771   9  46   0]
+|Epoch 025/155 | Loss 0.8039 |Tot reward in ep 207| time: 8.48|
+|Estimated: [668   2   3 267  60]|Labels: [198 757   7  48   0]
+|Epoch 026/155 | Loss 0.7962 |Tot reward in ep 198| time: 7.92|
+|Estimated: [648   1   4 342   5]|Labels: [187 755  14  54   0]
+|Epoch 027/155 | Loss 0.9154 |Tot reward in ep 181| time: 7.30|
+|Estimated: [689   2  64  35 210]|Labels: [186 758  19  46   1]
+|Epoch 028/155 | Loss 1.5110 |Tot reward in ep 361| time: 9.82|
+|Estimated: [509 153  34   5 299]|Labels: [215 733  13  47   2]
+|Epoch 029/155 | Loss 2.1429 |Tot reward in ep 707| time: 8.80|
+|Estimated: [100 650 147  44  59]|Labels: [177 760  15  56   2]
+|Epoch 030/155 | Loss 2.4903 |Tot reward in ep 637| time: 8.76|
+|Estimated: [205 484 128  97  86]|Labels: [198 748  13  51   0]
+|Epoch 031/155 | Loss 2.1039 |Tot reward in ep 612| time: 9.23|
+|Estimated: [171 511 244  22  52]|Labels: [182 753   7  66   2]
+|Epoch 032/155 | Loss 2.3359 |Tot reward in ep 723| time: 8.18|
+|Estimated: [302 604   0  67  27]|Labels: [203 745   9  52   1]
+|Epoch 033/155 | Loss 1.6305 |Tot reward in ep 878| time: 8.56|
+|Estimated: [164 826   0  10   0]|Labels: [182 757  20  51   0]
+|Epoch 034/155 | Loss 1.9875 |Tot reward in ep 851| time: 7.72|
+|Estimated: [179 757   0  64   0]|Labels: [185 758  13  53   1]
+|Epoch 035/155 | Loss 2.1155 |Tot reward in ep 846| time: 8.96|
+|Estimated: [147 736   0 117   0]|Labels: [196 734  17  62   1]
+|Epoch 036/155 | Loss 2.1531 |Tot reward in ep 761| time: 7.98|
+|Estimated: [184 600  21 195   0]|Labels: [189 756   7  58   0]
+|Epoch 037/155 | Loss 1.9234 |Tot reward in ep 635| time: 8.92|
+|Estimated: [159 587 120  70  64]|Labels: [195 765  10  39   1]
+|Epoch 038/155 | Loss 1.6610 |Tot reward in ep 673| time: 8.51|
+|Estimated: [166 564   5 145 120]|Labels: [184 762  13  51   0]
+|Epoch 039/155 | Loss 2.3654 |Tot reward in ep 746| time: 8.95|
+|Estimated: [262 630  39  31  38]|Labels: [198 752   7  52   1]
+|Epoch 040/155 | Loss 1.7511 |Tot reward in ep 886| time: 8.80|
+|Estimated: [297 693   4   2   4]|Labels: [233 726  12  38   1]
+|Epoch 041/155 | Loss 1.9620 |Tot reward in ep 871| time: 9.16|
+|Estimated: [258 728   2   9   3]|Labels: [189 762  10  48   1]
+|Epoch 042/155 | Loss 1.4613 |Tot reward in ep 883| time: 8.44|
+|Estimated: [266 729   0   5   0]|Labels: [194 751  14  51   0]
+|Epoch 043/155 | Loss 1.8923 |Tot reward in ep 582| time: 8.31|
+|Estimated: [196 524  14 143 123]|Labels: [204 741  12  52   1]
+|Epoch 044/155 | Loss 1.4511 |Tot reward in ep 567| time: 8.25|
+|Estimated: [ 95 593 107  59 146]|Labels: [168 777  18  46   1]
+|Epoch 045/155 | Loss 1.5926 |Tot reward in ep 577| time: 8.36|
+|Estimated: [142 681   0  75 102]|Labels: [197 737  20  56   0]
+|Epoch 046/155 | Loss 2.1124 |Tot reward in ep 477| time: 9.73|
+|Estimated: [117 448   1 199 235]|Labels: [183 760  14  52   1]
+|Epoch 047/155 | Loss 2.4745 |Tot reward in ep 539| time: 9.17|
+|Estimated: [389 384   0 178  49]|Labels: [196 745  11  57   1]
+|Epoch 048/155 | Loss 2.0926 |Tot reward in ep 680| time: 7.79|
+|Estimated: [208 530   0  90 172]|Labels: [217 735  18  40   0]
+|Epoch 049/155 | Loss 2.5058 |Tot reward in ep 715| time: 8.18|
+|Estimated: [122 733   0  75  70]|Labels: [191 746  20  52   1]
+|Epoch 050/155 | Loss 1.8743 |Tot reward in ep 872| time: 8.20|
+|Estimated: [252 748   0   0   0]|Labels: [189 756  15  50   0]
+|Epoch 051/155 | Loss 1.6921 |Tot reward in ep 877| time: 10.24|
+|Estimated: [287 713   0   0   0]|Labels: [199 753  13  44   1]
+|Epoch 052/155 | Loss 1.8635 |Tot reward in ep 753| time: 9.75|
+|Estimated: [330 597   0  73   0]|Labels: [207 730  10  63   0]
+|Epoch 053/155 | Loss 1.6347 |Tot reward in ep 709| time: 9.06|
+|Estimated: [250 547   1 201   1]|Labels: [199 750  13  47   1]
+|Epoch 054/155 | Loss 1.7842 |Tot reward in ep 796| time: 8.99|
+|Estimated: [133 762   1  72  32]|Labels: [194 765  10  41   0]
+|Epoch 055/155 | Loss 1.5235 |Tot reward in ep 881| time: 8.23|
+|Estimated: [262 738   0   0   0]|Labels: [197 743  14  55   1]
+|Epoch 056/155 | Loss 1.7042 |Tot reward in ep 864| time: 7.85|
+|Estimated: [254 746   0   0   0]|Labels: [185 760  15  49   1]
+|Epoch 057/155 | Loss 1.7245 |Tot reward in ep 872| time: 8.69|
+|Estimated: [258 735   0   6   1]|Labels: [193 750  15  48   4]
+|Epoch 058/155 | Loss 1.0885 |Tot reward in ep 910| time: 9.65|
+|Estimated: [243 750   0   2   5]|Labels: [194 749  13  52   2]
+|Epoch 059/155 | Loss 2.0498 |Tot reward in ep 776| time: 7.54|
+|Estimated: [ 96 744   0 153   7]|Labels: [218 726  12  54   0]
+|Epoch 060/155 | Loss 1.6620 |Tot reward in ep 614| time: 8.31|
+|Estimated: [ 40 625  69 175  91]|Labels: [213 729  15  52   1]
+|Epoch 061/155 | Loss 1.8863 |Tot reward in ep 669| time: 7.97|
+|Estimated: [156 734  33   1  76]|Labels: [205 723  14  67   1]
+|Epoch 062/155 | Loss 1.1443 |Tot reward in ep 905| time: 8.47|
+|Estimated: [258 742   0   0   0]|Labels: [202 741  17  50   0]
+|Epoch 063/155 | Loss 1.2332 |Tot reward in ep 892| time: 8.55|
+|Estimated: [234 766   0   0   0]|Labels: [205 743  10  51   1]
+|Epoch 064/155 | Loss 1.6109 |Tot reward in ep 878| time: 8.46|
+|Estimated: [244 755   0   1   0]|Labels: [208 742  11  49   0]
+|Epoch 065/155 | Loss 1.4813 |Tot reward in ep 885| time: 7.70|
+|Estimated: [250 747   0   2   1]|Labels: [185 765  13  46   1]
+|Epoch 066/155 | Loss 1.2285 |Tot reward in ep 898| time: 8.83|
+|Estimated: [256 740   0   3   1]|Labels: [187 758  11  54   0]
+|Epoch 067/155 | Loss 1.4013 |Tot reward in ep 893| time: 7.50|
+|Estimated: [297 699   0   4   0]|Labels: [211 722  10  65   2]
+|Epoch 068/155 | Loss 0.9601 |Tot reward in ep 908| time: 8.40|
+|Estimated: [260 734   0   6   0]|Labels: [197 737  13  62   1]
+|Epoch 069/155 | Loss 1.5093 |Tot reward in ep 885| time: 8.28|
+|Estimated: [169 779   0  52   0]|Labels: [201 744  15  50   0]
+|Epoch 070/155 | Loss 1.7770 |Tot reward in ep 829| time: 8.60|
+|Estimated: [ 84 748   0 168   0]|Labels: [199 736  14  61   0]
+|Epoch 071/155 | Loss 1.6411 |Tot reward in ep 785| time: 8.20|
+|Estimated: [187 641   1 169   2]|Labels: [199 744  17  48   2]
+|Epoch 072/155 | Loss 1.3006 |Tot reward in ep 719| time: 8.63|
+|Estimated: [244 562   0 194   0]|Labels: [192 757   8  53   0]
+|Epoch 073/155 | Loss 1.8082 |Tot reward in ep 679| time: 8.49|
+|Estimated: [222 564   3 165  46]|Labels: [204 754   9  42   1]
+|Epoch 074/155 | Loss 1.6406 |Tot reward in ep 704| time: 8.31|
+|Estimated: [218 622   0  71  89]|Labels: [196 756  17  41   0]
+|Epoch 075/155 | Loss 1.2720 |Tot reward in ep 902| time: 8.86|
+|Estimated: [240 745   0  11   4]|Labels: [209 734  18  48   1]
+|Epoch 076/155 | Loss 2.2294 |Tot reward in ep 733| time: 8.07|
+|Estimated: [204 596  34 131  35]|Labels: [197 739  10  62   2]
+|Epoch 077/155 | Loss 2.5404 |Tot reward in ep 476| time: 8.76|
+|Estimated: [175 340 158 141 186]|Labels: [220 725  14  50   1]
+|Epoch 078/155 | Loss 1.7659 |Tot reward in ep 723| time: 9.02|
+|Estimated: [ 87 686  52 125  50]|Labels: [174 776   9  51   0]
+|Epoch 079/155 | Loss 1.1474 |Tot reward in ep 820| time: 8.51|
+|Estimated: [ 88 859   0   3  50]|Labels: [199 754   8  49   0]
+|Epoch 080/155 | Loss 1.9926 |Tot reward in ep 792| time: 8.00|
+|Estimated: [198 721   0  31  50]|Labels: [194 754  15  47   0]
+|Epoch 081/155 | Loss 2.3869 |Tot reward in ep 708| time: 9.15|
+|Estimated: [305 547  40  37  71]|Labels: [205 747  17  41   0]
+|Epoch 082/155 | Loss 1.3044 |Tot reward in ep 881| time: 7.88|
+|Estimated: [250 750   0   0   0]|Labels: [198 738  12  60   2]
+|Epoch 083/155 | Loss 1.8033 |Tot reward in ep 824| time: 8.38|
+|Estimated: [322 661   3   9   5]|Labels: [205 716  22  67   0]
+|Epoch 084/155 | Loss 1.6844 |Tot reward in ep 879| time: 9.71|
+|Estimated: [254 721  10  15   0]|Labels: [205 746  11  48   0]
+|Epoch 085/155 | Loss 1.7373 |Tot reward in ep 848| time: 9.72|
+|Estimated: [193 727   0  78   2]|Labels: [183 742  13  71   1]
+|Epoch 086/155 | Loss 1.4716 |Tot reward in ep 851| time: 9.17|
+|Estimated: [155 760   0  85   0]|Labels: [206 737  11  56   0]
+|Epoch 087/155 | Loss 2.5731 |Tot reward in ep 624| time: 9.09|
+|Estimated: [219 539  30 143  69]|Labels: [175 762  10  62   1]
+|Epoch 088/155 | Loss 1.9764 |Tot reward in ep 764| time: 8.86|
+|Estimated: [121 733   9  46  91]|Labels: [198 735  17  58   2]
+|Epoch 089/155 | Loss 1.0462 |Tot reward in ep 896| time: 8.99|
+|Estimated: [179 813   0   5   3]|Labels: [188 765  10  47   0]
+|Epoch 090/155 | Loss 1.5772 |Tot reward in ep 875| time: 9.16|
+|Estimated: [242 752   0   0   6]|Labels: [195 754  11  50   0]
+|Epoch 091/155 | Loss 1.6808 |Tot reward in ep 741| time: 9.30|
+|Estimated: [232 626  63   7  72]|Labels: [200 749  15  45   1]
+|Epoch 092/155 | Loss 2.1531 |Tot reward in ep 692| time: 8.49|
+|Estimated: [159 545  50 168  78]|Labels: [191 720  20  79   0]
+|Epoch 093/155 | Loss 2.2556 |Tot reward in ep 758| time: 8.23|
+|Estimated: [150 639   4  92 115]|Labels: [209 726  15  60   0]
+|Epoch 094/155 | Loss 1.6180 |Tot reward in ep 877| time: 7.68|
+|Estimated: [143 731   0 126   0]|Labels: [202 736  15  56   1]
+|Epoch 095/155 | Loss 1.9631 |Tot reward in ep 814| time: 8.26|
+|Estimated: [137 686  42 135   0]|Labels: [195 748  15  52   0]
+|Epoch 096/155 | Loss 1.7517 |Tot reward in ep 633| time: 8.92|
+|Estimated: [187 583  55  97  78]|Labels: [212 743  11  44   0]
+|Epoch 097/155 | Loss 1.2823 |Tot reward in ep 880| time: 7.73|
+|Estimated: [153 805   0  42   0]|Labels: [201 750  16  43   0]
+|Epoch 098/155 | Loss 1.2738 |Tot reward in ep 906| time: 8.16|
+|Estimated: [239 759   0   2   0]|Labels: [195 757  13  45   0]
+|Epoch 099/155 | Loss 1.3967 |Tot reward in ep 886| time: 7.67|
+|Estimated: [241 751   2   6   0]|Labels: [190 746  18  55   1]
+|Epoch 100/155 | Loss 1.2486 |Tot reward in ep 891| time: 8.66|
+|Estimated: [163 777   0  60   0]|Labels: [184 769  10  46   1]
+|Epoch 101/155 | Loss 2.4177 |Tot reward in ep 726| time: 8.64|
+|Estimated: [263 568  78  70  21]|Labels: [205 737  13  55   0]
+|Epoch 102/155 | Loss 1.4405 |Tot reward in ep 900| time: 8.63|
+|Estimated: [252 745   3   0   0]|Labels: [213 738  16  43   0]
+|Epoch 103/155 | Loss 1.5455 |Tot reward in ep 830| time: 9.69|
+|Estimated: [152 729  69  50   0]|Labels: [207 740  15  47   1]
+|Epoch 104/155 | Loss 1.5214 |Tot reward in ep 623| time: 8.64|
+|Estimated: [ 36 691  99 150  24]|Labels: [191 743  15  60   1]
+|Epoch 105/155 | Loss 1.5920 |Tot reward in ep 588| time: 8.86|
+|Estimated: [110 727  28  49  86]|Labels: [204 745  17  43   1]
+|Epoch 106/155 | Loss 1.6334 |Tot reward in ep 806| time: 8.31|
+|Estimated: [278 663   0  26  33]|Labels: [209 725  11  64   1]
+|Epoch 107/155 | Loss 1.1219 |Tot reward in ep 907| time: 8.32|
+|Estimated: [260 732   2   2   4]|Labels: [202 753   9  46   0]
+|Epoch 108/155 | Loss 1.6123 |Tot reward in ep 860| time: 8.19|
+|Estimated: [201 754   0   0  45]|Labels: [179 759  11  61   0]
+|Epoch 109/155 | Loss 1.3523 |Tot reward in ep 813| time: 8.88|
+|Estimated: [119 774  37   0  70]|Labels: [171 767  19  51   2]
+|Epoch 110/155 | Loss 2.3179 |Tot reward in ep 663| time: 8.86|
+|Estimated: [136 601 181  26  56]|Labels: [194 748  17  50   1]
+|Epoch 111/155 | Loss 1.5745 |Tot reward in ep 677| time: 8.22|
+|Estimated: [229 587  21  47 116]|Labels: [206 733  11  60   0]
+|Epoch 112/155 | Loss 1.1355 |Tot reward in ep 899| time: 9.17|
+|Estimated: [270 725   1   0   4]|Labels: [210 730  21  47   2]
+|Epoch 113/155 | Loss 1.2047 |Tot reward in ep 891| time: 7.76|
+|Estimated: [245 746   5   0   4]|Labels: [212 725  17  55   1]
+|Epoch 114/155 | Loss 1.5750 |Tot reward in ep 832| time: 8.38|
+|Estimated: [173 755  35   0  37]|Labels: [193 754  12  51   0]
+|Epoch 115/155 | Loss 1.2820 |Tot reward in ep 870| time: 8.78|
+|Estimated: [219 745  16   0  20]|Labels: [216 726  10  58   0]
+|Epoch 116/155 | Loss 1.6346 |Tot reward in ep 871| time: 7.48|
+|Estimated: [262 733   0   0   5]|Labels: [206 743  12  48   1]
+|Epoch 117/155 | Loss 1.3077 |Tot reward in ep 859| time: 8.85|
+|Estimated: [302 695   3   0   0]|Labels: [185 745  14  65   1]
+|Epoch 118/155 | Loss 1.1617 |Tot reward in ep 903| time: 8.47|
+|Estimated: [267 724   3   0   6]|Labels: [225 724  15  46   0]
+|Epoch 119/155 | Loss 0.8515 |Tot reward in ep 916| time: 8.35|
+|Estimated: [219 756   1   0  24]|Labels: [197 753  16  43   1]
+|Epoch 120/155 | Loss 1.0540 |Tot reward in ep 897| time: 8.13|
+|Estimated: [187 781   0   0  32]|Labels: [186 765  18  41   0]
+|Epoch 121/155 | Loss 0.8951 |Tot reward in ep 880| time: 9.12|
+|Estimated: [209 744   0   0  47]|Labels: [183 746  14  67   0]
+|Epoch 122/155 | Loss 1.4798 |Tot reward in ep 772| time: 8.54|
+|Estimated: [118 743  64   0  75]|Labels: [175 763  15  57   0]
+|Epoch 123/155 | Loss 1.0312 |Tot reward in ep 700| time: 8.10|
+|Estimated: [  5 793 164   0  38]|Labels: [193 743  12  59   3]
+|Epoch 124/155 | Loss 2.0633 |Tot reward in ep 612| time: 8.65|
+|Estimated: [158 634 133   5  70]|Labels: [187 753  16  54   0]
+|Epoch 125/155 | Loss 1.8800 |Tot reward in ep 487| time: 7.98|
+|Estimated: [232 408  64 109 187]|Labels: [207 744  17  41   1]
+|Epoch 126/155 | Loss 1.8071 |Tot reward in ep 830| time: 8.79|
+|Estimated: [215 700  84   0   1]|Labels: [182 746  16  65   1]
+|Epoch 127/155 | Loss 1.3734 |Tot reward in ep 713| time: 9.02|
+|Estimated: [ 59 708 179   0  54]|Labels: [222 728   9  49   2]
+|Epoch 128/155 | Loss 0.5612 |Tot reward in ep 744| time: 8.86|
+|Estimated: [  0 936   0   0  64]|Labels: [179 768  14  48   1]
+|Epoch 129/155 | Loss 0.2413 |Tot reward in ep 746| time: 8.52|
+|Estimated: [  0 988  10   2   0]|Labels: [198 754  11  46   1]
+|Epoch 130/155 | Loss 2.1677 |Tot reward in ep 575| time: 8.68|
+|Estimated: [ 34 603 111 174  78]|Labels: [186 739  18  66   1]
+|Epoch 131/155 | Loss 1.3690 |Tot reward in ep 562| time: 7.92|
+|Estimated: [ 47 591  69 201  92]|Labels: [214 737  15  44   0]
+|Epoch 132/155 | Loss 1.4213 |Tot reward in ep 588| time: 8.88|
+|Estimated: [140 612  85 124  39]|Labels: [195 752  12  51   0]
+|Epoch 133/155 | Loss 1.9764 |Tot reward in ep 845| time: 8.49|
+|Estimated: [177 795  12  16   0]|Labels: [183 760  19  47   1]
+|Epoch 134/155 | Loss 2.2480 |Tot reward in ep 695| time: 7.87|
+|Estimated: [273 595  20  51  61]|Labels: [185 760  14  51   0]
+|Epoch 135/155 | Loss 2.2108 |Tot reward in ep 641| time: 8.33|
+|Estimated: [241 549  41  12 157]|Labels: [175 777   9  49   0]
+|Epoch 136/155 | Loss 1.8725 |Tot reward in ep 828| time: 8.88|
+|Estimated: [215 697   0  30  58]|Labels: [179 758  14  58   1]
+|Epoch 137/155 | Loss 1.8449 |Tot reward in ep 830| time: 9.49|
+|Estimated: [179 713   0  72  36]|Labels: [207 741  13  47   2]
+|Epoch 138/155 | Loss 2.2365 |Tot reward in ep 636| time: 8.30|
+|Estimated: [139 617  27 118  99]|Labels: [198 742  13  55   2]
+|Epoch 139/155 | Loss 2.0003 |Tot reward in ep 796| time: 9.05|
+|Estimated: [209 744   2   1  44]|Labels: [197 746  18  49   0]
+|Epoch 140/155 | Loss 1.9492 |Tot reward in ep 771| time: 8.43|
+|Estimated: [322 622   4  21  31]|Labels: [200 750  15  45   0]
+|Epoch 141/155 | Loss 1.7067 |Tot reward in ep 766| time: 8.55|
+|Estimated: [250 637  20  58  35]|Labels: [201 749  13  45   2]
+|Epoch 142/155 | Loss 1.0081 |Tot reward in ep 899| time: 8.41|
+|Estimated: [265 734   0   1   0]|Labels: [179 773   8  49   1]
+|Epoch 143/155 | Loss 1.9738 |Tot reward in ep 754| time: 7.79|
+|Estimated: [303 606  16  73   2]|Labels: [199 746  14  50   1]
+|Epoch 144/155 | Loss 1.4975 |Tot reward in ep 860| time: 8.23|
+|Estimated: [257 705  19  19   0]|Labels: [186 760  16  47   1]
+|Epoch 145/155 | Loss 1.1757 |Tot reward in ep 902| time: 8.77|
+|Estimated: [254 741   1   4   0]|Labels: [191 755  17  46   1]
+|Epoch 146/155 | Loss 1.1047 |Tot reward in ep 914| time: 9.33|
+|Estimated: [274 722   0   4   0]|Labels: [211 748   7  44   0]
+|Epoch 147/155 | Loss 1.1837 |Tot reward in ep 864| time: 8.18|
+|Estimated: [293 690   1  16   0]|Labels: [190 760  14  46   0]
+|Epoch 148/155 | Loss 1.0772 |Tot reward in ep 906| time: 7.42|
+|Estimated: [209 779   0  12   0]|Labels: [182 770  15  43   0]
+|Epoch 149/155 | Loss 1.1751 |Tot reward in ep 904| time: 7.76|
+|Estimated: [276 717   1   6   0]|Labels: [209 726   9  66   0]
+|Epoch 150/155 | Loss 1.3760 |Tot reward in ep 890| time: 8.40|
+|Estimated: [242 755   1   2   0]|Labels: [179 765  11  54   1]
+|Epoch 151/155 | Loss 2.1251 |Tot reward in ep 752| time: 9.97|
+|Estimated: [162 709  41  88   0]|Labels: [209 742  10  48   1]
+|Epoch 152/155 | Loss 1.1894 |Tot reward in ep 902| time: 8.29|
+|Estimated: [238 762   0   0   0]|Labels: [193 760  11  46   0]
+|Epoch 153/155 | Loss 1.0370 |Tot reward in ep 910| time: 8.80|
+|Estimated: [220 770   0  10   0]|Labels: [178 763  15  53   1]
+|Epoch 154/155 | Loss 1.6842 |Tot reward in ep 780| time: 8.92|
+|Estimated: [226 630   0 144   0]|Labels: [209 736  13  52   0]
+Shape:  (311029, 128)
+Used:  155000
+Press Ctrl+C to stop WebAgg server
+
+########################################################################
+# Colfax Cluster
+# End of output for job 58860.c009
+# Date: Fri Apr 13 21:42:22 PDT 2018
+########################################################################
+

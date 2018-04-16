@@ -1,5 +1,4 @@
 import json
-import matplotlib.pyplot as plt
 import numpy as np
 from keras.models import model_from_json
 from AD import RLenv
@@ -7,16 +6,17 @@ from AD import RLenv
 
 if __name__ == "__main__":
     
-    kdd_10_path = 'datasets/kddcup.data_10_percent_corrected'
+    test_path = '../datasets/corrected'
+    #test_path = '../datasets/KDDTest+.txt'
 
-
-    with open("model.json", "r") as jfile:
+    with open("models/model.json", "r") as jfile:
         model = model_from_json(json.load(jfile))
-    model.load_weights("model.h5")
+    model.load_weights("models/model.h5")
     model.compile("sgd", "mse")
 
+    batch_size = 10
     # Define environment, game
-    env = RLenv(kdd_10_path)
+    env = RLenv(test_path,'test',batch_size)
     
     
     ones = 0
@@ -40,7 +40,7 @@ if __name__ == "__main__":
         print("\rEpoch {}/{} | Ones/Zeros: {}/{}  Tot Rew -- > {}".format(e,epochs,ones,zeros,total_reward), end="")
  
     print('\r\nTotal reward: {} | Number of samples: {} | Acuracy = {}%'.format(total_reward,
-          int(env.state_shape[0]),float(100*total_reward/env.state_shape[0])))
+          int(epochs*env.batch_size),float(100*total_reward/(epochs*env.batch_size))))
         #plt.imshow(input_t.reshape((grid_size,)*2),
         #           interpolation='none', cmap='gray')
         #plt.savefig("error.png")

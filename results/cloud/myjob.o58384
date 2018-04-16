@@ -1,0 +1,324 @@
+
+########################################################################
+# Colfax Cluster - https://colfaxresearch.com/
+#      Date:           Thu Apr 12 02:13:26 PDT 2018
+#    Job ID:           58384.c009
+#      User:           u12785
+# Resources:           neednodes=1:ppn=2,nodes=1:ppn=2,walltime=06:00:00
+########################################################################
+
+Epoch 000/450 | Loss 6.3044 | Tot reward x episode 769| Ones/Zeros: 932/68 
+Epoch 001/450 | Loss 5.6459 | Tot reward x episode 844| Ones/Zeros: 883/117 
+Epoch 002/450 | Loss 6.1359 | Tot reward x episode 846| Ones/Zeros: 789/211 
+Epoch 003/450 | Loss 4.9196 | Tot reward x episode 871| Ones/Zeros: 784/216 
+Epoch 004/450 | Loss 5.8097 | Tot reward x episode 750| Ones/Zeros: 625/375 
+Epoch 005/450 | Loss 5.1970 | Tot reward x episode 872| Ones/Zeros: 811/189 
+Epoch 006/450 | Loss 4.1032 | Tot reward x episode 893| Ones/Zeros: 836/164 
+Epoch 007/450 | Loss 4.3097 | Tot reward x episode 890| Ones/Zeros: 785/215 
+Epoch 008/450 | Loss 3.6204 | Tot reward x episode 913| Ones/Zeros: 779/221 
+Epoch 009/450 | Loss 4.3837 | Tot reward x episode 887| Ones/Zeros: 774/226 
+Epoch 010/450 | Loss 4.6019 | Tot reward x episode 870| Ones/Zeros: 803/197 
+Epoch 011/450 | Loss 3.3284 | Tot reward x episode 905| Ones/Zeros: 770/230 
+Epoch 012/450 | Loss 5.0620 | Tot reward x episode 805| Ones/Zeros: 805/195 
+Epoch 013/450 | Loss 3.4373 | Tot reward x episode 910| Ones/Zeros: 745/255 
+Epoch 014/450 | Loss 3.7516 | Tot reward x episode 899| Ones/Zeros: 767/233 
+Epoch 015/450 | Loss 3.8256 | Tot reward x episode 896| Ones/Zeros: 779/221 
+Epoch 016/450 | Loss 4.0359 | Tot reward x episode 894| Ones/Zeros: 772/228 
+Epoch 017/450 | Loss 4.6817 | Tot reward x episode 797| Ones/Zeros: 721/279 
+Epoch 018/450 | Loss 4.6055 | Tot reward x episode 865| Ones/Zeros: 823/177 
+Epoch 019/450 | Loss 3.7218 | Tot reward x episode 833| Ones/Zeros: 755/245 
+Epoch 020/450 | Loss 3.8752 | Tot reward x episode 875| Ones/Zeros: 830/170 
+Epoch 021/450 | Loss 3.2307 | Tot reward x episode 904| Ones/Zeros: 838/162 
+Epoch 022/450 | Loss 4.5215 | Tot reward x episode 838| Ones/Zeros: 751/249 
+Epoch 023/450 | Loss 3.6983 | Tot reward x episode 874| Ones/Zeros: 863/137 
+Epoch 024/450 | Loss 3.7503 | Tot reward x episode 892| Ones/Zeros: 839/161 
+Epoch 025/450 | Loss 5.2706 | Tot reward x episode 845| Ones/Zeros: 678/322 
+Epoch 026/450 | Loss 2.9350 | Tot reward x episode 853| Ones/Zeros: 698/302 
+Epoch 027/450 | Loss 3.2381 | Tot reward x episode 889| Ones/Zeros: 724/276 
+Epoch 028/450 | Loss 4.3677 | Tot reward x episode 895| Ones/Zeros: 798/202 
+Epoch 029/450 | Loss 2.8939 | Tot reward x episode 914| Ones/Zeros: 787/213 
+Epoch 030/450 | Loss 3.8435 | Tot reward x episode 900| Ones/Zeros: 840/160 
+Epoch 031/450 | Loss 3.8424 | Tot reward x episode 898| Ones/Zeros: 810/190 
+Epoch 032/450 | Loss 2.7788 | Tot reward x episode 923| Ones/Zeros: 816/184 
+Epoch 033/450 | Loss 4.8167 | Tot reward x episode 844| Ones/Zeros: 693/307 
+Epoch 034/450 | Loss 3.5222 | Tot reward x episode 872| Ones/Zeros: 713/287 
+Epoch 035/450 | Loss 3.8483 | Tot reward x episode 878| Ones/Zeros: 796/204 
+Epoch 036/450 | Loss 3.7245 | Tot reward x episode 898| Ones/Zeros: 814/186 
+Epoch 037/450 | Loss 4.1002 | Tot reward x episode 895| Ones/Zeros: 775/225 
+Epoch 038/450 | Loss 3.9940 | Tot reward x episode 894| Ones/Zeros: 775/225 
+Epoch 039/450 | Loss 4.0646 | Tot reward x episode 875| Ones/Zeros: 718/282 
+Epoch 040/450 | Loss 3.7858 | Tot reward x episode 884| Ones/Zeros: 747/253 
+Epoch 041/450 | Loss 3.3562 | Tot reward x episode 899| Ones/Zeros: 744/256 
+Epoch 042/450 | Loss 3.6205 | Tot reward x episode 900| Ones/Zeros: 857/143 
+Epoch 043/450 | Loss 3.4172 | Tot reward x episode 900| Ones/Zeros: 788/212 
+Epoch 044/450 | Loss 3.4271 | Tot reward x episode 838| Ones/Zeros: 699/301 
+Epoch 045/450 | Loss 4.1832 | Tot reward x episode 851| Ones/Zeros: 883/117 
+Epoch 046/450 | Loss 3.2651 | Tot reward x episode 902| Ones/Zeros: 890/110 
+Epoch 047/450 | Loss 2.7962 | Tot reward x episode 928| Ones/Zeros: 798/202 
+Epoch 048/450 | Loss 2.5977 | Tot reward x episode 925| Ones/Zeros: 818/182 
+Epoch 049/450 | Loss 3.1613 | Tot reward x episode 914| Ones/Zeros: 828/172 
+Epoch 050/450 | Loss 2.7255 | Tot reward x episode 927| Ones/Zeros: 789/211 
+Epoch 051/450 | Loss 2.8501 | Tot reward x episode 923| Ones/Zeros: 771/229 
+Epoch 052/450 | Loss 2.4326 | Tot reward x episode 931| Ones/Zeros: 757/243 
+Epoch 053/450 | Loss 4.1352 | Tot reward x episode 825| Ones/Zeros: 765/235 
+Epoch 054/450 | Loss 3.8762 | Tot reward x episode 864| Ones/Zeros: 902/98 
+Epoch 055/450 | Loss 2.8571 | Tot reward x episode 926| Ones/Zeros: 840/160 
+Epoch 056/450 | Loss 2.7162 | Tot reward x episode 923| Ones/Zeros: 857/143 
+Epoch 057/450 | Loss 3.2040 | Tot reward x episode 879| Ones/Zeros: 754/246 
+Epoch 058/450 | Loss 3.2562 | Tot reward x episode 866| Ones/Zeros: 744/256 
+Epoch 059/450 | Loss 4.6266 | Tot reward x episode 878| Ones/Zeros: 891/109 
+Epoch 060/450 | Loss 2.8749 | Tot reward x episode 906| Ones/Zeros: 847/153 
+Epoch 061/450 | Loss 2.8712 | Tot reward x episode 921| Ones/Zeros: 832/168 
+Epoch 062/450 | Loss 2.6204 | Tot reward x episode 923| Ones/Zeros: 804/196 
+Epoch 063/450 | Loss 2.9082 | Tot reward x episode 916| Ones/Zeros: 757/243 
+Epoch 064/450 | Loss 2.6927 | Tot reward x episode 920| Ones/Zeros: 830/170 
+Epoch 065/450 | Loss 2.8599 | Tot reward x episode 924| Ones/Zeros: 769/231 
+Epoch 066/450 | Loss 3.3202 | Tot reward x episode 904| Ones/Zeros: 809/191 
+Epoch 067/450 | Loss 1.8101 | Tot reward x episode 948| Ones/Zeros: 786/214 
+Epoch 068/450 | Loss 3.0648 | Tot reward x episode 914| Ones/Zeros: 762/238 
+Epoch 069/450 | Loss 3.2976 | Tot reward x episode 900| Ones/Zeros: 797/203 
+Epoch 070/450 | Loss 3.5617 | Tot reward x episode 907| Ones/Zeros: 777/223 
+Epoch 071/450 | Loss 2.5810 | Tot reward x episode 921| Ones/Zeros: 818/182 
+Epoch 072/450 | Loss 2.8710 | Tot reward x episode 914| Ones/Zeros: 821/179 
+Epoch 073/450 | Loss 3.3976 | Tot reward x episode 901| Ones/Zeros: 821/179 
+Epoch 074/450 | Loss 2.8601 | Tot reward x episode 909| Ones/Zeros: 844/156 
+Epoch 075/450 | Loss 2.8150 | Tot reward x episode 904| Ones/Zeros: 865/135 
+Epoch 076/450 | Loss 2.8312 | Tot reward x episode 912| Ones/Zeros: 873/127 
+Epoch 077/450 | Loss 2.8080 | Tot reward x episode 905| Ones/Zeros: 851/149 
+Epoch 078/450 | Loss 2.3807 | Tot reward x episode 925| Ones/Zeros: 847/153 
+Epoch 079/450 | Loss 3.0778 | Tot reward x episode 914| Ones/Zeros: 854/146 
+Epoch 080/450 | Loss 3.0935 | Tot reward x episode 908| Ones/Zeros: 850/150 
+Epoch 081/450 | Loss 2.2798 | Tot reward x episode 932| Ones/Zeros: 803/197 
+Epoch 082/450 | Loss 2.0463 | Tot reward x episode 936| Ones/Zeros: 811/189 
+Epoch 083/450 | Loss 2.6717 | Tot reward x episode 926| Ones/Zeros: 797/203 
+Epoch 084/450 | Loss 1.9618 | Tot reward x episode 936| Ones/Zeros: 842/158 
+Epoch 085/450 | Loss 2.2306 | Tot reward x episode 927| Ones/Zeros: 829/171 
+Epoch 086/450 | Loss 2.8765 | Tot reward x episode 926| Ones/Zeros: 847/153 
+Epoch 087/450 | Loss 1.7167 | Tot reward x episode 952| Ones/Zeros: 826/174 
+Epoch 088/450 | Loss 5.0197 | Tot reward x episode 862| Ones/Zeros: 774/226 
+Epoch 089/450 | Loss 3.4983 | Tot reward x episode 798| Ones/Zeros: 664/336 
+Epoch 090/450 | Loss 2.9433 | Tot reward x episode 918| Ones/Zeros: 856/144 
+Epoch 091/450 | Loss 2.3518 | Tot reward x episode 920| Ones/Zeros: 859/141 
+Epoch 092/450 | Loss 1.6794 | Tot reward x episode 946| Ones/Zeros: 801/199 
+Epoch 093/450 | Loss 3.2905 | Tot reward x episode 901| Ones/Zeros: 833/167 
+Epoch 094/450 | Loss 3.8066 | Tot reward x episode 889| Ones/Zeros: 797/203 
+Epoch 095/450 | Loss 2.2703 | Tot reward x episode 934| Ones/Zeros: 818/182 
+Epoch 096/450 | Loss 3.3760 | Tot reward x episode 906| Ones/Zeros: 755/245 
+Epoch 097/450 | Loss 3.0840 | Tot reward x episode 920| Ones/Zeros: 742/258 
+Epoch 098/450 | Loss 2.1050 | Tot reward x episode 935| Ones/Zeros: 759/241 
+Epoch 099/450 | Loss 3.6067 | Tot reward x episode 896| Ones/Zeros: 717/283 
+Epoch 100/450 | Loss 3.2618 | Tot reward x episode 915| Ones/Zeros: 814/186 
+Epoch 101/450 | Loss 2.9461 | Tot reward x episode 910| Ones/Zeros: 802/198 
+Epoch 102/450 | Loss 2.3846 | Tot reward x episode 934| Ones/Zeros: 779/221 
+Epoch 103/450 | Loss 3.4477 | Tot reward x episode 903| Ones/Zeros: 738/262 
+Epoch 104/450 | Loss 4.1781 | Tot reward x episode 842| Ones/Zeros: 720/280 
+Epoch 105/450 | Loss 2.6324 | Tot reward x episode 857| Ones/Zeros: 745/255 
+Epoch 106/450 | Loss 3.0099 | Tot reward x episode 891| Ones/Zeros: 822/178 
+Epoch 107/450 | Loss 1.5800 | Tot reward x episode 948| Ones/Zeros: 860/140 
+Epoch 108/450 | Loss 2.5819 | Tot reward x episode 929| Ones/Zeros: 807/193 
+Epoch 109/450 | Loss 3.2507 | Tot reward x episode 916| Ones/Zeros: 853/147 
+Epoch 110/450 | Loss 2.5249 | Tot reward x episode 924| Ones/Zeros: 836/164 
+Epoch 111/450 | Loss 2.1779 | Tot reward x episode 929| Ones/Zeros: 819/181 
+Epoch 112/450 | Loss 2.8391 | Tot reward x episode 918| Ones/Zeros: 809/191 
+Epoch 113/450 | Loss 2.3730 | Tot reward x episode 921| Ones/Zeros: 842/158 
+Epoch 114/450 | Loss 2.7265 | Tot reward x episode 924| Ones/Zeros: 818/182 
+Epoch 115/450 | Loss 2.5170 | Tot reward x episode 922| Ones/Zeros: 840/160 
+Epoch 116/450 | Loss 2.0886 | Tot reward x episode 937| Ones/Zeros: 757/243 
+Epoch 117/450 | Loss 3.3272 | Tot reward x episode 902| Ones/Zeros: 749/251 
+Epoch 118/450 | Loss 3.0964 | Tot reward x episode 905| Ones/Zeros: 769/231 
+Epoch 119/450 | Loss 3.5880 | Tot reward x episode 895| Ones/Zeros: 782/218 
+Epoch 120/450 | Loss 2.2588 | Tot reward x episode 938| Ones/Zeros: 793/207 
+Epoch 121/450 | Loss 3.3036 | Tot reward x episode 907| Ones/Zeros: 882/118 
+Epoch 122/450 | Loss 2.1144 | Tot reward x episode 940| Ones/Zeros: 823/177 
+Epoch 123/450 | Loss 3.3985 | Tot reward x episode 905| Ones/Zeros: 803/197 
+Epoch 124/450 | Loss 3.8032 | Tot reward x episode 886| Ones/Zeros: 799/201 
+Epoch 125/450 | Loss 3.0606 | Tot reward x episode 908| Ones/Zeros: 771/229 
+Epoch 126/450 | Loss 2.6857 | Tot reward x episode 915| Ones/Zeros: 843/157 
+Epoch 127/450 | Loss 2.1075 | Tot reward x episode 937| Ones/Zeros: 848/152 
+Epoch 128/450 | Loss 3.0329 | Tot reward x episode 913| Ones/Zeros: 802/198 
+Epoch 129/450 | Loss 2.9364 | Tot reward x episode 911| Ones/Zeros: 848/152 
+Epoch 130/450 | Loss 2.8565 | Tot reward x episode 918| Ones/Zeros: 819/181 
+Epoch 131/450 | Loss 2.3972 | Tot reward x episode 936| Ones/Zeros: 787/213 
+Epoch 132/450 | Loss 2.4843 | Tot reward x episode 924| Ones/Zeros: 832/168 
+Epoch 133/450 | Loss 2.0078 | Tot reward x episode 930| Ones/Zeros: 851/149 
+Epoch 134/450 | Loss 3.2007 | Tot reward x episode 912| Ones/Zeros: 832/168 
+Epoch 135/450 | Loss 2.3619 | Tot reward x episode 928| Ones/Zeros: 861/139 
+Epoch 136/450 | Loss 1.2882 | Tot reward x episode 952| Ones/Zeros: 791/209 
+Epoch 137/450 | Loss 3.8681 | Tot reward x episode 907| Ones/Zeros: 841/159 
+Epoch 138/450 | Loss 2.4308 | Tot reward x episode 930| Ones/Zeros: 737/263 
+Epoch 139/450 | Loss 2.0137 | Tot reward x episode 946| Ones/Zeros: 778/222 
+Epoch 140/450 | Loss 3.2639 | Tot reward x episode 915| Ones/Zeros: 792/208 
+Epoch 141/450 | Loss 2.2631 | Tot reward x episode 937| Ones/Zeros: 781/219 
+Epoch 142/450 | Loss 2.5141 | Tot reward x episode 932| Ones/Zeros: 789/211 
+Epoch 143/450 | Loss 2.8020 | Tot reward x episode 922| Ones/Zeros: 773/227 
+Epoch 144/450 | Loss 2.2964 | Tot reward x episode 932| Ones/Zeros: 822/178 
+Epoch 145/450 | Loss 1.3562 | Tot reward x episode 953| Ones/Zeros: 754/246 
+Epoch 146/450 | Loss 2.5369 | Tot reward x episode 931| Ones/Zeros: 800/200 
+Epoch 147/450 | Loss 2.4440 | Tot reward x episode 927| Ones/Zeros: 790/210 
+Epoch 148/450 | Loss 4.6406 | Tot reward x episode 873| Ones/Zeros: 903/97 
+Epoch 149/450 | Loss 3.4088 | Tot reward x episode 911| Ones/Zeros: 782/218 
+Epoch 150/450 | Loss 1.7100 | Tot reward x episode 953| Ones/Zeros: 775/225 
+Epoch 151/450 | Loss 2.3210 | Tot reward x episode 934| Ones/Zeros: 806/194 
+Epoch 152/450 | Loss 2.7210 | Tot reward x episode 931| Ones/Zeros: 765/235 
+Epoch 153/450 | Loss 2.1224 | Tot reward x episode 940| Ones/Zeros: 772/228 
+Epoch 154/450 | Loss 2.1283 | Tot reward x episode 938| Ones/Zeros: 825/175 
+Epoch 155/450 | Loss 2.1849 | Tot reward x episode 936| Ones/Zeros: 803/197 
+Epoch 156/450 | Loss 2.4742 | Tot reward x episode 929| Ones/Zeros: 745/255 
+Epoch 157/450 | Loss 2.1838 | Tot reward x episode 940| Ones/Zeros: 759/241 
+Epoch 158/450 | Loss 2.2132 | Tot reward x episode 939| Ones/Zeros: 775/225 
+Epoch 159/450 | Loss 3.1374 | Tot reward x episode 919| Ones/Zeros: 815/185 
+Epoch 160/450 | Loss 4.2703 | Tot reward x episode 891| Ones/Zeros: 812/188 
+Epoch 161/450 | Loss 3.0131 | Tot reward x episode 912| Ones/Zeros: 773/227 
+Epoch 162/450 | Loss 2.7179 | Tot reward x episode 899| Ones/Zeros: 727/273 
+Epoch 163/450 | Loss 3.2931 | Tot reward x episode 904| Ones/Zeros: 835/165 
+Epoch 164/450 | Loss 4.0876 | Tot reward x episode 889| Ones/Zeros: 852/148 
+Epoch 165/450 | Loss 3.4609 | Tot reward x episode 912| Ones/Zeros: 770/230 
+Epoch 166/450 | Loss 2.9526 | Tot reward x episode 913| Ones/Zeros: 738/262 
+Epoch 167/450 | Loss 3.1734 | Tot reward x episode 917| Ones/Zeros: 884/116 
+Epoch 168/450 | Loss 2.3230 | Tot reward x episode 924| Ones/Zeros: 868/132 
+Epoch 169/450 | Loss 3.0214 | Tot reward x episode 916| Ones/Zeros: 841/159 
+Epoch 170/450 | Loss 2.3651 | Tot reward x episode 931| Ones/Zeros: 765/235 
+Epoch 171/450 | Loss 2.8341 | Tot reward x episode 919| Ones/Zeros: 775/225 
+Epoch 172/450 | Loss 3.0787 | Tot reward x episode 914| Ones/Zeros: 757/243 
+Epoch 173/450 | Loss 2.5327 | Tot reward x episode 932| Ones/Zeros: 791/209 
+Epoch 174/450 | Loss 3.6410 | Tot reward x episode 896| Ones/Zeros: 827/173 
+Epoch 175/450 | Loss 3.0798 | Tot reward x episode 919| Ones/Zeros: 854/146 
+Epoch 176/450 | Loss 2.4712 | Tot reward x episode 923| Ones/Zeros: 856/144 
+Epoch 177/450 | Loss 2.5438 | Tot reward x episode 931| Ones/Zeros: 815/185 
+Epoch 178/450 | Loss 2.5740 | Tot reward x episode 929| Ones/Zeros: 785/215 
+Epoch 179/450 | Loss 2.8533 | Tot reward x episode 927| Ones/Zeros: 766/234 
+Epoch 180/450 | Loss 3.4965 | Tot reward x episode 907| Ones/Zeros: 788/212 
+Epoch 181/450 | Loss 2.6146 | Tot reward x episode 930| Ones/Zeros: 805/195 
+Epoch 182/450 | Loss 2.4937 | Tot reward x episode 927| Ones/Zeros: 788/212 
+Epoch 183/450 | Loss 2.2430 | Tot reward x episode 934| Ones/Zeros: 759/241 
+Epoch 184/450 | Loss 2.4588 | Tot reward x episode 922| Ones/Zeros: 786/214 
+Epoch 185/450 | Loss 2.9316 | Tot reward x episode 912| Ones/Zeros: 808/192 
+Epoch 186/450 | Loss 2.0816 | Tot reward x episode 935| Ones/Zeros: 840/160 
+Epoch 187/450 | Loss 2.8924 | Tot reward x episode 913| Ones/Zeros: 845/155 
+Epoch 188/450 | Loss 1.9394 | Tot reward x episode 939| Ones/Zeros: 770/230 
+Epoch 189/450 | Loss 1.2821 | Tot reward x episode 953| Ones/Zeros: 821/179 
+Epoch 190/450 | Loss 3.0279 | Tot reward x episode 916| Ones/Zeros: 855/145 
+Epoch 191/450 | Loss 2.1612 | Tot reward x episode 937| Ones/Zeros: 825/175 
+Epoch 192/450 | Loss 3.2095 | Tot reward x episode 910| Ones/Zeros: 834/166 
+Epoch 193/450 | Loss 2.3133 | Tot reward x episode 926| Ones/Zeros: 824/176 
+Epoch 194/450 | Loss 3.6286 | Tot reward x episode 898| Ones/Zeros: 820/180 
+Epoch 195/450 | Loss 2.4521 | Tot reward x episode 936| Ones/Zeros: 803/197 
+Epoch 196/450 | Loss 2.4150 | Tot reward x episode 934| Ones/Zeros: 832/168 
+Epoch 197/450 | Loss 2.1124 | Tot reward x episode 935| Ones/Zeros: 831/169 
+Epoch 198/450 | Loss 3.0387 | Tot reward x episode 917| Ones/Zeros: 820/180 
+Epoch 199/450 | Loss 3.6017 | Tot reward x episode 899| Ones/Zeros: 806/194 
+Epoch 200/450 | Loss 2.8986 | Tot reward x episode 867| Ones/Zeros: 740/260 
+Epoch 201/450 | Loss 3.0692 | Tot reward x episode 903| Ones/Zeros: 811/189 
+Epoch 202/450 | Loss 2.3662 | Tot reward x episode 932| Ones/Zeros: 819/181 
+Epoch 203/450 | Loss 3.1029 | Tot reward x episode 922| Ones/Zeros: 786/214 
+Epoch 204/450 | Loss 2.2223 | Tot reward x episode 946| Ones/Zeros: 795/205 
+Epoch 205/450 | Loss 2.7541 | Tot reward x episode 922| Ones/Zeros: 767/233 
+Epoch 206/450 | Loss 2.7764 | Tot reward x episode 920| Ones/Zeros: 841/159 
+Epoch 207/450 | Loss 3.8604 | Tot reward x episode 891| Ones/Zeros: 825/175 
+Epoch 208/450 | Loss 2.3684 | Tot reward x episode 924| Ones/Zeros: 853/147 
+Epoch 209/450 | Loss 3.1542 | Tot reward x episode 921| Ones/Zeros: 863/137 
+Epoch 210/450 | Loss 2.4737 | Tot reward x episode 923| Ones/Zeros: 849/151 
+Epoch 211/450 | Loss 3.9428 | Tot reward x episode 891| Ones/Zeros: 875/125 
+Epoch 212/450 | Loss 2.4854 | Tot reward x episode 925| Ones/Zeros: 839/161 
+Epoch 213/450 | Loss 2.9259 | Tot reward x episode 919| Ones/Zeros: 730/270 
+Epoch 214/450 | Loss 2.3301 | Tot reward x episode 936| Ones/Zeros: 768/232 
+Epoch 215/450 | Loss 3.3834 | Tot reward x episode 911| Ones/Zeros: 821/179 
+Epoch 216/450 | Loss 2.3863 | Tot reward x episode 925| Ones/Zeros: 777/223 
+Epoch 217/450 | Loss 1.6713 | Tot reward x episode 956| Ones/Zeros: 783/217 
+Epoch 218/450 | Loss 2.7802 | Tot reward x episode 927| Ones/Zeros: 776/224 
+Epoch 219/450 | Loss 2.3407 | Tot reward x episode 926| Ones/Zeros: 817/183 
+Epoch 220/450 | Loss 1.9746 | Tot reward x episode 948| Ones/Zeros: 777/223 
+Epoch 221/450 | Loss 2.2202 | Tot reward x episode 942| Ones/Zeros: 776/224 
+Epoch 222/450 | Loss 2.2454 | Tot reward x episode 937| Ones/Zeros: 783/217 
+Epoch 223/450 | Loss 3.2481 | Tot reward x episode 916| Ones/Zeros: 788/212 
+Epoch 224/450 | Loss 2.7062 | Tot reward x episode 930| Ones/Zeros: 756/244 
+Epoch 225/450 | Loss 2.2473 | Tot reward x episode 937| Ones/Zeros: 798/202 
+Epoch 226/450 | Loss 1.4037 | Tot reward x episode 957| Ones/Zeros: 827/173 
+Epoch 227/450 | Loss 3.4581 | Tot reward x episode 920| Ones/Zeros: 829/171 
+Epoch 228/450 | Loss 2.4701 | Tot reward x episode 931| Ones/Zeros: 820/180 
+Epoch 229/450 | Loss 1.9620 | Tot reward x episode 946| Ones/Zeros: 783/217 
+Epoch 230/450 | Loss 3.3877 | Tot reward x episode 907| Ones/Zeros: 812/188 
+Epoch 231/450 | Loss 3.1025 | Tot reward x episode 903| Ones/Zeros: 831/169 
+Epoch 232/450 | Loss 2.1275 | Tot reward x episode 947| Ones/Zeros: 794/206 
+Epoch 233/450 | Loss 2.4568 | Tot reward x episode 948| Ones/Zeros: 838/162 
+Epoch 234/450 | Loss 2.4429 | Tot reward x episode 938| Ones/Zeros: 783/217 
+Epoch 235/450 | Loss 1.9310 | Tot reward x episode 942| Ones/Zeros: 818/182 
+Epoch 236/450 | Loss 2.4486 | Tot reward x episode 947| Ones/Zeros: 819/181 
+Epoch 237/450 | Loss 2.8704 | Tot reward x episode 923| Ones/Zeros: 776/224 
+Epoch 238/450 | Loss 3.3372 | Tot reward x episode 920| Ones/Zeros: 754/246 
+Epoch 239/450 | Loss 2.9535 | Tot reward x episode 919| Ones/Zeros: 796/204 
+Epoch 240/450 | Loss 2.7521 | Tot reward x episode 928| Ones/Zeros: 777/223 
+Epoch 241/450 | Loss 2.9282 | Tot reward x episode 917| Ones/Zeros: 738/262 
+Epoch 242/450 | Loss 2.1590 | Tot reward x episode 943| Ones/Zeros: 757/243 
+Epoch 243/450 | Loss 2.0796 | Tot reward x episode 938| Ones/Zeros: 769/231 
+Epoch 244/450 | Loss 3.2292 | Tot reward x episode 918| Ones/Zeros: 864/136 
+Epoch 245/450 | Loss 1.8826 | Tot reward x episode 944| Ones/Zeros: 798/202 
+Epoch 246/450 | Loss 3.4393 | Tot reward x episode 905| Ones/Zeros: 777/223 
+Epoch 247/450 | Loss 2.2284 | Tot reward x episode 939| Ones/Zeros: 759/241 
+Epoch 248/450 | Loss 2.4522 | Tot reward x episode 933| Ones/Zeros: 791/209 
+Epoch 249/450 | Loss 2.7325 | Tot reward x episode 910| Ones/Zeros: 829/171 
+Epoch 250/450 | Loss 2.4216 | Tot reward x episode 927| Ones/Zeros: 821/179 
+Epoch 251/450 | Loss 2.9691 | Tot reward x episode 918| Ones/Zeros: 826/174 
+Epoch 252/450 | Loss 2.7500 | Tot reward x episode 914| Ones/Zeros: 829/171 
+Epoch 253/450 | Loss 3.1188 | Tot reward x episode 894| Ones/Zeros: 814/186 
+Epoch 254/450 | Loss 3.2791 | Tot reward x episode 882| Ones/Zeros: 800/200 
+Epoch 255/450 | Loss 2.7172 | Tot reward x episode 906| Ones/Zeros: 789/211 
+Epoch 256/450 | Loss 2.8632 | Tot reward x episode 906| Ones/Zeros: 752/248 
+Epoch 257/450 | Loss 4.1062 | Tot reward x episode 886| Ones/Zeros: 801/199 
+Epoch 258/450 | Loss 2.2104 | Tot reward x episode 938| Ones/Zeros: 772/228 
+Epoch 259/450 | Loss 3.2340 | Tot reward x episode 909| Ones/Zeros: 848/152 
+Epoch 260/450 | Loss 3.5542 | Tot reward x episode 901| Ones/Zeros: 829/171 
+Epoch 261/450 | Loss 2.7757 | Tot reward x episode 928| Ones/Zeros: 807/193 
+Epoch 262/450 | Loss 2.5582 | Tot reward x episode 925| Ones/Zeros: 803/197 
+Epoch 263/450 | Loss 3.3507 | Tot reward x episode 915| Ones/Zeros: 805/195 
+Epoch 264/450 | Loss 2.6486 | Tot reward x episode 933| Ones/Zeros: 782/218 
+Epoch 265/450 | Loss 2.8146 | Tot reward x episode 924| Ones/Zeros: 773/227 
+Epoch 266/450 | Loss 2.6947 | Tot reward x episode 919| Ones/Zeros: 790/210 
+Epoch 267/450 | Loss 3.4721 | Tot reward x episode 909| Ones/Zeros: 785/215 
+Epoch 268/450 | Loss 2.2498 | Tot reward x episode 942| Ones/Zeros: 780/220 
+Epoch 269/450 | Loss 3.7213 | Tot reward x episode 906| Ones/Zeros: 823/177 
+Epoch 270/450 | Loss 2.7261 | Tot reward x episode 925| Ones/Zeros: 783/217 
+Epoch 271/450 | Loss 2.6656 | Tot reward x episode 908| Ones/Zeros: 813/187 
+Epoch 272/450 | Loss 3.6001 | Tot reward x episode 908| Ones/Zeros: 794/206 
+Epoch 273/450 | Loss 2.0716 | Tot reward x episode 945| Ones/Zeros: 776/224 
+Epoch 274/450 | Loss 2.6113 | Tot reward x episode 927| Ones/Zeros: 782/218 
+Epoch 275/450 | Loss 2.8655 | Tot reward x episode 920| Ones/Zeros: 758/242 
+Epoch 276/450 | Loss 2.8752 | Tot reward x episode 919| Ones/Zeros: 790/210 
+Epoch 277/450 | Loss 3.9278 | Tot reward x episode 896| Ones/Zeros: 853/147 
+Epoch 278/450 | Loss 2.4801 | Tot reward x episode 925| Ones/Zeros: 750/250 
+Epoch 279/450 | Loss 3.6248 | Tot reward x episode 903| Ones/Zeros: 787/213 
+Epoch 280/450 | Loss 2.0963 | Tot reward x episode 928| Ones/Zeros: 757/243 
+Epoch 281/450 | Loss 2.7888 | Tot reward x episode 933| Ones/Zeros: 801/199 
+Epoch 282/450 | Loss 3.2713 | Tot reward x episode 899| Ones/Zeros: 806/194 
+Epoch 283/450 | Loss 3.6621 | Tot reward x episode 894| Ones/Zeros: 762/238 
+Epoch 284/450 | Loss 3.7248 | Tot reward x episode 845| Ones/Zeros: 685/315 
+Epoch 285/450 | Loss 3.7943 | Tot reward x episode 880| Ones/Zeros: 821/179 
+Epoch 286/450 | Loss 2.1763 | Tot reward x episode 929| Ones/Zeros: 830/170 
+Epoch 287/450 | Loss 2.2282 | Tot reward x episode 928| Ones/Zeros: 790/210 
+Epoch 288/450 | Loss 2.8048 | Tot reward x episode 921| Ones/Zeros: 782/218 
+Epoch 289/450 | Loss 2.4987 | Tot reward x episode 924| Ones/Zeros: 793/207 
+Epoch 290/450 | Loss 2.0066 | Tot reward x episode 936| Ones/Zeros: 828/172 
+Epoch 291/450 | Loss 4.0706 | Tot reward x episode 792| Ones/Zeros: 800/200 
+Epoch 292/450 | Loss 3.0065 | Tot reward x episode 911| Ones/Zeros: 847/153 
+Epoch 293/450 | Loss 2.9196 | Tot reward x episode 912| Ones/Zeros: 837/163 
+Epoch 294/450 | Loss 2.5337 | Tot reward x episode 929| Ones/Zeros: 753/247 
+Epoch 295/450 | Loss 2.1727 | Tot reward x episode 943| Ones/Zeros: 764/236 
+Epoch 296/450 | Loss 2.3692 | Tot reward x episode 923| Ones/Zeros: 828/172 
+Epoch 297/450 | Loss 2.1337 | Tot reward x episode 932| Ones/Zeros: 845/155 
+Epoch 298/450 | Loss 1.9261 | Tot reward x episode 942| Ones/Zeros: 857/143 
+Epoch 299/450 | Loss 2.3769 | Tot reward x episode 921| Ones/Zeros: 838/162 
+Epoch 300/450 | Loss 2.9508 | Tot reward x episode 912| Ones/Zeros: 871/129 
+Epoch 301/450 | Loss 3.2418 | Tot reward x episode 906| Ones/Zeros: 868/132 
+Epoch 302/450 | Loss 3.1540 | Tot reward x episode 912| Ones/Zeros: 796/204 
+Epoch 303/450 | Loss 2.7697 | Tot reward x episode 921| Ones/Zeros: 819/181 
+Epoch 304/450 | Loss 3.2989 | Tot reward x episode 909| Ones/Zeros: 871/129 
+Epoch 305/450 | Loss 2.0072 | Tot reward x episode 928| Ones/Zeros: 837/163 
+Epoch 306/450 | Loss 2.5672 | Tot reward x episode 917| Ones/Zeros: 848/152 
+Press Ctrl+C to stop WebAgg server
+
+########################################################################
+# Colfax Cluster
+# End of output for job 58384.c009
+# Date: Thu Apr 12 08:13:31 PDT 2018
+########################################################################
+

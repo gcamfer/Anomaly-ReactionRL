@@ -2,29 +2,30 @@ import json
 import numpy as np
 import pandas as pd
 from keras.models import model_from_json
-from multiAD import RLenv
-
+from adversarialAD import RLenv
+from sklearn.metrics import f1_score
 
 if __name__ == "__main__":
     batch_size = 10
-    test_path = '../datasets/corrected'
+    test_path = '../datasets/test_multiple_data.data'
 
-    with open("models/multi_model.json", "r") as jfile:
+
+    with open("multi_model.json", "r") as jfile:
         model = model_from_json(json.load(jfile))
-    model.load_weights("models/multi_model.h5")
+    model.load_weights("multi_model.h5")
     model.compile("sgd", "mse")
 
     # Define environment, game, make sure the batch_size is the same in train
-    env = RLenv(test_path,'test',batch_size)
+    env = RLenv(test_path,batch_size)
     
 
     total_reward = 0    
-    epochs = int(env.data_shape[0]/env.batch_size/10)
+    epochs = int(env.data_shape[0]/env.batch_size/4)
     
     
-    true_labels = np.zeros(len(env.attack_names),dtype=int)
-    estimated_labels = np.zeros(len(env.attack_names),dtype=int)
-    estimated_correct_labels = np.zeros(len(env.attack_names),dtype=int)
+    true_labels = np.zeros(len(env.attack_types),dtype=int)
+    estimated_labels = np.zeros(len(env.attack_types),dtype=int)
+    estimated_correct_labels = np.zeros(len(env.attack_types),dtype=int)
     
     for e in range(epochs):
         #states , labels = env.get_sequential_batch(test_path,batch_size = env.batch_size)
@@ -46,17 +47,22 @@ if __name__ == "__main__":
         total_reward += int(sum(reward))
         print("\rEpoch {}/{} | Tot Rew -- > {}".format(e,epochs,total_reward), end="")
         
-    Accuracy = np.nan_to_num(estimated_correct_labels / true_labels )
+    Accuracy = estimated_correct_labels / true_labels
     Mismatch = estimated_labels - true_labels
+    score = f1_score(true_labels, estimated_labels, average=None)
+
     print('\r\nTotal reward: {} | Number of samples: {} | Accuracy = {}%'.format(total_reward,
           int(epochs*env.batch_size),float(100*total_reward/(epochs*env.batch_size))))
-    outputs_df = pd.DataFrame(index = env.attack_names,columns = ["Estimated","Correct","Total","Acuracy","Mismatch"])
-    for indx,att in enumerate(env.attack_names):
+    outputs_df = pd.DataFrame(index = env.attack_types,columns = ["Estimated","Correct","Total","Acuracy","Mismatch"])
+    for indx,att in enumerate(env.attack_types):
        outputs_df.iloc[indx].Estimated = estimated_labels[indx]
        outputs_df.iloc[indx].Correct = estimated_correct_labels[indx]
        outputs_df.iloc[indx].Total = true_labels[indx]
-       outputs_df.iloc[indx].Mismatch = abs(Mismatch[indx])
        outputs_df.iloc[indx].Acuracy = Accuracy[indx]*100
+       outputs_df.iloc[indx].Mismatch = abs(Mismatch[indx])
+
+    print("F1 Score = {}".format(score))
+       
 
         
     print(outputs_df)

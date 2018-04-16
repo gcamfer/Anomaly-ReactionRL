@@ -1,0 +1,2466 @@
+
+########################################################################
+# Colfax Cluster - https://colfaxresearch.com/
+#      Date:           Fri Apr 13 15:40:09 PDT 2018
+#    Job ID:           58858.c009
+#      User:           u12785
+# Resources:           neednodes=1:ppn=2,nodes=1:ppn=2,walltime=06:00:00
+########################################################################
+
+|Epoch 000/2449 | Loss 0.4377 | Tot reward x episode 497|
+|Epoch 001/2449 | Loss 0.4151 | Tot reward x episode 540|
+|Epoch 002/2449 | Loss 0.3270 | Tot reward x episode 513|
+|Epoch 003/2449 | Loss 0.3984 | Tot reward x episode 509|
+|Epoch 004/2449 | Loss 0.4131 | Tot reward x episode 480|
+|Epoch 005/2449 | Loss 0.5186 | Tot reward x episode 497|
+|Epoch 006/2449 | Loss 0.4076 | Tot reward x episode 513|
+|Epoch 007/2449 | Loss 0.3479 | Tot reward x episode 545|
+|Epoch 008/2449 | Loss 0.2808 | Tot reward x episode 520|
+|Epoch 009/2449 | Loss 0.3869 | Tot reward x episode 500|
+|Epoch 010/2449 | Loss 0.4046 | Tot reward x episode 508|
+|Epoch 011/2449 | Loss 0.3401 | Tot reward x episode 534|
+|Epoch 012/2449 | Loss 0.2462 | Tot reward x episode 491|
+|Epoch 013/2449 | Loss 0.3629 | Tot reward x episode 521|
+|Epoch 014/2449 | Loss 0.2551 | Tot reward x episode 535|
+|Epoch 015/2449 | Loss 0.2129 | Tot reward x episode 524|
+|Epoch 016/2449 | Loss 0.2784 | Tot reward x episode 529|
+|Epoch 017/2449 | Loss 0.3066 | Tot reward x episode 538|
+|Epoch 018/2449 | Loss 0.3172 | Tot reward x episode 530|
+|Epoch 019/2449 | Loss 0.3853 | Tot reward x episode 511|
+|Epoch 020/2449 | Loss 0.3513 | Tot reward x episode 492|
+|Epoch 021/2449 | Loss 0.2748 | Tot reward x episode 507|
+|Epoch 022/2449 | Loss 0.2194 | Tot reward x episode 543|
+|Epoch 023/2449 | Loss 0.5318 | Tot reward x episode 596|
+|Epoch 024/2449 | Loss 0.5668 | Tot reward x episode 663|
+|Epoch 025/2449 | Loss 0.4105 | Tot reward x episode 694|
+|Epoch 026/2449 | Loss 0.3051 | Tot reward x episode 681|
+|Epoch 027/2449 | Loss 0.4362 | Tot reward x episode 638|
+|Epoch 028/2449 | Loss 0.4887 | Tot reward x episode 561|
+|Epoch 029/2449 | Loss 0.3937 | Tot reward x episode 658|
+|Epoch 030/2449 | Loss 0.3333 | Tot reward x episode 635|
+|Epoch 031/2449 | Loss 0.3134 | Tot reward x episode 665|
+|Epoch 032/2449 | Loss 0.3488 | Tot reward x episode 631|
+|Epoch 033/2449 | Loss 0.3754 | Tot reward x episode 656|
+|Epoch 034/2449 | Loss 0.2233 | Tot reward x episode 723|
+|Epoch 035/2449 | Loss 0.3286 | Tot reward x episode 660|
+|Epoch 036/2449 | Loss 0.3294 | Tot reward x episode 639|
+|Epoch 037/2449 | Loss 0.2110 | Tot reward x episode 687|
+|Epoch 038/2449 | Loss 0.2803 | Tot reward x episode 689|
+|Epoch 039/2449 | Loss 0.2728 | Tot reward x episode 660|
+|Epoch 040/2449 | Loss 0.2661 | Tot reward x episode 677|
+|Epoch 041/2449 | Loss 0.3057 | Tot reward x episode 665|
+|Epoch 042/2449 | Loss 0.2478 | Tot reward x episode 710|
+|Epoch 043/2449 | Loss 0.3974 | Tot reward x episode 650|
+|Epoch 044/2449 | Loss 0.3409 | Tot reward x episode 662|
+|Epoch 045/2449 | Loss 0.2907 | Tot reward x episode 715|
+|Epoch 046/2449 | Loss 0.3793 | Tot reward x episode 658|
+|Epoch 047/2449 | Loss 0.2516 | Tot reward x episode 678|
+|Epoch 048/2449 | Loss 0.1622 | Tot reward x episode 718|
+|Epoch 049/2449 | Loss 0.2712 | Tot reward x episode 678|
+|Epoch 050/2449 | Loss 0.2217 | Tot reward x episode 692|
+|Epoch 051/2449 | Loss 0.2425 | Tot reward x episode 687|
+|Epoch 052/2449 | Loss 0.4065 | Tot reward x episode 625|
+|Epoch 053/2449 | Loss 0.3345 | Tot reward x episode 627|
+|Epoch 054/2449 | Loss 0.2057 | Tot reward x episode 681|
+|Epoch 055/2449 | Loss 0.3778 | Tot reward x episode 678|
+|Epoch 056/2449 | Loss 0.1151 | Tot reward x episode 741|
+|Epoch 057/2449 | Loss 0.2717 | Tot reward x episode 675|
+|Epoch 058/2449 | Loss 0.3920 | Tot reward x episode 557|
+|Epoch 059/2449 | Loss 0.1869 | Tot reward x episode 661|
+|Epoch 060/2449 | Loss 0.3376 | Tot reward x episode 693|
+|Epoch 061/2449 | Loss 0.2867 | Tot reward x episode 707|
+|Epoch 062/2449 | Loss 0.1664 | Tot reward x episode 720|
+|Epoch 063/2449 | Loss 0.3288 | Tot reward x episode 664|
+|Epoch 064/2449 | Loss 0.2949 | Tot reward x episode 691|
+|Epoch 065/2449 | Loss 0.2402 | Tot reward x episode 693|
+|Epoch 066/2449 | Loss 0.2618 | Tot reward x episode 684|
+|Epoch 067/2449 | Loss 0.2790 | Tot reward x episode 711|
+|Epoch 068/2449 | Loss 0.2649 | Tot reward x episode 705|
+|Epoch 069/2449 | Loss 0.2097 | Tot reward x episode 692|
+|Epoch 070/2449 | Loss 0.2999 | Tot reward x episode 684|
+|Epoch 071/2449 | Loss 0.2686 | Tot reward x episode 689|
+|Epoch 072/2449 | Loss 0.2842 | Tot reward x episode 699|
+|Epoch 073/2449 | Loss 0.3863 | Tot reward x episode 632|
+|Epoch 074/2449 | Loss 0.2260 | Tot reward x episode 707|
+|Epoch 075/2449 | Loss 0.1461 | Tot reward x episode 727|
+|Epoch 076/2449 | Loss 0.2074 | Tot reward x episode 702|
+|Epoch 077/2449 | Loss 0.2569 | Tot reward x episode 696|
+|Epoch 078/2449 | Loss 0.4206 | Tot reward x episode 638|
+|Epoch 079/2449 | Loss 0.1292 | Tot reward x episode 771|
+|Epoch 080/2449 | Loss 0.2488 | Tot reward x episode 679|
+|Epoch 081/2449 | Loss 0.0860 | Tot reward x episode 745|
+|Epoch 082/2449 | Loss 0.2123 | Tot reward x episode 725|
+|Epoch 083/2449 | Loss 0.1980 | Tot reward x episode 699|
+|Epoch 084/2449 | Loss 0.2386 | Tot reward x episode 670|
+|Epoch 085/2449 | Loss 0.2617 | Tot reward x episode 688|
+|Epoch 086/2449 | Loss 0.3014 | Tot reward x episode 694|
+|Epoch 087/2449 | Loss 0.1808 | Tot reward x episode 721|
+|Epoch 088/2449 | Loss 0.1890 | Tot reward x episode 705|
+|Epoch 089/2449 | Loss 0.2714 | Tot reward x episode 662|
+|Epoch 090/2449 | Loss 0.3248 | Tot reward x episode 583|
+|Epoch 091/2449 | Loss 0.3059 | Tot reward x episode 642|
+|Epoch 092/2449 | Loss 0.2141 | Tot reward x episode 718|
+|Epoch 093/2449 | Loss 0.2695 | Tot reward x episode 651|
+|Epoch 094/2449 | Loss 0.1383 | Tot reward x episode 692|
+|Epoch 095/2449 | Loss 0.2052 | Tot reward x episode 729|
+|Epoch 096/2449 | Loss 0.1399 | Tot reward x episode 735|
+|Epoch 097/2449 | Loss 0.3314 | Tot reward x episode 639|
+|Epoch 098/2449 | Loss 0.2692 | Tot reward x episode 660|
+|Epoch 099/2449 | Loss 0.2231 | Tot reward x episode 711|
+|Epoch 100/2449 | Loss 0.2600 | Tot reward x episode 691|
+|Epoch 101/2449 | Loss 0.1719 | Tot reward x episode 715|
+|Epoch 102/2449 | Loss 0.1687 | Tot reward x episode 728|
+|Epoch 103/2449 | Loss 0.2154 | Tot reward x episode 691|
+|Epoch 104/2449 | Loss 0.3212 | Tot reward x episode 656|
+|Epoch 105/2449 | Loss 0.2500 | Tot reward x episode 682|
+|Epoch 106/2449 | Loss 0.0987 | Tot reward x episode 715|
+|Epoch 107/2449 | Loss 0.1995 | Tot reward x episode 694|
+|Epoch 108/2449 | Loss 0.3641 | Tot reward x episode 638|
+|Epoch 109/2449 | Loss 0.2580 | Tot reward x episode 669|
+|Epoch 110/2449 | Loss 0.1878 | Tot reward x episode 707|
+|Epoch 111/2449 | Loss 0.0856 | Tot reward x episode 754|
+|Epoch 112/2449 | Loss 0.3218 | Tot reward x episode 667|
+|Epoch 113/2449 | Loss 0.1621 | Tot reward x episode 708|
+|Epoch 114/2449 | Loss 0.0792 | Tot reward x episode 752|
+|Epoch 115/2449 | Loss 0.1980 | Tot reward x episode 719|
+|Epoch 116/2449 | Loss 0.3141 | Tot reward x episode 628|
+|Epoch 117/2449 | Loss 0.2359 | Tot reward x episode 677|
+|Epoch 118/2449 | Loss 0.1762 | Tot reward x episode 665|
+|Epoch 119/2449 | Loss 0.1336 | Tot reward x episode 736|
+|Epoch 120/2449 | Loss 0.2496 | Tot reward x episode 712|
+|Epoch 121/2449 | Loss 0.1604 | Tot reward x episode 718|
+|Epoch 122/2449 | Loss 0.2001 | Tot reward x episode 673|
+|Epoch 123/2449 | Loss 0.2140 | Tot reward x episode 673|
+|Epoch 124/2449 | Loss 0.2266 | Tot reward x episode 682|
+|Epoch 125/2449 | Loss 0.2521 | Tot reward x episode 673|
+|Epoch 126/2449 | Loss 0.2682 | Tot reward x episode 663|
+|Epoch 127/2449 | Loss 0.2631 | Tot reward x episode 693|
+|Epoch 128/2449 | Loss 0.1134 | Tot reward x episode 722|
+|Epoch 129/2449 | Loss 0.3160 | Tot reward x episode 661|
+|Epoch 130/2449 | Loss 0.1354 | Tot reward x episode 664|
+|Epoch 131/2449 | Loss 0.0608 | Tot reward x episode 741|
+|Epoch 132/2449 | Loss 0.1186 | Tot reward x episode 745|
+|Epoch 133/2449 | Loss 0.2503 | Tot reward x episode 682|
+|Epoch 134/2449 | Loss 0.4015 | Tot reward x episode 579|
+|Epoch 135/2449 | Loss 0.2875 | Tot reward x episode 705|
+|Epoch 136/2449 | Loss 0.0859 | Tot reward x episode 759|
+|Epoch 137/2449 | Loss 0.2420 | Tot reward x episode 711|
+|Epoch 138/2449 | Loss 0.2356 | Tot reward x episode 690|
+|Epoch 139/2449 | Loss 0.3605 | Tot reward x episode 672|
+|Epoch 140/2449 | Loss 0.1710 | Tot reward x episode 724|
+|Epoch 141/2449 | Loss 0.1278 | Tot reward x episode 674|
+|Epoch 142/2449 | Loss 0.2261 | Tot reward x episode 684|
+|Epoch 143/2449 | Loss 0.2677 | Tot reward x episode 685|
+|Epoch 144/2449 | Loss 0.1699 | Tot reward x episode 698|
+|Epoch 145/2449 | Loss 0.1960 | Tot reward x episode 717|
+|Epoch 146/2449 | Loss 0.0890 | Tot reward x episode 762|
+|Epoch 147/2449 | Loss 0.1682 | Tot reward x episode 709|
+|Epoch 148/2449 | Loss 0.1720 | Tot reward x episode 734|
+|Epoch 149/2449 | Loss 0.0402 | Tot reward x episode 754|
+|Epoch 150/2449 | Loss 0.1508 | Tot reward x episode 736|
+|Epoch 151/2449 | Loss 0.1069 | Tot reward x episode 735|
+|Epoch 152/2449 | Loss 0.0805 | Tot reward x episode 757|
+|Epoch 153/2449 | Loss 0.2288 | Tot reward x episode 664|
+|Epoch 154/2449 | Loss 0.2234 | Tot reward x episode 711|
+|Epoch 155/2449 | Loss 0.1558 | Tot reward x episode 679|
+|Epoch 156/2449 | Loss 0.2680 | Tot reward x episode 696|
+|Epoch 157/2449 | Loss 0.1317 | Tot reward x episode 721|
+|Epoch 158/2449 | Loss 0.1234 | Tot reward x episode 719|
+|Epoch 159/2449 | Loss 0.0884 | Tot reward x episode 689|
+|Epoch 160/2449 | Loss 0.1347 | Tot reward x episode 710|
+|Epoch 161/2449 | Loss 0.2652 | Tot reward x episode 685|
+|Epoch 162/2449 | Loss 0.3393 | Tot reward x episode 615|
+|Epoch 163/2449 | Loss 0.2404 | Tot reward x episode 536|
+|Epoch 164/2449 | Loss 0.1083 | Tot reward x episode 559|
+|Epoch 165/2449 | Loss 0.2496 | Tot reward x episode 533|
+|Epoch 166/2449 | Loss 0.0881 | Tot reward x episode 580|
+|Epoch 167/2449 | Loss 0.1571 | Tot reward x episode 547|
+|Epoch 168/2449 | Loss 0.2716 | Tot reward x episode 538|
+|Epoch 169/2449 | Loss 0.2694 | Tot reward x episode 572|
+|Epoch 170/2449 | Loss 0.1052 | Tot reward x episode 570|
+|Epoch 171/2449 | Loss 0.1188 | Tot reward x episode 552|
+|Epoch 172/2449 | Loss 0.2404 | Tot reward x episode 643|
+|Epoch 173/2449 | Loss 0.2275 | Tot reward x episode 761|
+|Epoch 174/2449 | Loss 0.2774 | Tot reward x episode 740|
+|Epoch 175/2449 | Loss 0.2197 | Tot reward x episode 760|
+|Epoch 176/2449 | Loss 0.1689 | Tot reward x episode 747|
+|Epoch 177/2449 | Loss 0.0710 | Tot reward x episode 766|
+|Epoch 178/2449 | Loss 0.1989 | Tot reward x episode 724|
+|Epoch 179/2449 | Loss 0.2552 | Tot reward x episode 730|
+|Epoch 180/2449 | Loss 0.0610 | Tot reward x episode 753|
+|Epoch 181/2449 | Loss 0.0657 | Tot reward x episode 736|
+|Epoch 182/2449 | Loss 0.2794 | Tot reward x episode 711|
+|Epoch 183/2449 | Loss 0.1132 | Tot reward x episode 755|
+|Epoch 184/2449 | Loss 0.1173 | Tot reward x episode 744|
+|Epoch 185/2449 | Loss 0.0865 | Tot reward x episode 719|
+|Epoch 186/2449 | Loss 0.1209 | Tot reward x episode 710|
+|Epoch 187/2449 | Loss 0.0497 | Tot reward x episode 740|
+|Epoch 188/2449 | Loss 0.2398 | Tot reward x episode 727|
+|Epoch 189/2449 | Loss 0.0695 | Tot reward x episode 735|
+|Epoch 190/2449 | Loss 0.3070 | Tot reward x episode 662|
+|Epoch 191/2449 | Loss 0.0962 | Tot reward x episode 749|
+|Epoch 192/2449 | Loss 0.0948 | Tot reward x episode 764|
+|Epoch 193/2449 | Loss 0.1466 | Tot reward x episode 724|
+|Epoch 194/2449 | Loss 0.1169 | Tot reward x episode 741|
+|Epoch 195/2449 | Loss 0.2536 | Tot reward x episode 707|
+|Epoch 196/2449 | Loss 0.1292 | Tot reward x episode 736|
+|Epoch 197/2449 | Loss 0.1087 | Tot reward x episode 730|
+|Epoch 198/2449 | Loss 0.0723 | Tot reward x episode 763|
+|Epoch 199/2449 | Loss 0.0908 | Tot reward x episode 753|
+|Epoch 200/2449 | Loss 0.1476 | Tot reward x episode 725|
+|Epoch 201/2449 | Loss 0.2360 | Tot reward x episode 731|
+|Epoch 202/2449 | Loss 0.1399 | Tot reward x episode 721|
+|Epoch 203/2449 | Loss 0.0545 | Tot reward x episode 751|
+|Epoch 204/2449 | Loss 0.1945 | Tot reward x episode 719|
+|Epoch 205/2449 | Loss 0.0545 | Tot reward x episode 746|
+|Epoch 206/2449 | Loss 0.1060 | Tot reward x episode 711|
+|Epoch 207/2449 | Loss 0.1423 | Tot reward x episode 698|
+|Epoch 208/2449 | Loss 0.1472 | Tot reward x episode 728|
+|Epoch 209/2449 | Loss 0.0526 | Tot reward x episode 751|
+|Epoch 210/2449 | Loss 0.1466 | Tot reward x episode 722|
+|Epoch 211/2449 | Loss 0.0404 | Tot reward x episode 743|
+|Epoch 212/2449 | Loss 0.1234 | Tot reward x episode 714|
+|Epoch 213/2449 | Loss 0.1450 | Tot reward x episode 713|
+|Epoch 214/2449 | Loss 0.0671 | Tot reward x episode 746|
+|Epoch 215/2449 | Loss 0.0478 | Tot reward x episode 734|
+|Epoch 216/2449 | Loss 0.1760 | Tot reward x episode 740|
+|Epoch 217/2449 | Loss 0.0849 | Tot reward x episode 715|
+|Epoch 218/2449 | Loss 0.0493 | Tot reward x episode 709|
+|Epoch 219/2449 | Loss 0.2137 | Tot reward x episode 689|
+|Epoch 220/2449 | Loss 0.1542 | Tot reward x episode 747|
+|Epoch 221/2449 | Loss 0.0699 | Tot reward x episode 733|
+|Epoch 222/2449 | Loss 0.0387 | Tot reward x episode 756|
+|Epoch 223/2449 | Loss 0.0858 | Tot reward x episode 729|
+|Epoch 224/2449 | Loss 0.1701 | Tot reward x episode 701|
+|Epoch 225/2449 | Loss 0.1504 | Tot reward x episode 727|
+|Epoch 226/2449 | Loss 0.1129 | Tot reward x episode 728|
+|Epoch 227/2449 | Loss 0.2041 | Tot reward x episode 703|
+|Epoch 228/2449 | Loss 0.2101 | Tot reward x episode 606|
+|Epoch 229/2449 | Loss 0.1028 | Tot reward x episode 693|
+|Epoch 230/2449 | Loss 0.0556 | Tot reward x episode 754|
+|Epoch 231/2449 | Loss 0.1971 | Tot reward x episode 711|
+|Epoch 232/2449 | Loss 0.2377 | Tot reward x episode 621|
+|Epoch 233/2449 | Loss 0.0778 | Tot reward x episode 733|
+|Epoch 234/2449 | Loss 0.2137 | Tot reward x episode 675|
+|Epoch 235/2449 | Loss 0.1519 | Tot reward x episode 704|
+|Epoch 236/2449 | Loss 0.0653 | Tot reward x episode 730|
+|Epoch 237/2449 | Loss 0.0211 | Tot reward x episode 746|
+|Epoch 238/2449 | Loss 0.1023 | Tot reward x episode 730|
+|Epoch 239/2449 | Loss 0.0957 | Tot reward x episode 735|
+|Epoch 240/2449 | Loss 0.0583 | Tot reward x episode 713|
+|Epoch 241/2449 | Loss 0.0533 | Tot reward x episode 695|
+|Epoch 242/2449 | Loss 0.2259 | Tot reward x episode 667|
+|Epoch 243/2449 | Loss 0.0669 | Tot reward x episode 735|
+|Epoch 244/2449 | Loss 0.0589 | Tot reward x episode 738|
+|Epoch 245/2449 | Loss 0.1763 | Tot reward x episode 710|
+|Epoch 246/2449 | Loss 0.1144 | Tot reward x episode 684|
+|Epoch 247/2449 | Loss 0.0767 | Tot reward x episode 751|
+|Epoch 248/2449 | Loss 0.1610 | Tot reward x episode 692|
+|Epoch 249/2449 | Loss 0.0736 | Tot reward x episode 718|
+|Epoch 250/2449 | Loss 0.0768 | Tot reward x episode 725|
+|Epoch 251/2449 | Loss 0.1578 | Tot reward x episode 684|
+|Epoch 252/2449 | Loss 0.0402 | Tot reward x episode 721|
+|Epoch 253/2449 | Loss 0.1722 | Tot reward x episode 701|
+|Epoch 254/2449 | Loss 0.1215 | Tot reward x episode 700|
+|Epoch 255/2449 | Loss 0.0411 | Tot reward x episode 719|
+|Epoch 256/2449 | Loss 0.1115 | Tot reward x episode 697|
+|Epoch 257/2449 | Loss 0.1741 | Tot reward x episode 691|
+|Epoch 258/2449 | Loss 0.0534 | Tot reward x episode 728|
+|Epoch 259/2449 | Loss 0.2447 | Tot reward x episode 682|
+|Epoch 260/2449 | Loss 0.1453 | Tot reward x episode 683|
+|Epoch 261/2449 | Loss 0.1438 | Tot reward x episode 703|
+|Epoch 262/2449 | Loss 0.0409 | Tot reward x episode 719|
+|Epoch 263/2449 | Loss 0.1097 | Tot reward x episode 682|
+|Epoch 264/2449 | Loss 0.1762 | Tot reward x episode 681|
+|Epoch 265/2449 | Loss 0.1392 | Tot reward x episode 644|
+|Epoch 266/2449 | Loss 0.0643 | Tot reward x episode 667|
+|Epoch 267/2449 | Loss 0.1283 | Tot reward x episode 648|
+|Epoch 268/2449 | Loss 0.0575 | Tot reward x episode 702|
+|Epoch 269/2449 | Loss 0.3202 | Tot reward x episode 579|
+|Epoch 270/2449 | Loss 0.1032 | Tot reward x episode 558|
+|Epoch 271/2449 | Loss 0.0484 | Tot reward x episode 552|
+|Epoch 272/2449 | Loss 0.0568 | Tot reward x episode 582|
+|Epoch 273/2449 | Loss 0.2242 | Tot reward x episode 526|
+|Epoch 274/2449 | Loss 0.1602 | Tot reward x episode 558|
+|Epoch 275/2449 | Loss 0.0388 | Tot reward x episode 583|
+|Epoch 276/2449 | Loss 0.2406 | Tot reward x episode 554|
+|Epoch 277/2449 | Loss 0.0384 | Tot reward x episode 537|
+|Epoch 278/2449 | Loss 0.0890 | Tot reward x episode 564|
+|Epoch 279/2449 | Loss 0.0807 | Tot reward x episode 548|
+|Epoch 280/2449 | Loss 0.1990 | Tot reward x episode 511|
+|Epoch 281/2449 | Loss 0.1067 | Tot reward x episode 576|
+|Epoch 282/2449 | Loss 0.4179 | Tot reward x episode 485|
+|Epoch 283/2449 | Loss 0.1124 | Tot reward x episode 582|
+|Epoch 284/2449 | Loss 0.0185 | Tot reward x episode 573|
+|Epoch 285/2449 | Loss 0.0583 | Tot reward x episode 573|
+|Epoch 286/2449 | Loss 0.0292 | Tot reward x episode 566|
+|Epoch 287/2449 | Loss 0.0201 | Tot reward x episode 580|
+|Epoch 288/2449 | Loss 0.2854 | Tot reward x episode 604|
+|Epoch 289/2449 | Loss 0.2706 | Tot reward x episode 660|
+|Epoch 290/2449 | Loss 0.1811 | Tot reward x episode 663|
+|Epoch 291/2449 | Loss 0.1292 | Tot reward x episode 652|
+|Epoch 292/2449 | Loss 0.1565 | Tot reward x episode 634|
+|Epoch 293/2449 | Loss 0.1379 | Tot reward x episode 643|
+|Epoch 294/2449 | Loss 0.1261 | Tot reward x episode 680|
+|Epoch 295/2449 | Loss 0.1303 | Tot reward x episode 663|
+|Epoch 296/2449 | Loss 0.1539 | Tot reward x episode 656|
+|Epoch 297/2449 | Loss 0.1458 | Tot reward x episode 681|
+|Epoch 298/2449 | Loss 0.1225 | Tot reward x episode 696|
+|Epoch 299/2449 | Loss 0.2262 | Tot reward x episode 633|
+|Epoch 300/2449 | Loss 0.1372 | Tot reward x episode 680|
+|Epoch 301/2449 | Loss 0.0634 | Tot reward x episode 716|
+|Epoch 302/2449 | Loss 0.1509 | Tot reward x episode 649|
+|Epoch 303/2449 | Loss 0.1187 | Tot reward x episode 680|
+|Epoch 304/2449 | Loss 0.1921 | Tot reward x episode 680|
+|Epoch 305/2449 | Loss 0.1350 | Tot reward x episode 669|
+|Epoch 306/2449 | Loss 0.1452 | Tot reward x episode 695|
+|Epoch 307/2449 | Loss 0.1966 | Tot reward x episode 686|
+|Epoch 308/2449 | Loss 0.0539 | Tot reward x episode 720|
+|Epoch 309/2449 | Loss 0.2306 | Tot reward x episode 619|
+|Epoch 310/2449 | Loss 0.2294 | Tot reward x episode 662|
+|Epoch 311/2449 | Loss 0.0901 | Tot reward x episode 703|
+|Epoch 312/2449 | Loss 0.1254 | Tot reward x episode 660|
+|Epoch 313/2449 | Loss 0.0970 | Tot reward x episode 662|
+|Epoch 314/2449 | Loss 0.0823 | Tot reward x episode 708|
+|Epoch 315/2449 | Loss 0.0907 | Tot reward x episode 683|
+|Epoch 316/2449 | Loss 0.3891 | Tot reward x episode 605|
+|Epoch 317/2449 | Loss 0.0676 | Tot reward x episode 700|
+|Epoch 318/2449 | Loss 0.0589 | Tot reward x episode 678|
+|Epoch 319/2449 | Loss 0.0975 | Tot reward x episode 673|
+|Epoch 320/2449 | Loss 0.1286 | Tot reward x episode 691|
+|Epoch 321/2449 | Loss 0.0384 | Tot reward x episode 685|
+|Epoch 322/2449 | Loss 0.0647 | Tot reward x episode 672|
+|Epoch 323/2449 | Loss 0.1087 | Tot reward x episode 663|
+|Epoch 324/2449 | Loss 0.0856 | Tot reward x episode 668|
+|Epoch 325/2449 | Loss 0.1932 | Tot reward x episode 686|
+|Epoch 326/2449 | Loss 0.1845 | Tot reward x episode 670|
+|Epoch 327/2449 | Loss 0.0833 | Tot reward x episode 697|
+|Epoch 328/2449 | Loss 0.2744 | Tot reward x episode 635|
+|Epoch 329/2449 | Loss 0.0402 | Tot reward x episode 730|
+|Epoch 330/2449 | Loss 0.0645 | Tot reward x episode 683|
+|Epoch 331/2449 | Loss 0.0916 | Tot reward x episode 673|
+|Epoch 332/2449 | Loss 0.1543 | Tot reward x episode 655|
+|Epoch 333/2449 | Loss 0.0492 | Tot reward x episode 703|
+|Epoch 334/2449 | Loss 0.1220 | Tot reward x episode 619|
+|Epoch 335/2449 | Loss 0.2828 | Tot reward x episode 511|
+|Epoch 336/2449 | Loss 0.0683 | Tot reward x episode 576|
+|Epoch 337/2449 | Loss 0.0465 | Tot reward x episode 578|
+|Epoch 338/2449 | Loss 0.0600 | Tot reward x episode 590|
+|Epoch 339/2449 | Loss 0.1304 | Tot reward x episode 571|
+|Epoch 340/2449 | Loss 0.0884 | Tot reward x episode 535|
+|Epoch 341/2449 | Loss 0.0505 | Tot reward x episode 537|
+|Epoch 342/2449 | Loss 0.4634 | Tot reward x episode 116|
+|Epoch 343/2449 | Loss 0.1599 | Tot reward x episode 077|
+|Epoch 344/2449 | Loss 0.1132 | Tot reward x episode 053|
+|Epoch 345/2449 | Loss 0.1055 | Tot reward x episode 046|
+|Epoch 346/2449 | Loss 0.1243 | Tot reward x episode 059|
+|Epoch 347/2449 | Loss 0.1011 | Tot reward x episode 044|
+|Epoch 348/2449 | Loss 0.1323 | Tot reward x episode 056|
+|Epoch 349/2449 | Loss 0.1825 | Tot reward x episode 107|
+|Epoch 350/2449 | Loss 0.1902 | Tot reward x episode 160|
+|Epoch 351/2449 | Loss 0.2055 | Tot reward x episode 165|
+|Epoch 352/2449 | Loss 0.2134 | Tot reward x episode 105|
+|Epoch 353/2449 | Loss 0.3515 | Tot reward x episode 549|
+|Epoch 354/2449 | Loss 0.0657 | Tot reward x episode 732|
+|Epoch 355/2449 | Loss 0.1554 | Tot reward x episode 738|
+|Epoch 356/2449 | Loss 0.1443 | Tot reward x episode 715|
+|Epoch 357/2449 | Loss 0.0643 | Tot reward x episode 704|
+|Epoch 358/2449 | Loss 0.0999 | Tot reward x episode 670|
+|Epoch 359/2449 | Loss 0.1035 | Tot reward x episode 659|
+|Epoch 360/2449 | Loss 0.0793 | Tot reward x episode 714|
+|Epoch 361/2449 | Loss 0.0747 | Tot reward x episode 700|
+|Epoch 362/2449 | Loss 0.0496 | Tot reward x episode 699|
+|Epoch 363/2449 | Loss 0.0766 | Tot reward x episode 666|
+|Epoch 364/2449 | Loss 0.1088 | Tot reward x episode 674|
+|Epoch 365/2449 | Loss 0.0425 | Tot reward x episode 709|
+|Epoch 366/2449 | Loss 0.1709 | Tot reward x episode 692|
+|Epoch 367/2449 | Loss 0.0263 | Tot reward x episode 695|
+|Epoch 368/2449 | Loss 0.0769 | Tot reward x episode 697|
+|Epoch 369/2449 | Loss 0.0522 | Tot reward x episode 689|
+|Epoch 370/2449 | Loss 0.0925 | Tot reward x episode 679|
+|Epoch 371/2449 | Loss 0.1573 | Tot reward x episode 651|
+|Epoch 372/2449 | Loss 0.1142 | Tot reward x episode 560|
+|Epoch 373/2449 | Loss 0.1897 | Tot reward x episode 515|
+|Epoch 374/2449 | Loss 0.0741 | Tot reward x episode 571|
+|Epoch 375/2449 | Loss 0.1519 | Tot reward x episode 531|
+|Epoch 376/2449 | Loss 0.0810 | Tot reward x episode 545|
+|Epoch 377/2449 | Loss 0.0704 | Tot reward x episode 549|
+|Epoch 378/2449 | Loss 0.0289 | Tot reward x episode 554|
+|Epoch 379/2449 | Loss 0.2803 | Tot reward x episode 366|
+|Epoch 380/2449 | Loss 0.0231 | Tot reward x episode 000|
+|Epoch 381/2449 | Loss 0.0047 | Tot reward x episode 000|
+|Epoch 382/2449 | Loss 0.0034 | Tot reward x episode 000|
+|Epoch 383/2449 | Loss 0.0051 | Tot reward x episode 001|
+|Epoch 384/2449 | Loss 0.0050 | Tot reward x episode 001|
+|Epoch 385/2449 | Loss 0.0025 | Tot reward x episode 000|
+|Epoch 386/2449 | Loss 0.0019 | Tot reward x episode 000|
+|Epoch 387/2449 | Loss 0.0075 | Tot reward x episode 002|
+|Epoch 388/2449 | Loss 0.0032 | Tot reward x episode 000|
+|Epoch 389/2449 | Loss 0.0048 | Tot reward x episode 001|
+|Epoch 390/2449 | Loss 0.0050 | Tot reward x episode 001|
+|Epoch 391/2449 | Loss 0.0042 | Tot reward x episode 001|
+|Epoch 392/2449 | Loss 0.0043 | Tot reward x episode 001|
+|Epoch 393/2449 | Loss 0.0037 | Tot reward x episode 001|
+|Epoch 394/2449 | Loss 0.0035 | Tot reward x episode 000|
+|Epoch 395/2449 | Loss 0.0040 | Tot reward x episode 001|
+|Epoch 396/2449 | Loss 0.0040 | Tot reward x episode 001|
+|Epoch 397/2449 | Loss 0.0015 | Tot reward x episode 000|
+|Epoch 398/2449 | Loss 0.0015 | Tot reward x episode 000|
+|Epoch 399/2449 | Loss 0.0013 | Tot reward x episode 000|
+|Epoch 400/2449 | Loss 0.0027 | Tot reward x episode 000|
+|Epoch 401/2449 | Loss 0.0012 | Tot reward x episode 000|
+|Epoch 402/2449 | Loss 0.0045 | Tot reward x episode 001|
+|Epoch 403/2449 | Loss 0.0064 | Tot reward x episode 002|
+|Epoch 404/2449 | Loss 0.0036 | Tot reward x episode 001|
+|Epoch 405/2449 | Loss 0.0011 | Tot reward x episode 000|
+|Epoch 406/2449 | Loss 0.0038 | Tot reward x episode 001|
+|Epoch 407/2449 | Loss 0.0020 | Tot reward x episode 000|
+|Epoch 408/2449 | Loss 0.0036 | Tot reward x episode 001|
+|Epoch 409/2449 | Loss 0.0008 | Tot reward x episode 000|
+|Epoch 410/2449 | Loss 0.0008 | Tot reward x episode 000|
+|Epoch 411/2449 | Loss 0.0078 | Tot reward x episode 003|
+|Epoch 412/2449 | Loss 0.0008 | Tot reward x episode 000|
+|Epoch 413/2449 | Loss 0.0007 | Tot reward x episode 000|
+|Epoch 414/2449 | Loss 0.0056 | Tot reward x episode 002|
+|Epoch 415/2449 | Loss 0.0007 | Tot reward x episode 000|
+|Epoch 416/2449 | Loss 0.0034 | Tot reward x episode 001|
+|Epoch 417/2449 | Loss 0.0006 | Tot reward x episode 000|
+|Epoch 418/2449 | Loss 0.0065 | Tot reward x episode 002|
+|Epoch 419/2449 | Loss 0.0055 | Tot reward x episode 002|
+|Epoch 420/2449 | Loss 0.0031 | Tot reward x episode 001|
+|Epoch 421/2449 | Loss 0.0030 | Tot reward x episode 001|
+|Epoch 422/2449 | Loss 0.0005 | Tot reward x episode 000|
+|Epoch 423/2449 | Loss 0.0006 | Tot reward x episode 000|
+|Epoch 424/2449 | Loss 0.0056 | Tot reward x episode 002|
+|Epoch 425/2449 | Loss 0.0029 | Tot reward x episode 001|
+|Epoch 426/2449 | Loss 0.0029 | Tot reward x episode 001|
+|Epoch 427/2449 | Loss 0.0032 | Tot reward x episode 001|
+|Epoch 428/2449 | Loss 0.0053 | Tot reward x episode 002|
+|Epoch 429/2449 | Loss 0.0050 | Tot reward x episode 002|
+|Epoch 430/2449 | Loss 0.0005 | Tot reward x episode 000|
+|Epoch 431/2449 | Loss 0.0029 | Tot reward x episode 001|
+|Epoch 432/2449 | Loss 0.0015 | Tot reward x episode 000|
+|Epoch 433/2449 | Loss 0.0004 | Tot reward x episode 000|
+|Epoch 434/2449 | Loss 0.0005 | Tot reward x episode 000|
+|Epoch 435/2449 | Loss 0.0005 | Tot reward x episode 000|
+|Epoch 436/2449 | Loss 0.0005 | Tot reward x episode 000|
+|Epoch 437/2449 | Loss 0.0004 | Tot reward x episode 000|
+|Epoch 438/2449 | Loss 0.0004 | Tot reward x episode 000|
+|Epoch 439/2449 | Loss 0.0003 | Tot reward x episode 000|
+|Epoch 440/2449 | Loss 0.0106 | Tot reward x episode 004|
+|Epoch 441/2449 | Loss 0.0105 | Tot reward x episode 004|
+|Epoch 442/2449 | Loss 0.0026 | Tot reward x episode 001|
+|Epoch 443/2449 | Loss 0.0100 | Tot reward x episode 004|
+|Epoch 444/2449 | Loss 0.0004 | Tot reward x episode 000|
+|Epoch 445/2449 | Loss 0.0102 | Tot reward x episode 004|
+|Epoch 446/2449 | Loss 0.0003 | Tot reward x episode 000|
+|Epoch 447/2449 | Loss 0.0004 | Tot reward x episode 000|
+|Epoch 448/2449 | Loss 0.0004 | Tot reward x episode 000|
+|Epoch 449/2449 | Loss 0.0040 | Tot reward x episode 001|
+|Epoch 450/2449 | Loss 0.0053 | Tot reward x episode 002|
+|Epoch 451/2449 | Loss 0.0030 | Tot reward x episode 001|
+|Epoch 452/2449 | Loss 0.0050 | Tot reward x episode 002|
+|Epoch 453/2449 | Loss 0.0004 | Tot reward x episode 000|
+|Epoch 454/2449 | Loss 0.0004 | Tot reward x episode 000|
+|Epoch 455/2449 | Loss 0.0003 | Tot reward x episode 000|
+|Epoch 456/2449 | Loss 0.0003 | Tot reward x episode 000|
+|Epoch 457/2449 | Loss 0.0003 | Tot reward x episode 000|
+|Epoch 458/2449 | Loss 0.0079 | Tot reward x episode 003|
+|Epoch 459/2449 | Loss 0.0054 | Tot reward x episode 002|
+|Epoch 460/2449 | Loss 0.0125 | Tot reward x episode 005|
+|Epoch 461/2449 | Loss 0.0028 | Tot reward x episode 001|
+|Epoch 462/2449 | Loss 0.0053 | Tot reward x episode 002|
+|Epoch 463/2449 | Loss 0.0053 | Tot reward x episode 002|
+|Epoch 464/2449 | Loss 0.0120 | Tot reward x episode 005|
+|Epoch 465/2449 | Loss 0.0075 | Tot reward x episode 003|
+|Epoch 466/2449 | Loss 0.0099 | Tot reward x episode 004|
+|Epoch 467/2449 | Loss 0.0146 | Tot reward x episode 006|
+|Epoch 468/2449 | Loss 0.0361 | Tot reward x episode 015|
+|Epoch 469/2449 | Loss 0.0138 | Tot reward x episode 006|
+|Epoch 470/2449 | Loss 0.0027 | Tot reward x episode 001|
+|Epoch 471/2449 | Loss 0.0162 | Tot reward x episode 007|
+|Epoch 472/2449 | Loss 0.0151 | Tot reward x episode 006|
+|Epoch 473/2449 | Loss 0.0080 | Tot reward x episode 003|
+|Epoch 474/2449 | Loss 0.0131 | Tot reward x episode 005|
+|Epoch 475/2449 | Loss 0.0148 | Tot reward x episode 006|
+|Epoch 476/2449 | Loss 0.0268 | Tot reward x episode 011|
+|Epoch 477/2449 | Loss 0.0196 | Tot reward x episode 008|
+|Epoch 478/2449 | Loss 0.0197 | Tot reward x episode 008|
+|Epoch 479/2449 | Loss 0.0119 | Tot reward x episode 005|
+|Epoch 480/2449 | Loss 0.0277 | Tot reward x episode 011|
+|Epoch 481/2449 | Loss 0.0395 | Tot reward x episode 016|
+|Epoch 482/2449 | Loss 0.0211 | Tot reward x episode 009|
+|Epoch 483/2449 | Loss 0.0207 | Tot reward x episode 008|
+|Epoch 484/2449 | Loss 0.0288 | Tot reward x episode 012|
+|Epoch 485/2449 | Loss 0.0221 | Tot reward x episode 010|
+|Epoch 486/2449 | Loss 0.0145 | Tot reward x episode 006|
+|Epoch 487/2449 | Loss 0.0284 | Tot reward x episode 012|
+|Epoch 488/2449 | Loss 0.0161 | Tot reward x episode 007|
+|Epoch 489/2449 | Loss 0.0182 | Tot reward x episode 008|
+|Epoch 490/2449 | Loss 0.0307 | Tot reward x episode 013|
+|Epoch 491/2449 | Loss 0.0220 | Tot reward x episode 009|
+|Epoch 492/2449 | Loss 0.0260 | Tot reward x episode 011|
+|Epoch 493/2449 | Loss 0.0539 | Tot reward x episode 023|
+|Epoch 494/2449 | Loss 0.1206 | Tot reward x episode 057|
+|Epoch 495/2449 | Loss 0.0944 | Tot reward x episode 046|
+|Epoch 496/2449 | Loss 0.1131 | Tot reward x episode 055|
+|Epoch 497/2449 | Loss 0.1482 | Tot reward x episode 085|
+|Epoch 498/2449 | Loss 0.1007 | Tot reward x episode 058|
+|Epoch 499/2449 | Loss 0.1475 | Tot reward x episode 102|
+|Epoch 500/2449 | Loss 0.1380 | Tot reward x episode 104|
+|Epoch 501/2449 | Loss 0.1118 | Tot reward x episode 135|
+|Epoch 502/2449 | Loss 0.1085 | Tot reward x episode 156|
+|Epoch 503/2449 | Loss 0.1863 | Tot reward x episode 133|
+|Epoch 504/2449 | Loss 0.1274 | Tot reward x episode 149|
+|Epoch 505/2449 | Loss 0.0871 | Tot reward x episode 144|
+|Epoch 506/2449 | Loss 0.0459 | Tot reward x episode 146|
+|Epoch 507/2449 | Loss 0.1177 | Tot reward x episode 138|
+|Epoch 508/2449 | Loss 0.0902 | Tot reward x episode 138|
+|Epoch 509/2449 | Loss 0.0889 | Tot reward x episode 148|
+|Epoch 510/2449 | Loss 0.1541 | Tot reward x episode 154|
+|Epoch 511/2449 | Loss 0.0516 | Tot reward x episode 154|
+|Epoch 512/2449 | Loss 0.0358 | Tot reward x episode 137|
+|Epoch 513/2449 | Loss 0.0377 | Tot reward x episode 129|
+|Epoch 514/2449 | Loss 0.0964 | Tot reward x episode 123|
+|Epoch 515/2449 | Loss 0.0447 | Tot reward x episode 140|
+|Epoch 516/2449 | Loss 0.0280 | Tot reward x episode 139|
+|Epoch 517/2449 | Loss 0.0254 | Tot reward x episode 139|
+|Epoch 518/2449 | Loss 0.0297 | Tot reward x episode 120|
+|Epoch 519/2449 | Loss 0.0571 | Tot reward x episode 132|
+|Epoch 520/2449 | Loss 0.0353 | Tot reward x episode 123|
+|Epoch 521/2449 | Loss 0.1385 | Tot reward x episode 032|
+|Epoch 522/2449 | Loss 0.0586 | Tot reward x episode 000|
+|Epoch 523/2449 | Loss 0.0327 | Tot reward x episode 000|
+|Epoch 524/2449 | Loss 0.0366 | Tot reward x episode 002|
+|Epoch 525/2449 | Loss 0.0145 | Tot reward x episode 000|
+|Epoch 526/2449 | Loss 0.0144 | Tot reward x episode 000|
+|Epoch 527/2449 | Loss 0.0088 | Tot reward x episode 000|
+|Epoch 528/2449 | Loss 0.0078 | Tot reward x episode 000|
+|Epoch 529/2449 | Loss 0.0064 | Tot reward x episode 000|
+|Epoch 530/2449 | Loss 0.0059 | Tot reward x episode 000|
+|Epoch 531/2449 | Loss 0.0115 | Tot reward x episode 000|
+|Epoch 532/2449 | Loss 0.0042 | Tot reward x episode 000|
+|Epoch 533/2449 | Loss 0.0037 | Tot reward x episode 000|
+|Epoch 534/2449 | Loss 0.0032 | Tot reward x episode 000|
+|Epoch 535/2449 | Loss 0.0033 | Tot reward x episode 000|
+|Epoch 536/2449 | Loss 0.0033 | Tot reward x episode 000|
+|Epoch 537/2449 | Loss 0.0026 | Tot reward x episode 000|
+|Epoch 538/2449 | Loss 0.0023 | Tot reward x episode 000|
+|Epoch 539/2449 | Loss 0.0084 | Tot reward x episode 001|
+|Epoch 540/2449 | Loss 0.0024 | Tot reward x episode 000|
+|Epoch 541/2449 | Loss 0.0018 | Tot reward x episode 000|
+|Epoch 542/2449 | Loss 0.0015 | Tot reward x episode 000|
+|Epoch 543/2449 | Loss 0.0015 | Tot reward x episode 000|
+|Epoch 544/2449 | Loss 0.0020 | Tot reward x episode 000|
+|Epoch 545/2449 | Loss 0.0015 | Tot reward x episode 000|
+|Epoch 546/2449 | Loss 0.0034 | Tot reward x episode 000|
+|Epoch 547/2449 | Loss 0.0016 | Tot reward x episode 000|
+|Epoch 548/2449 | Loss 0.0012 | Tot reward x episode 000|
+|Epoch 549/2449 | Loss 0.0012 | Tot reward x episode 000|
+|Epoch 550/2449 | Loss 0.0022 | Tot reward x episode 000|
+|Epoch 551/2449 | Loss 0.0021 | Tot reward x episode 000|
+|Epoch 552/2449 | Loss 0.0020 | Tot reward x episode 000|
+|Epoch 553/2449 | Loss 0.0015 | Tot reward x episode 000|
+|Epoch 554/2449 | Loss 0.0017 | Tot reward x episode 000|
+|Epoch 555/2449 | Loss 0.0014 | Tot reward x episode 000|
+|Epoch 556/2449 | Loss 0.0013 | Tot reward x episode 000|
+|Epoch 557/2449 | Loss 0.0010 | Tot reward x episode 000|
+|Epoch 558/2449 | Loss 0.0011 | Tot reward x episode 000|
+|Epoch 559/2449 | Loss 0.0014 | Tot reward x episode 000|
+|Epoch 560/2449 | Loss 0.0013 | Tot reward x episode 000|
+|Epoch 561/2449 | Loss 0.0011 | Tot reward x episode 000|
+|Epoch 562/2449 | Loss 0.0038 | Tot reward x episode 001|
+|Epoch 563/2449 | Loss 0.0010 | Tot reward x episode 000|
+|Epoch 564/2449 | Loss 0.0009 | Tot reward x episode 000|
+|Epoch 565/2449 | Loss 0.0036 | Tot reward x episode 001|
+|Epoch 566/2449 | Loss 0.0009 | Tot reward x episode 000|
+|Epoch 567/2449 | Loss 0.0035 | Tot reward x episode 001|
+|Epoch 568/2449 | Loss 0.0037 | Tot reward x episode 001|
+|Epoch 569/2449 | Loss 0.0008 | Tot reward x episode 000|
+|Epoch 570/2449 | Loss 0.0009 | Tot reward x episode 000|
+|Epoch 571/2449 | Loss 0.0006 | Tot reward x episode 000|
+|Epoch 572/2449 | Loss 0.0009 | Tot reward x episode 000|
+|Epoch 573/2449 | Loss 0.0007 | Tot reward x episode 000|
+|Epoch 574/2449 | Loss 0.0006 | Tot reward x episode 000|
+|Epoch 575/2449 | Loss 0.0008 | Tot reward x episode 000|
+|Epoch 576/2449 | Loss 0.0007 | Tot reward x episode 000|
+|Epoch 577/2449 | Loss 0.0013 | Tot reward x episode 000|
+|Epoch 578/2449 | Loss 0.0007 | Tot reward x episode 000|
+|Epoch 579/2449 | Loss 0.0007 | Tot reward x episode 000|
+|Epoch 580/2449 | Loss 0.0006 | Tot reward x episode 000|
+|Epoch 581/2449 | Loss 0.0005 | Tot reward x episode 000|
+|Epoch 582/2449 | Loss 0.0005 | Tot reward x episode 000|
+|Epoch 583/2449 | Loss 0.0007 | Tot reward x episode 000|
+|Epoch 584/2449 | Loss 0.0006 | Tot reward x episode 000|
+|Epoch 585/2449 | Loss 0.0006 | Tot reward x episode 000|
+|Epoch 586/2449 | Loss 0.0005 | Tot reward x episode 000|
+|Epoch 587/2449 | Loss 0.0004 | Tot reward x episode 000|
+|Epoch 588/2449 | Loss 0.0005 | Tot reward x episode 000|
+|Epoch 589/2449 | Loss 0.0005 | Tot reward x episode 000|
+|Epoch 590/2449 | Loss 0.0029 | Tot reward x episode 000|
+|Epoch 591/2449 | Loss 0.0004 | Tot reward x episode 000|
+|Epoch 592/2449 | Loss 0.0004 | Tot reward x episode 000|
+|Epoch 593/2449 | Loss 0.0005 | Tot reward x episode 000|
+|Epoch 594/2449 | Loss 0.1611 | Tot reward x episode 071|
+|Epoch 595/2449 | Loss 0.3616 | Tot reward x episode 233|
+|Epoch 596/2449 | Loss 0.2944 | Tot reward x episode 212|
+|Epoch 597/2449 | Loss 0.3678 | Tot reward x episode 218|
+|Epoch 598/2449 | Loss 0.2721 | Tot reward x episode 218|
+|Epoch 599/2449 | Loss 0.3536 | Tot reward x episode 223|
+|Epoch 600/2449 | Loss 0.1991 | Tot reward x episode 214|
+|Epoch 601/2449 | Loss 0.2113 | Tot reward x episode 204|
+|Epoch 602/2449 | Loss 0.1459 | Tot reward x episode 207|
+|Epoch 603/2449 | Loss 0.2265 | Tot reward x episode 225|
+|Epoch 604/2449 | Loss 0.1024 | Tot reward x episode 229|
+|Epoch 605/2449 | Loss 0.2415 | Tot reward x episode 208|
+|Epoch 606/2449 | Loss 0.0799 | Tot reward x episode 201|
+|Epoch 607/2449 | Loss 0.0580 | Tot reward x episode 220|
+|Epoch 608/2449 | Loss 0.1105 | Tot reward x episode 207|
+|Epoch 609/2449 | Loss 0.0431 | Tot reward x episode 221|
+|Epoch 610/2449 | Loss 0.0693 | Tot reward x episode 210|
+|Epoch 611/2449 | Loss 0.0284 | Tot reward x episode 213|
+|Epoch 612/2449 | Loss 0.6171 | Tot reward x episode 614|
+|Epoch 613/2449 | Loss 0.2629 | Tot reward x episode 606|
+|Epoch 614/2449 | Loss 0.2115 | Tot reward x episode 603|
+|Epoch 615/2449 | Loss 0.2015 | Tot reward x episode 613|
+|Epoch 616/2449 | Loss 0.1059 | Tot reward x episode 615|
+|Epoch 617/2449 | Loss 0.2654 | Tot reward x episode 567|
+|Epoch 618/2449 | Loss 0.1206 | Tot reward x episode 594|
+|Epoch 619/2449 | Loss 0.0999 | Tot reward x episode 627|
+|Epoch 620/2449 | Loss 0.1168 | Tot reward x episode 599|
+|Epoch 621/2449 | Loss 0.1921 | Tot reward x episode 557|
+|Epoch 622/2449 | Loss 0.1065 | Tot reward x episode 570|
+|Epoch 623/2449 | Loss 0.0702 | Tot reward x episode 611|
+|Epoch 624/2449 | Loss 0.0960 | Tot reward x episode 579|
+|Epoch 625/2449 | Loss 0.0396 | Tot reward x episode 615|
+|Epoch 626/2449 | Loss 0.0826 | Tot reward x episode 524|
+|Epoch 627/2449 | Loss 0.0733 | Tot reward x episode 572|
+|Epoch 628/2449 | Loss 0.0664 | Tot reward x episode 579|
+|Epoch 629/2449 | Loss 0.1544 | Tot reward x episode 529|
+|Epoch 630/2449 | Loss 0.0864 | Tot reward x episode 568|
+|Epoch 631/2449 | Loss 0.0653 | Tot reward x episode 590|
+|Epoch 632/2449 | Loss 0.1098 | Tot reward x episode 606|
+|Epoch 633/2449 | Loss 0.1326 | Tot reward x episode 581|
+|Epoch 634/2449 | Loss 0.1981 | Tot reward x episode 592|
+|Epoch 635/2449 | Loss 0.1617 | Tot reward x episode 662|
+|Epoch 636/2449 | Loss 0.1822 | Tot reward x episode 615|
+|Epoch 637/2449 | Loss 0.1353 | Tot reward x episode 636|
+|Epoch 638/2449 | Loss 0.3687 | Tot reward x episode 215|
+|Epoch 639/2449 | Loss 0.2335 | Tot reward x episode 210|
+|Epoch 640/2449 | Loss 0.2052 | Tot reward x episode 200|
+|Epoch 641/2449 | Loss 0.0942 | Tot reward x episode 192|
+|Epoch 642/2449 | Loss 0.0643 | Tot reward x episode 204|
+|Epoch 643/2449 | Loss 0.0678 | Tot reward x episode 203|
+|Epoch 644/2449 | Loss 0.1293 | Tot reward x episode 141|
+|Epoch 645/2449 | Loss 0.1454 | Tot reward x episode 148|
+|Epoch 646/2449 | Loss 0.0401 | Tot reward x episode 237|
+|Epoch 647/2449 | Loss 0.0346 | Tot reward x episode 226|
+|Epoch 648/2449 | Loss 0.1195 | Tot reward x episode 151|
+|Epoch 649/2449 | Loss 0.0366 | Tot reward x episode 241|
+|Epoch 650/2449 | Loss 0.0819 | Tot reward x episode 192|
+|Epoch 651/2449 | Loss 0.0248 | Tot reward x episode 220|
+|Epoch 652/2449 | Loss 0.0318 | Tot reward x episode 218|
+|Epoch 653/2449 | Loss 0.1224 | Tot reward x episode 144|
+|Epoch 654/2449 | Loss 0.0728 | Tot reward x episode 203|
+|Epoch 655/2449 | Loss 0.0881 | Tot reward x episode 185|
+|Epoch 656/2449 | Loss 0.1541 | Tot reward x episode 076|
+|Epoch 657/2449 | Loss 0.1173 | Tot reward x episode 034|
+|Epoch 658/2449 | Loss 0.1134 | Tot reward x episode 048|
+|Epoch 659/2449 | Loss 0.1630 | Tot reward x episode 139|
+|Epoch 660/2449 | Loss 0.1368 | Tot reward x episode 132|
+|Epoch 661/2449 | Loss 0.1446 | Tot reward x episode 087|
+|Epoch 662/2449 | Loss 0.1339 | Tot reward x episode 084|
+|Epoch 663/2449 | Loss 0.1212 | Tot reward x episode 068|
+|Epoch 664/2449 | Loss 0.1388 | Tot reward x episode 147|
+|Epoch 665/2449 | Loss 0.0974 | Tot reward x episode 138|
+|Epoch 666/2449 | Loss 0.0999 | Tot reward x episode 140|
+|Epoch 667/2449 | Loss 0.0633 | Tot reward x episode 187|
+|Epoch 668/2449 | Loss 0.0427 | Tot reward x episode 224|
+|Epoch 669/2449 | Loss 0.0925 | Tot reward x episode 186|
+|Epoch 670/2449 | Loss 0.0837 | Tot reward x episode 205|
+|Epoch 671/2449 | Loss 0.0594 | Tot reward x episode 182|
+|Epoch 672/2449 | Loss 0.1386 | Tot reward x episode 127|
+|Epoch 673/2449 | Loss 0.1215 | Tot reward x episode 115|
+|Epoch 674/2449 | Loss 0.0835 | Tot reward x episode 164|
+|Epoch 675/2449 | Loss 0.1307 | Tot reward x episode 100|
+|Epoch 676/2449 | Loss 0.0954 | Tot reward x episode 026|
+|Epoch 677/2449 | Loss 0.0726 | Tot reward x episode 021|
+|Epoch 678/2449 | Loss 0.1480 | Tot reward x episode 141|
+|Epoch 679/2449 | Loss 0.0714 | Tot reward x episode 199|
+|Epoch 680/2449 | Loss 0.0429 | Tot reward x episode 189|
+|Epoch 681/2449 | Loss 0.0619 | Tot reward x episode 199|
+|Epoch 682/2449 | Loss 0.0205 | Tot reward x episode 200|
+|Epoch 683/2449 | Loss 0.0405 | Tot reward x episode 200|
+|Epoch 684/2449 | Loss 0.0624 | Tot reward x episode 178|
+|Epoch 685/2449 | Loss 0.0358 | Tot reward x episode 215|
+|Epoch 686/2449 | Loss 0.0317 | Tot reward x episode 202|
+|Epoch 687/2449 | Loss 0.1049 | Tot reward x episode 168|
+|Epoch 688/2449 | Loss 0.0417 | Tot reward x episode 198|
+|Epoch 689/2449 | Loss 0.0294 | Tot reward x episode 235|
+|Epoch 690/2449 | Loss 0.0318 | Tot reward x episode 206|
+|Epoch 691/2449 | Loss 0.0441 | Tot reward x episode 187|
+|Epoch 692/2449 | Loss 0.1226 | Tot reward x episode 147|
+|Epoch 693/2449 | Loss 0.0804 | Tot reward x episode 160|
+|Epoch 694/2449 | Loss 0.0256 | Tot reward x episode 185|
+|Epoch 695/2449 | Loss 0.0733 | Tot reward x episode 199|
+|Epoch 696/2449 | Loss 0.1314 | Tot reward x episode 046|
+|Epoch 697/2449 | Loss 0.0906 | Tot reward x episode 046|
+|Epoch 698/2449 | Loss 0.0566 | Tot reward x episode 038|
+|Epoch 699/2449 | Loss 0.0399 | Tot reward x episode 032|
+|Epoch 700/2449 | Loss 0.0377 | Tot reward x episode 037|
+|Epoch 701/2449 | Loss 0.0402 | Tot reward x episode 043|
+|Epoch 702/2449 | Loss 0.0302 | Tot reward x episode 029|
+|Epoch 703/2449 | Loss 0.0317 | Tot reward x episode 029|
+|Epoch 704/2449 | Loss 0.0273 | Tot reward x episode 031|
+|Epoch 705/2449 | Loss 0.0258 | Tot reward x episode 025|
+|Epoch 706/2449 | Loss 0.0298 | Tot reward x episode 034|
+|Epoch 707/2449 | Loss 0.0284 | Tot reward x episode 040|
+|Epoch 708/2449 | Loss 0.0209 | Tot reward x episode 045|
+|Epoch 709/2449 | Loss 0.0224 | Tot reward x episode 040|
+|Epoch 710/2449 | Loss 0.0317 | Tot reward x episode 026|
+|Epoch 711/2449 | Loss 0.0203 | Tot reward x episode 029|
+|Epoch 712/2449 | Loss 0.0232 | Tot reward x episode 038|
+|Epoch 713/2449 | Loss 0.0213 | Tot reward x episode 040|
+|Epoch 714/2449 | Loss 0.0221 | Tot reward x episode 049|
+|Epoch 715/2449 | Loss 0.0276 | Tot reward x episode 025|
+|Epoch 716/2449 | Loss 0.0212 | Tot reward x episode 037|
+|Epoch 717/2449 | Loss 0.0155 | Tot reward x episode 038|
+|Epoch 718/2449 | Loss 0.0223 | Tot reward x episode 041|
+|Epoch 719/2449 | Loss 0.0182 | Tot reward x episode 040|
+|Epoch 720/2449 | Loss 0.0454 | Tot reward x episode 006|
+|Epoch 721/2449 | Loss 0.0275 | Tot reward x episode 000|
+|Epoch 722/2449 | Loss 0.0095 | Tot reward x episode 000|
+|Epoch 723/2449 | Loss 0.0164 | Tot reward x episode 002|
+|Epoch 724/2449 | Loss 0.0144 | Tot reward x episode 002|
+|Epoch 725/2449 | Loss 0.0124 | Tot reward x episode 001|
+|Epoch 726/2449 | Loss 0.0064 | Tot reward x episode 000|
+|Epoch 727/2449 | Loss 0.0042 | Tot reward x episode 000|
+|Epoch 728/2449 | Loss 0.0084 | Tot reward x episode 002|
+|Epoch 729/2449 | Loss 0.0031 | Tot reward x episode 000|
+|Epoch 730/2449 | Loss 0.0050 | Tot reward x episode 001|
+|Epoch 731/2449 | Loss 0.0082 | Tot reward x episode 002|
+|Epoch 732/2449 | Loss 0.0044 | Tot reward x episode 001|
+|Epoch 733/2449 | Loss 0.0066 | Tot reward x episode 002|
+|Epoch 734/2449 | Loss 0.0145 | Tot reward x episode 005|
+|Epoch 735/2449 | Loss 0.0040 | Tot reward x episode 001|
+|Epoch 736/2449 | Loss 0.0039 | Tot reward x episode 001|
+|Epoch 737/2449 | Loss 0.0091 | Tot reward x episode 003|
+|Epoch 738/2449 | Loss 0.0010 | Tot reward x episode 000|
+|Epoch 739/2449 | Loss 0.0063 | Tot reward x episode 002|
+|Epoch 740/2449 | Loss 0.0084 | Tot reward x episode 003|
+|Epoch 741/2449 | Loss 0.0105 | Tot reward x episode 004|
+|Epoch 742/2449 | Loss 0.0013 | Tot reward x episode 000|
+|Epoch 743/2449 | Loss 0.0096 | Tot reward x episode 003|
+|Epoch 744/2449 | Loss 0.0120 | Tot reward x episode 004|
+|Epoch 745/2449 | Loss 0.0163 | Tot reward x episode 006|
+|Epoch 746/2449 | Loss 0.0139 | Tot reward x episode 005|
+|Epoch 747/2449 | Loss 0.0089 | Tot reward x episode 003|
+|Epoch 748/2449 | Loss 0.0085 | Tot reward x episode 003|
+|Epoch 749/2449 | Loss 0.0082 | Tot reward x episode 003|
+|Epoch 750/2449 | Loss 0.0142 | Tot reward x episode 005|
+|Epoch 751/2449 | Loss 0.0202 | Tot reward x episode 008|
+|Epoch 752/2449 | Loss 0.0036 | Tot reward x episode 001|
+|Epoch 753/2449 | Loss 0.0081 | Tot reward x episode 003|
+|Epoch 754/2449 | Loss 0.0103 | Tot reward x episode 004|
+|Epoch 755/2449 | Loss 0.0133 | Tot reward x episode 005|
+|Epoch 756/2449 | Loss 0.0154 | Tot reward x episode 006|
+|Epoch 757/2449 | Loss 0.0157 | Tot reward x episode 006|
+|Epoch 758/2449 | Loss 0.0080 | Tot reward x episode 003|
+|Epoch 759/2449 | Loss 0.0081 | Tot reward x episode 003|
+|Epoch 760/2449 | Loss 0.0104 | Tot reward x episode 004|
+|Epoch 761/2449 | Loss 0.0031 | Tot reward x episode 001|
+|Epoch 762/2449 | Loss 0.0134 | Tot reward x episode 005|
+|Epoch 763/2449 | Loss 0.0055 | Tot reward x episode 002|
+|Epoch 764/2449 | Loss 0.0173 | Tot reward x episode 007|
+|Epoch 765/2449 | Loss 0.0078 | Tot reward x episode 003|
+|Epoch 766/2449 | Loss 0.0108 | Tot reward x episode 004|
+|Epoch 767/2449 | Loss 0.0034 | Tot reward x episode 001|
+|Epoch 768/2449 | Loss 0.0032 | Tot reward x episode 001|
+|Epoch 769/2449 | Loss 0.0111 | Tot reward x episode 004|
+|Epoch 770/2449 | Loss 0.0173 | Tot reward x episode 007|
+|Epoch 771/2449 | Loss 0.0080 | Tot reward x episode 003|
+|Epoch 772/2449 | Loss 0.0134 | Tot reward x episode 005|
+|Epoch 773/2449 | Loss 0.0178 | Tot reward x episode 007|
+|Epoch 774/2449 | Loss 0.0057 | Tot reward x episode 002|
+|Epoch 775/2449 | Loss 0.0056 | Tot reward x episode 002|
+|Epoch 776/2449 | Loss 0.0077 | Tot reward x episode 003|
+|Epoch 777/2449 | Loss 0.0055 | Tot reward x episode 002|
+|Epoch 778/2449 | Loss 0.0055 | Tot reward x episode 002|
+|Epoch 779/2449 | Loss 0.0081 | Tot reward x episode 003|
+|Epoch 780/2449 | Loss 0.0104 | Tot reward x episode 004|
+|Epoch 781/2449 | Loss 0.0129 | Tot reward x episode 005|
+|Epoch 782/2449 | Loss 0.0124 | Tot reward x episode 005|
+|Epoch 783/2449 | Loss 0.0133 | Tot reward x episode 005|
+|Epoch 784/2449 | Loss 0.0056 | Tot reward x episode 002|
+|Epoch 785/2449 | Loss 0.0032 | Tot reward x episode 001|
+|Epoch 786/2449 | Loss 0.0079 | Tot reward x episode 003|
+|Epoch 787/2449 | Loss 0.0100 | Tot reward x episode 004|
+|Epoch 788/2449 | Loss 0.0030 | Tot reward x episode 001|
+|Epoch 789/2449 | Loss 0.0104 | Tot reward x episode 004|
+|Epoch 790/2449 | Loss 0.0056 | Tot reward x episode 002|
+|Epoch 791/2449 | Loss 0.0031 | Tot reward x episode 001|
+|Epoch 792/2449 | Loss 0.0076 | Tot reward x episode 003|
+|Epoch 793/2449 | Loss 0.0099 | Tot reward x episode 004|
+|Epoch 794/2449 | Loss 0.0054 | Tot reward x episode 002|
+|Epoch 795/2449 | Loss 0.0056 | Tot reward x episode 002|
+|Epoch 796/2449 | Loss 0.1815 | Tot reward x episode 378|
+|Epoch 797/2449 | Loss 0.1442 | Tot reward x episode 579|
+|Epoch 798/2449 | Loss 0.0397 | Tot reward x episode 570|
+|Epoch 799/2449 | Loss 0.0338 | Tot reward x episode 582|
+|Epoch 800/2449 | Loss 0.0649 | Tot reward x episode 549|
+|Epoch 801/2449 | Loss 0.0416 | Tot reward x episode 564|
+|Epoch 802/2449 | Loss 0.0966 | Tot reward x episode 573|
+|Epoch 803/2449 | Loss 0.0588 | Tot reward x episode 540|
+|Epoch 804/2449 | Loss 0.0315 | Tot reward x episode 572|
+|Epoch 805/2449 | Loss 0.1204 | Tot reward x episode 546|
+|Epoch 806/2449 | Loss 0.0904 | Tot reward x episode 569|
+|Epoch 807/2449 | Loss 0.1508 | Tot reward x episode 545|
+|Epoch 808/2449 | Loss 0.0991 | Tot reward x episode 557|
+|Epoch 809/2449 | Loss 0.0573 | Tot reward x episode 558|
+|Epoch 810/2449 | Loss 0.0271 | Tot reward x episode 566|
+|Epoch 811/2449 | Loss 0.0895 | Tot reward x episode 539|
+|Epoch 812/2449 | Loss 0.0299 | Tot reward x episode 574|
+|Epoch 813/2449 | Loss 0.0612 | Tot reward x episode 549|
+|Epoch 814/2449 | Loss 0.0234 | Tot reward x episode 569|
+|Epoch 815/2449 | Loss 0.3011 | Tot reward x episode 682|
+|Epoch 816/2449 | Loss 0.2256 | Tot reward x episode 692|
+|Epoch 817/2449 | Loss 0.1945 | Tot reward x episode 644|
+|Epoch 818/2449 | Loss 0.1272 | Tot reward x episode 643|
+|Epoch 819/2449 | Loss 0.1547 | Tot reward x episode 659|
+|Epoch 820/2449 | Loss 0.1153 | Tot reward x episode 617|
+|Epoch 821/2449 | Loss 0.1463 | Tot reward x episode 641|
+|Epoch 822/2449 | Loss 0.2458 | Tot reward x episode 355|
+|Epoch 823/2449 | Loss 0.0867 | Tot reward x episode 037|
+|Epoch 824/2449 | Loss 0.0487 | Tot reward x episode 022|
+|Epoch 825/2449 | Loss 0.0323 | Tot reward x episode 010|
+|Epoch 826/2449 | Loss 0.0535 | Tot reward x episode 027|
+|Epoch 827/2449 | Loss 0.0764 | Tot reward x episode 059|
+|Epoch 828/2449 | Loss 0.0591 | Tot reward x episode 037|
+|Epoch 829/2449 | Loss 0.0382 | Tot reward x episode 027|
+|Epoch 830/2449 | Loss 0.0491 | Tot reward x episode 033|
+|Epoch 831/2449 | Loss 0.1784 | Tot reward x episode 092|
+|Epoch 832/2449 | Loss 0.3494 | Tot reward x episode 216|
+|Epoch 833/2449 | Loss 0.2289 | Tot reward x episode 234|
+|Epoch 834/2449 | Loss 0.1056 | Tot reward x episode 209|
+|Epoch 835/2449 | Loss 0.0560 | Tot reward x episode 218|
+|Epoch 836/2449 | Loss 0.0856 | Tot reward x episode 205|
+|Epoch 837/2449 | Loss 0.0774 | Tot reward x episode 193|
+|Epoch 838/2449 | Loss 0.1221 | Tot reward x episode 206|
+|Epoch 839/2449 | Loss 0.1543 | Tot reward x episode 135|
+|Epoch 840/2449 | Loss 0.1567 | Tot reward x episode 059|
+|Epoch 841/2449 | Loss 0.1336 | Tot reward x episode 066|
+|Epoch 842/2449 | Loss 0.1231 | Tot reward x episode 061|
+|Epoch 843/2449 | Loss 0.0737 | Tot reward x episode 031|
+|Epoch 844/2449 | Loss 0.0654 | Tot reward x episode 027|
+|Epoch 845/2449 | Loss 0.0706 | Tot reward x episode 033|
+|Epoch 846/2449 | Loss 0.0727 | Tot reward x episode 033|
+|Epoch 847/2449 | Loss 0.1402 | Tot reward x episode 105|
+|Epoch 848/2449 | Loss 0.0980 | Tot reward x episode 204|
+|Epoch 849/2449 | Loss 0.0397 | Tot reward x episode 218|
+|Epoch 850/2449 | Loss 0.0886 | Tot reward x episode 200|
+|Epoch 851/2449 | Loss 0.0788 | Tot reward x episode 160|
+|Epoch 852/2449 | Loss 0.1096 | Tot reward x episode 161|
+|Epoch 853/2449 | Loss 0.0427 | Tot reward x episode 187|
+|Epoch 854/2449 | Loss 0.0901 | Tot reward x episode 163|
+|Epoch 855/2449 | Loss 0.0344 | Tot reward x episode 208|
+|Epoch 856/2449 | Loss 0.0333 | Tot reward x episode 233|
+|Epoch 857/2449 | Loss 0.0728 | Tot reward x episode 198|
+|Epoch 858/2449 | Loss 0.0814 | Tot reward x episode 181|
+|Epoch 859/2449 | Loss 0.0428 | Tot reward x episode 188|
+|Epoch 860/2449 | Loss 0.0666 | Tot reward x episode 181|
+|Epoch 861/2449 | Loss 0.0468 | Tot reward x episode 168|
+|Epoch 862/2449 | Loss 0.0882 | Tot reward x episode 171|
+|Epoch 863/2449 | Loss 0.1201 | Tot reward x episode 115|
+|Epoch 864/2449 | Loss 0.0702 | Tot reward x episode 167|
+|Epoch 865/2449 | Loss 0.0561 | Tot reward x episode 154|
+|Epoch 866/2449 | Loss 0.0546 | Tot reward x episode 140|
+|Epoch 867/2449 | Loss 0.0735 | Tot reward x episode 135|
+|Epoch 868/2449 | Loss 0.0218 | Tot reward x episode 158|
+|Epoch 869/2449 | Loss 0.0375 | Tot reward x episode 155|
+|Epoch 870/2449 | Loss 0.1138 | Tot reward x episode 075|
+|Epoch 871/2449 | Loss 0.0627 | Tot reward x episode 023|
+|Epoch 872/2449 | Loss 0.0175 | Tot reward x episode 000|
+|Epoch 873/2449 | Loss 0.0062 | Tot reward x episode 000|
+|Epoch 874/2449 | Loss 0.0040 | Tot reward x episode 000|
+|Epoch 875/2449 | Loss 0.0039 | Tot reward x episode 000|
+|Epoch 876/2449 | Loss 0.0026 | Tot reward x episode 000|
+|Epoch 877/2449 | Loss 0.0021 | Tot reward x episode 000|
+|Epoch 878/2449 | Loss 0.0018 | Tot reward x episode 000|
+|Epoch 879/2449 | Loss 0.0017 | Tot reward x episode 000|
+|Epoch 880/2449 | Loss 0.0015 | Tot reward x episode 000|
+|Epoch 881/2449 | Loss 0.0017 | Tot reward x episode 000|
+|Epoch 882/2449 | Loss 0.0019 | Tot reward x episode 000|
+|Epoch 883/2449 | Loss 0.0014 | Tot reward x episode 000|
+|Epoch 884/2449 | Loss 0.0011 | Tot reward x episode 000|
+|Epoch 885/2449 | Loss 0.0015 | Tot reward x episode 000|
+|Epoch 886/2449 | Loss 0.0011 | Tot reward x episode 000|
+|Epoch 887/2449 | Loss 0.0012 | Tot reward x episode 000|
+|Epoch 888/2449 | Loss 0.0012 | Tot reward x episode 000|
+|Epoch 889/2449 | Loss 0.0011 | Tot reward x episode 000|
+|Epoch 890/2449 | Loss 0.0010 | Tot reward x episode 000|
+|Epoch 891/2449 | Loss 0.0009 | Tot reward x episode 000|
+|Epoch 892/2449 | Loss 0.0008 | Tot reward x episode 000|
+|Epoch 893/2449 | Loss 0.0007 | Tot reward x episode 000|
+|Epoch 894/2449 | Loss 0.0007 | Tot reward x episode 000|
+|Epoch 895/2449 | Loss 0.0008 | Tot reward x episode 000|
+|Epoch 896/2449 | Loss 0.0007 | Tot reward x episode 000|
+|Epoch 897/2449 | Loss 0.0007 | Tot reward x episode 000|
+|Epoch 898/2449 | Loss 0.0008 | Tot reward x episode 000|
+|Epoch 899/2449 | Loss 0.0008 | Tot reward x episode 000|
+|Epoch 900/2449 | Loss 0.0006 | Tot reward x episode 000|
+|Epoch 901/2449 | Loss 0.0007 | Tot reward x episode 000|
+|Epoch 902/2449 | Loss 0.0008 | Tot reward x episode 000|
+|Epoch 903/2449 | Loss 0.0007 | Tot reward x episode 000|
+|Epoch 904/2449 | Loss 0.0007 | Tot reward x episode 000|
+|Epoch 905/2449 | Loss 0.0006 | Tot reward x episode 000|
+|Epoch 906/2449 | Loss 0.0006 | Tot reward x episode 000|
+|Epoch 907/2449 | Loss 0.0029 | Tot reward x episode 001|
+|Epoch 908/2449 | Loss 0.0004 | Tot reward x episode 000|
+|Epoch 909/2449 | Loss 0.0005 | Tot reward x episode 000|
+|Epoch 910/2449 | Loss 0.0004 | Tot reward x episode 000|
+|Epoch 911/2449 | Loss 0.0004 | Tot reward x episode 000|
+|Epoch 912/2449 | Loss 0.0005 | Tot reward x episode 000|
+|Epoch 913/2449 | Loss 0.0028 | Tot reward x episode 001|
+|Epoch 914/2449 | Loss 0.0054 | Tot reward x episode 002|
+|Epoch 915/2449 | Loss 0.0029 | Tot reward x episode 001|
+|Epoch 916/2449 | Loss 0.0004 | Tot reward x episode 000|
+|Epoch 917/2449 | Loss 0.0004 | Tot reward x episode 000|
+|Epoch 918/2449 | Loss 0.0166 | Tot reward x episode 005|
+|Epoch 919/2449 | Loss 0.0046 | Tot reward x episode 000|
+|Epoch 920/2449 | Loss 0.0084 | Tot reward x episode 002|
+|Epoch 921/2449 | Loss 0.0217 | Tot reward x episode 008|
+|Epoch 922/2449 | Loss 0.1559 | Tot reward x episode 069|
+|Epoch 923/2449 | Loss 0.2351 | Tot reward x episode 690|
+|Epoch 924/2449 | Loss 0.0812 | Tot reward x episode 734|
+|Epoch 925/2449 | Loss 0.1368 | Tot reward x episode 674|
+|Epoch 926/2449 | Loss 0.0743 | Tot reward x episode 717|
+|Epoch 927/2449 | Loss 0.1769 | Tot reward x episode 674|
+|Epoch 928/2449 | Loss 0.0926 | Tot reward x episode 702|
+|Epoch 929/2449 | Loss 0.0619 | Tot reward x episode 725|
+|Epoch 930/2449 | Loss 0.1459 | Tot reward x episode 664|
+|Epoch 931/2449 | Loss 0.1161 | Tot reward x episode 685|
+|Epoch 932/2449 | Loss 0.1413 | Tot reward x episode 667|
+|Epoch 933/2449 | Loss 0.0728 | Tot reward x episode 702|
+|Epoch 934/2449 | Loss 0.1570 | Tot reward x episode 673|
+|Epoch 935/2449 | Loss 0.0688 | Tot reward x episode 719|
+|Epoch 936/2449 | Loss 0.1638 | Tot reward x episode 695|
+|Epoch 937/2449 | Loss 0.0541 | Tot reward x episode 753|
+|Epoch 938/2449 | Loss 0.0178 | Tot reward x episode 752|
+|Epoch 939/2449 | Loss 0.0528 | Tot reward x episode 740|
+|Epoch 940/2449 | Loss 0.0201 | Tot reward x episode 723|
+|Epoch 941/2449 | Loss 0.0671 | Tot reward x episode 721|
+|Epoch 942/2449 | Loss 0.0270 | Tot reward x episode 716|
+|Epoch 943/2449 | Loss 0.0572 | Tot reward x episode 741|
+|Epoch 944/2449 | Loss 0.0308 | Tot reward x episode 731|
+|Epoch 945/2449 | Loss 0.1103 | Tot reward x episode 694|
+|Epoch 946/2449 | Loss 0.1474 | Tot reward x episode 552|
+|Epoch 947/2449 | Loss 0.0687 | Tot reward x episode 543|
+|Epoch 948/2449 | Loss 0.0883 | Tot reward x episode 530|
+|Epoch 949/2449 | Loss 0.0530 | Tot reward x episode 588|
+|Epoch 950/2449 | Loss 0.1564 | Tot reward x episode 651|
+|Epoch 951/2449 | Loss 0.1126 | Tot reward x episode 696|
+|Epoch 952/2449 | Loss 0.2150 | Tot reward x episode 380|
+|Epoch 953/2449 | Loss 0.1098 | Tot reward x episode 148|
+|Epoch 954/2449 | Loss 0.0123 | Tot reward x episode 146|
+|Epoch 955/2449 | Loss 0.0091 | Tot reward x episode 178|
+|Epoch 956/2449 | Loss 0.0065 | Tot reward x episode 165|
+|Epoch 957/2449 | Loss 0.0232 | Tot reward x episode 190|
+|Epoch 958/2449 | Loss 0.0310 | Tot reward x episode 172|
+|Epoch 959/2449 | Loss 0.0084 | Tot reward x episode 170|
+|Epoch 960/2449 | Loss 0.0655 | Tot reward x episode 145|
+|Epoch 961/2449 | Loss 0.0571 | Tot reward x episode 145|
+|Epoch 962/2449 | Loss 0.0138 | Tot reward x episode 153|
+|Epoch 963/2449 | Loss 0.0217 | Tot reward x episode 159|
+|Epoch 964/2449 | Loss 0.0211 | Tot reward x episode 197|
+|Epoch 965/2449 | Loss 0.0065 | Tot reward x episode 178|
+|Epoch 966/2449 | Loss 0.0482 | Tot reward x episode 167|
+|Epoch 967/2449 | Loss 0.0242 | Tot reward x episode 166|
+|Epoch 968/2449 | Loss 0.0047 | Tot reward x episode 158|
+|Epoch 969/2449 | Loss 0.0426 | Tot reward x episode 166|
+|Epoch 970/2449 | Loss 0.0287 | Tot reward x episode 163|
+|Epoch 971/2449 | Loss 0.0422 | Tot reward x episode 153|
+|Epoch 972/2449 | Loss 0.0185 | Tot reward x episode 161|
+|Epoch 973/2449 | Loss 0.0079 | Tot reward x episode 173|
+|Epoch 974/2449 | Loss 0.0088 | Tot reward x episode 170|
+|Epoch 975/2449 | Loss 0.0320 | Tot reward x episode 189|
+|Epoch 976/2449 | Loss 0.0449 | Tot reward x episode 166|
+|Epoch 977/2449 | Loss 0.1220 | Tot reward x episode 126|
+|Epoch 978/2449 | Loss 0.0166 | Tot reward x episode 180|
+|Epoch 979/2449 | Loss 0.0056 | Tot reward x episode 167|
+|Epoch 980/2449 | Loss 0.0482 | Tot reward x episode 163|
+|Epoch 981/2449 | Loss 0.0314 | Tot reward x episode 176|
+|Epoch 982/2449 | Loss 0.0062 | Tot reward x episode 192|
+|Epoch 983/2449 | Loss 0.0054 | Tot reward x episode 185|
+|Epoch 984/2449 | Loss 0.0180 | Tot reward x episode 158|
+|Epoch 985/2449 | Loss 0.1009 | Tot reward x episode 115|
+|Epoch 986/2449 | Loss 0.0425 | Tot reward x episode 158|
+|Epoch 987/2449 | Loss 0.0141 | Tot reward x episode 181|
+|Epoch 988/2449 | Loss 0.0080 | Tot reward x episode 194|
+|Epoch 989/2449 | Loss 0.0127 | Tot reward x episode 154|
+|Epoch 990/2449 | Loss 0.0598 | Tot reward x episode 154|
+|Epoch 991/2449 | Loss 0.0067 | Tot reward x episode 205|
+|Epoch 992/2449 | Loss 0.0206 | Tot reward x episode 178|
+|Epoch 993/2449 | Loss 0.0513 | Tot reward x episode 144|
+|Epoch 994/2449 | Loss 0.0358 | Tot reward x episode 148|
+|Epoch 995/2449 | Loss 0.0050 | Tot reward x episode 188|
+|Epoch 996/2449 | Loss 0.0143 | Tot reward x episode 165|
+|Epoch 997/2449 | Loss 0.0065 | Tot reward x episode 145|
+|Epoch 998/2449 | Loss 0.0065 | Tot reward x episode 167|
+|Epoch 999/2449 | Loss 0.0289 | Tot reward x episode 152|
+|Epoch 1000/2449 | Loss 0.0064 | Tot reward x episode 174|
+|Epoch 1001/2449 | Loss 0.0068 | Tot reward x episode 171|
+|Epoch 1002/2449 | Loss 0.0271 | Tot reward x episode 165|
+|Epoch 1003/2449 | Loss 0.0447 | Tot reward x episode 149|
+|Epoch 1004/2449 | Loss 0.0060 | Tot reward x episode 185|
+|Epoch 1005/2449 | Loss 0.0081 | Tot reward x episode 195|
+|Epoch 1006/2449 | Loss 0.0034 | Tot reward x episode 168|
+|Epoch 1007/2449 | Loss 0.0461 | Tot reward x episode 162|
+|Epoch 1008/2449 | Loss 0.0032 | Tot reward x episode 181|
+|Epoch 1009/2449 | Loss 0.0350 | Tot reward x episode 187|
+|Epoch 1010/2449 | Loss 0.0600 | Tot reward x episode 158|
+|Epoch 1011/2449 | Loss 0.0143 | Tot reward x episode 199|
+|Epoch 1012/2449 | Loss 0.0033 | Tot reward x episode 155|
+|Epoch 1013/2449 | Loss 0.0198 | Tot reward x episode 189|
+|Epoch 1014/2449 | Loss 0.0125 | Tot reward x episode 182|
+|Epoch 1015/2449 | Loss 0.0057 | Tot reward x episode 147|
+|Epoch 1016/2449 | Loss 0.0466 | Tot reward x episode 174|
+|Epoch 1017/2449 | Loss 0.0127 | Tot reward x episode 191|
+|Epoch 1018/2449 | Loss 0.0343 | Tot reward x episode 175|
+|Epoch 1019/2449 | Loss 0.0115 | Tot reward x episode 142|
+|Epoch 1020/2449 | Loss 0.0275 | Tot reward x episode 168|
+|Epoch 1021/2449 | Loss 0.0093 | Tot reward x episode 172|
+|Epoch 1022/2449 | Loss 0.0216 | Tot reward x episode 169|
+|Epoch 1023/2449 | Loss 0.0188 | Tot reward x episode 170|
+|Epoch 1024/2449 | Loss 0.0035 | Tot reward x episode 175|
+|Epoch 1025/2449 | Loss 0.0095 | Tot reward x episode 197|
+|Epoch 1026/2449 | Loss 0.0063 | Tot reward x episode 169|
+|Epoch 1027/2449 | Loss 0.0178 | Tot reward x episode 187|
+|Epoch 1028/2449 | Loss 0.0225 | Tot reward x episode 181|
+|Epoch 1029/2449 | Loss 0.0036 | Tot reward x episode 149|
+|Epoch 1030/2449 | Loss 0.0447 | Tot reward x episode 158|
+|Epoch 1031/2449 | Loss 0.0183 | Tot reward x episode 185|
+|Epoch 1032/2449 | Loss 0.0088 | Tot reward x episode 174|
+|Epoch 1033/2449 | Loss 0.0107 | Tot reward x episode 179|
+|Epoch 1034/2449 | Loss 0.0419 | Tot reward x episode 153|
+|Epoch 1035/2449 | Loss 0.0228 | Tot reward x episode 156|
+|Epoch 1036/2449 | Loss 0.0113 | Tot reward x episode 183|
+|Epoch 1037/2449 | Loss 0.0103 | Tot reward x episode 184|
+|Epoch 1038/2449 | Loss 0.1621 | Tot reward x episode 073|
+|Epoch 1039/2449 | Loss 0.0962 | Tot reward x episode 172|
+|Epoch 1040/2449 | Loss 0.0584 | Tot reward x episode 189|
+|Epoch 1041/2449 | Loss 0.0093 | Tot reward x episode 169|
+|Epoch 1042/2449 | Loss 0.0203 | Tot reward x episode 180|
+|Epoch 1043/2449 | Loss 0.0263 | Tot reward x episode 165|
+|Epoch 1044/2449 | Loss 0.0120 | Tot reward x episode 180|
+|Epoch 1045/2449 | Loss 0.0448 | Tot reward x episode 149|
+|Epoch 1046/2449 | Loss 0.0140 | Tot reward x episode 177|
+|Epoch 1047/2449 | Loss 0.0268 | Tot reward x episode 165|
+|Epoch 1048/2449 | Loss 0.0122 | Tot reward x episode 164|
+|Epoch 1049/2449 | Loss 0.0091 | Tot reward x episode 197|
+|Epoch 1050/2449 | Loss 0.0092 | Tot reward x episode 175|
+|Epoch 1051/2449 | Loss 0.0938 | Tot reward x episode 165|
+|Epoch 1052/2449 | Loss 0.0761 | Tot reward x episode 206|
+|Epoch 1053/2449 | Loss 0.0636 | Tot reward x episode 223|
+|Epoch 1054/2449 | Loss 0.0646 | Tot reward x episode 201|
+|Epoch 1055/2449 | Loss 0.0809 | Tot reward x episode 225|
+|Epoch 1056/2449 | Loss 0.1875 | Tot reward x episode 131|
+|Epoch 1057/2449 | Loss 0.1773 | Tot reward x episode 054|
+|Epoch 1058/2449 | Loss 0.1007 | Tot reward x episode 035|
+|Epoch 1059/2449 | Loss 0.1021 | Tot reward x episode 037|
+|Epoch 1060/2449 | Loss 0.0910 | Tot reward x episode 039|
+|Epoch 1061/2449 | Loss 0.0960 | Tot reward x episode 046|
+|Epoch 1062/2449 | Loss 0.0665 | Tot reward x episode 030|
+|Epoch 1063/2449 | Loss 0.0741 | Tot reward x episode 037|
+|Epoch 1064/2449 | Loss 0.1066 | Tot reward x episode 058|
+|Epoch 1065/2449 | Loss 0.0627 | Tot reward x episode 041|
+|Epoch 1066/2449 | Loss 0.0752 | Tot reward x episode 044|
+|Epoch 1067/2449 | Loss 0.0680 | Tot reward x episode 035|
+|Epoch 1068/2449 | Loss 0.0497 | Tot reward x episode 026|
+|Epoch 1069/2449 | Loss 0.0610 | Tot reward x episode 045|
+|Epoch 1070/2449 | Loss 0.0577 | Tot reward x episode 045|
+|Epoch 1071/2449 | Loss 0.0578 | Tot reward x episode 045|
+|Epoch 1072/2449 | Loss 0.0816 | Tot reward x episode 049|
+|Epoch 1073/2449 | Loss 0.0413 | Tot reward x episode 034|
+|Epoch 1074/2449 | Loss 0.0445 | Tot reward x episode 035|
+|Epoch 1075/2449 | Loss 0.0661 | Tot reward x episode 047|
+|Epoch 1076/2449 | Loss 0.1102 | Tot reward x episode 064|
+|Epoch 1077/2449 | Loss 0.0688 | Tot reward x episode 036|
+|Epoch 1078/2449 | Loss 0.0644 | Tot reward x episode 041|
+|Epoch 1079/2449 | Loss 0.0534 | Tot reward x episode 049|
+|Epoch 1080/2449 | Loss 0.0557 | Tot reward x episode 056|
+|Epoch 1081/2449 | Loss 0.0476 | Tot reward x episode 048|
+|Epoch 1082/2449 | Loss 0.0319 | Tot reward x episode 043|
+|Epoch 1083/2449 | Loss 0.0327 | Tot reward x episode 031|
+|Epoch 1084/2449 | Loss 0.0316 | Tot reward x episode 027|
+|Epoch 1085/2449 | Loss 0.0244 | Tot reward x episode 020|
+|Epoch 1086/2449 | Loss 0.0308 | Tot reward x episode 018|
+|Epoch 1087/2449 | Loss 0.0311 | Tot reward x episode 008|
+|Epoch 1088/2449 | Loss 0.0160 | Tot reward x episode 002|
+|Epoch 1089/2449 | Loss 0.2076 | Tot reward x episode 230|
+|Epoch 1090/2449 | Loss 0.0880 | Tot reward x episode 622|
+|Epoch 1091/2449 | Loss 0.0783 | Tot reward x episode 562|
+|Epoch 1092/2449 | Loss 0.0364 | Tot reward x episode 604|
+|Epoch 1093/2449 | Loss 0.0848 | Tot reward x episode 561|
+|Epoch 1094/2449 | Loss 0.0801 | Tot reward x episode 544|
+|Epoch 1095/2449 | Loss 0.0219 | Tot reward x episode 601|
+|Epoch 1096/2449 | Loss 0.0843 | Tot reward x episode 555|
+|Epoch 1097/2449 | Loss 0.1205 | Tot reward x episode 530|
+|Epoch 1098/2449 | Loss 0.0299 | Tot reward x episode 572|
+|Epoch 1099/2449 | Loss 0.0393 | Tot reward x episode 540|
+|Epoch 1100/2449 | Loss 0.1196 | Tot reward x episode 540|
+|Epoch 1101/2449 | Loss 0.0465 | Tot reward x episode 539|
+|Epoch 1102/2449 | Loss 0.0438 | Tot reward x episode 574|
+|Epoch 1103/2449 | Loss 0.0390 | Tot reward x episode 562|
+|Epoch 1104/2449 | Loss 0.0370 | Tot reward x episode 573|
+|Epoch 1105/2449 | Loss 0.0489 | Tot reward x episode 559|
+|Epoch 1106/2449 | Loss 0.0628 | Tot reward x episode 545|
+|Epoch 1107/2449 | Loss 0.0750 | Tot reward x episode 536|
+|Epoch 1108/2449 | Loss 0.0529 | Tot reward x episode 571|
+|Epoch 1109/2449 | Loss 0.0345 | Tot reward x episode 561|
+|Epoch 1110/2449 | Loss 0.0568 | Tot reward x episode 542|
+|Epoch 1111/2449 | Loss 0.0244 | Tot reward x episode 539|
+|Epoch 1112/2449 | Loss 0.0424 | Tot reward x episode 587|
+|Epoch 1113/2449 | Loss 0.1099 | Tot reward x episode 568|
+|Epoch 1114/2449 | Loss 0.0719 | Tot reward x episode 564|
+|Epoch 1115/2449 | Loss 0.0542 | Tot reward x episode 565|
+|Epoch 1116/2449 | Loss 0.0425 | Tot reward x episode 540|
+|Epoch 1117/2449 | Loss 0.0489 | Tot reward x episode 586|
+|Epoch 1118/2449 | Loss 0.0300 | Tot reward x episode 550|
+|Epoch 1119/2449 | Loss 0.0794 | Tot reward x episode 558|
+|Epoch 1120/2449 | Loss 0.0403 | Tot reward x episode 545|
+|Epoch 1121/2449 | Loss 0.0757 | Tot reward x episode 566|
+|Epoch 1122/2449 | Loss 0.0989 | Tot reward x episode 576|
+|Epoch 1123/2449 | Loss 0.0549 | Tot reward x episode 577|
+|Epoch 1124/2449 | Loss 0.0465 | Tot reward x episode 552|
+|Epoch 1125/2449 | Loss 0.0598 | Tot reward x episode 562|
+|Epoch 1126/2449 | Loss 0.0313 | Tot reward x episode 571|
+|Epoch 1127/2449 | Loss 0.0341 | Tot reward x episode 570|
+|Epoch 1128/2449 | Loss 0.0704 | Tot reward x episode 570|
+|Epoch 1129/2449 | Loss 0.0392 | Tot reward x episode 586|
+|Epoch 1130/2449 | Loss 0.0357 | Tot reward x episode 573|
+|Epoch 1131/2449 | Loss 0.0707 | Tot reward x episode 518|
+|Epoch 1132/2449 | Loss 0.0756 | Tot reward x episode 550|
+|Epoch 1133/2449 | Loss 0.0959 | Tot reward x episode 542|
+|Epoch 1134/2449 | Loss 0.0413 | Tot reward x episode 576|
+|Epoch 1135/2449 | Loss 0.0780 | Tot reward x episode 564|
+|Epoch 1136/2449 | Loss 0.0380 | Tot reward x episode 583|
+|Epoch 1137/2449 | Loss 0.0626 | Tot reward x episode 574|
+|Epoch 1138/2449 | Loss 0.0514 | Tot reward x episode 566|
+|Epoch 1139/2449 | Loss 0.0628 | Tot reward x episode 556|
+|Epoch 1140/2449 | Loss 0.0382 | Tot reward x episode 593|
+|Epoch 1141/2449 | Loss 0.0437 | Tot reward x episode 547|
+|Epoch 1142/2449 | Loss 0.0475 | Tot reward x episode 568|
+|Epoch 1143/2449 | Loss 0.0473 | Tot reward x episode 594|
+|Epoch 1144/2449 | Loss 0.0650 | Tot reward x episode 576|
+|Epoch 1145/2449 | Loss 0.0762 | Tot reward x episode 598|
+|Epoch 1146/2449 | Loss 0.0634 | Tot reward x episode 576|
+|Epoch 1147/2449 | Loss 0.0992 | Tot reward x episode 556|
+|Epoch 1148/2449 | Loss 0.0484 | Tot reward x episode 574|
+|Epoch 1149/2449 | Loss 0.0616 | Tot reward x episode 557|
+|Epoch 1150/2449 | Loss 0.1063 | Tot reward x episode 615|
+|Epoch 1151/2449 | Loss 0.0954 | Tot reward x episode 593|
+|Epoch 1152/2449 | Loss 0.2710 | Tot reward x episode 583|
+|Epoch 1153/2449 | Loss 0.1175 | Tot reward x episode 609|
+|Epoch 1154/2449 | Loss 0.1386 | Tot reward x episode 605|
+|Epoch 1155/2449 | Loss 0.1159 | Tot reward x episode 623|
+|Epoch 1156/2449 | Loss 0.1500 | Tot reward x episode 644|
+|Epoch 1157/2449 | Loss 0.1428 | Tot reward x episode 637|
+|Epoch 1158/2449 | Loss 0.1166 | Tot reward x episode 646|
+|Epoch 1159/2449 | Loss 0.1362 | Tot reward x episode 635|
+|Epoch 1160/2449 | Loss 0.1721 | Tot reward x episode 657|
+|Epoch 1161/2449 | Loss 0.1225 | Tot reward x episode 657|
+|Epoch 1162/2449 | Loss 0.1515 | Tot reward x episode 601|
+|Epoch 1163/2449 | Loss 0.1487 | Tot reward x episode 630|
+|Epoch 1164/2449 | Loss 0.1434 | Tot reward x episode 608|
+|Epoch 1165/2449 | Loss 0.1772 | Tot reward x episode 661|
+|Epoch 1166/2449 | Loss 0.1453 | Tot reward x episode 656|
+|Epoch 1167/2449 | Loss 0.1445 | Tot reward x episode 634|
+|Epoch 1168/2449 | Loss 0.1875 | Tot reward x episode 672|
+|Epoch 1169/2449 | Loss 0.1707 | Tot reward x episode 627|
+|Epoch 1170/2449 | Loss 0.1402 | Tot reward x episode 620|
+|Epoch 1171/2449 | Loss 0.1681 | Tot reward x episode 618|
+|Epoch 1172/2449 | Loss 0.1944 | Tot reward x episode 652|
+|Epoch 1173/2449 | Loss 0.2008 | Tot reward x episode 621|
+|Epoch 1174/2449 | Loss 0.1731 | Tot reward x episode 653|
+|Epoch 1175/2449 | Loss 0.1516 | Tot reward x episode 647|
+|Epoch 1176/2449 | Loss 0.1723 | Tot reward x episode 626|
+|Epoch 1177/2449 | Loss 0.1762 | Tot reward x episode 629|
+|Epoch 1178/2449 | Loss 0.1702 | Tot reward x episode 641|
+|Epoch 1179/2449 | Loss 0.1645 | Tot reward x episode 651|
+|Epoch 1180/2449 | Loss 0.1159 | Tot reward x episode 664|
+|Epoch 1181/2449 | Loss 0.1996 | Tot reward x episode 642|
+|Epoch 1182/2449 | Loss 0.1347 | Tot reward x episode 703|
+|Epoch 1183/2449 | Loss 0.2312 | Tot reward x episode 636|
+|Epoch 1184/2449 | Loss 0.1609 | Tot reward x episode 702|
+|Epoch 1185/2449 | Loss 0.1869 | Tot reward x episode 704|
+|Epoch 1186/2449 | Loss 0.1661 | Tot reward x episode 722|
+|Epoch 1187/2449 | Loss 0.1768 | Tot reward x episode 725|
+|Epoch 1188/2449 | Loss 0.1387 | Tot reward x episode 740|
+|Epoch 1189/2449 | Loss 0.1305 | Tot reward x episode 745|
+|Epoch 1190/2449 | Loss 0.1277 | Tot reward x episode 748|
+|Epoch 1191/2449 | Loss 0.1057 | Tot reward x episode 744|
+|Epoch 1192/2449 | Loss 0.0600 | Tot reward x episode 766|
+|Epoch 1193/2449 | Loss 0.1097 | Tot reward x episode 771|
+|Epoch 1194/2449 | Loss 0.0612 | Tot reward x episode 766|
+|Epoch 1195/2449 | Loss 0.0583 | Tot reward x episode 765|
+|Epoch 1196/2449 | Loss 0.0456 | Tot reward x episode 793|
+|Epoch 1197/2449 | Loss 0.1246 | Tot reward x episode 729|
+|Epoch 1198/2449 | Loss 0.0418 | Tot reward x episode 781|
+|Epoch 1199/2449 | Loss 0.0866 | Tot reward x episode 767|
+|Epoch 1200/2449 | Loss 0.1085 | Tot reward x episode 754|
+|Epoch 1201/2449 | Loss 0.0364 | Tot reward x episode 797|
+|Epoch 1202/2449 | Loss 0.1398 | Tot reward x episode 734|
+|Epoch 1203/2449 | Loss 0.1065 | Tot reward x episode 750|
+|Epoch 1204/2449 | Loss 0.1158 | Tot reward x episode 714|
+|Epoch 1205/2449 | Loss 0.0903 | Tot reward x episode 718|
+|Epoch 1206/2449 | Loss 0.1371 | Tot reward x episode 711|
+|Epoch 1207/2449 | Loss 0.1973 | Tot reward x episode 711|
+|Epoch 1208/2449 | Loss 0.1301 | Tot reward x episode 708|
+|Epoch 1209/2449 | Loss 0.1489 | Tot reward x episode 656|
+|Epoch 1210/2449 | Loss 0.1005 | Tot reward x episode 716|
+|Epoch 1211/2449 | Loss 0.0970 | Tot reward x episode 728|
+|Epoch 1212/2449 | Loss 0.0970 | Tot reward x episode 719|
+|Epoch 1213/2449 | Loss 0.1011 | Tot reward x episode 711|
+|Epoch 1214/2449 | Loss 0.0957 | Tot reward x episode 724|
+|Epoch 1215/2449 | Loss 0.0519 | Tot reward x episode 735|
+|Epoch 1216/2449 | Loss 0.0434 | Tot reward x episode 740|
+|Epoch 1217/2449 | Loss 0.0744 | Tot reward x episode 726|
+|Epoch 1218/2449 | Loss 0.0774 | Tot reward x episode 713|
+|Epoch 1219/2449 | Loss 0.0506 | Tot reward x episode 748|
+|Epoch 1220/2449 | Loss 0.0566 | Tot reward x episode 724|
+|Epoch 1221/2449 | Loss 0.0626 | Tot reward x episode 721|
+|Epoch 1222/2449 | Loss 0.0298 | Tot reward x episode 762|
+|Epoch 1223/2449 | Loss 0.0608 | Tot reward x episode 720|
+|Epoch 1224/2449 | Loss 0.0324 | Tot reward x episode 740|
+|Epoch 1225/2449 | Loss 0.0397 | Tot reward x episode 729|
+|Epoch 1226/2449 | Loss 0.1043 | Tot reward x episode 713|
+|Epoch 1227/2449 | Loss 0.0892 | Tot reward x episode 712|
+|Epoch 1228/2449 | Loss 0.0559 | Tot reward x episode 751|
+|Epoch 1229/2449 | Loss 0.0279 | Tot reward x episode 724|
+|Epoch 1230/2449 | Loss 0.1220 | Tot reward x episode 715|
+|Epoch 1231/2449 | Loss 0.0911 | Tot reward x episode 715|
+|Epoch 1232/2449 | Loss 0.0626 | Tot reward x episode 707|
+|Epoch 1233/2449 | Loss 0.0972 | Tot reward x episode 701|
+|Epoch 1234/2449 | Loss 0.2067 | Tot reward x episode 605|
+|Epoch 1235/2449 | Loss 0.1187 | Tot reward x episode 740|
+|Epoch 1236/2449 | Loss 0.0862 | Tot reward x episode 721|
+|Epoch 1237/2449 | Loss 0.0438 | Tot reward x episode 739|
+|Epoch 1238/2449 | Loss 0.0536 | Tot reward x episode 734|
+|Epoch 1239/2449 | Loss 0.0548 | Tot reward x episode 725|
+|Epoch 1240/2449 | Loss 0.0116 | Tot reward x episode 763|
+|Epoch 1241/2449 | Loss 0.0307 | Tot reward x episode 725|
+|Epoch 1242/2449 | Loss 0.0679 | Tot reward x episode 748|
+|Epoch 1243/2449 | Loss 0.0772 | Tot reward x episode 720|
+|Epoch 1244/2449 | Loss 0.0815 | Tot reward x episode 743|
+|Epoch 1245/2449 | Loss 0.2100 | Tot reward x episode 770|
+|Epoch 1246/2449 | Loss 0.1506 | Tot reward x episode 773|
+|Epoch 1247/2449 | Loss 0.0684 | Tot reward x episode 759|
+|Epoch 1248/2449 | Loss 0.0879 | Tot reward x episode 795|
+|Epoch 1249/2449 | Loss 0.1061 | Tot reward x episode 770|
+|Epoch 1250/2449 | Loss 0.0954 | Tot reward x episode 774|
+|Epoch 1251/2449 | Loss 0.0678 | Tot reward x episode 773|
+|Epoch 1252/2449 | Loss 0.1238 | Tot reward x episode 737|
+|Epoch 1253/2449 | Loss 0.0878 | Tot reward x episode 749|
+|Epoch 1254/2449 | Loss 0.1100 | Tot reward x episode 738|
+|Epoch 1255/2449 | Loss 0.1963 | Tot reward x episode 609|
+|Epoch 1256/2449 | Loss 0.1692 | Tot reward x episode 618|
+|Epoch 1257/2449 | Loss 0.1233 | Tot reward x episode 595|
+|Epoch 1258/2449 | Loss 0.1103 | Tot reward x episode 575|
+|Epoch 1259/2449 | Loss 0.0757 | Tot reward x episode 588|
+|Epoch 1260/2449 | Loss 0.1062 | Tot reward x episode 573|
+|Epoch 1261/2449 | Loss 0.2905 | Tot reward x episode 556|
+|Epoch 1262/2449 | Loss 0.0900 | Tot reward x episode 611|
+|Epoch 1263/2449 | Loss 0.1132 | Tot reward x episode 563|
+|Epoch 1264/2449 | Loss 0.0854 | Tot reward x episode 607|
+|Epoch 1265/2449 | Loss 0.0691 | Tot reward x episode 595|
+|Epoch 1266/2449 | Loss 0.0699 | Tot reward x episode 568|
+|Epoch 1267/2449 | Loss 0.0729 | Tot reward x episode 574|
+|Epoch 1268/2449 | Loss 0.0802 | Tot reward x episode 592|
+|Epoch 1269/2449 | Loss 0.0584 | Tot reward x episode 576|
+|Epoch 1270/2449 | Loss 0.0887 | Tot reward x episode 601|
+|Epoch 1271/2449 | Loss 0.1072 | Tot reward x episode 561|
+|Epoch 1272/2449 | Loss 0.0926 | Tot reward x episode 603|
+|Epoch 1273/2449 | Loss 0.1604 | Tot reward x episode 527|
+|Epoch 1274/2449 | Loss 0.0768 | Tot reward x episode 558|
+|Epoch 1275/2449 | Loss 0.1223 | Tot reward x episode 637|
+|Epoch 1276/2449 | Loss 0.2140 | Tot reward x episode 699|
+|Epoch 1277/2449 | Loss 0.1262 | Tot reward x episode 757|
+|Epoch 1278/2449 | Loss 0.0887 | Tot reward x episode 791|
+|Epoch 1279/2449 | Loss 0.0836 | Tot reward x episode 777|
+|Epoch 1280/2449 | Loss 0.0319 | Tot reward x episode 787|
+|Epoch 1281/2449 | Loss 0.0909 | Tot reward x episode 766|
+|Epoch 1282/2449 | Loss 0.0323 | Tot reward x episode 787|
+|Epoch 1283/2449 | Loss 0.0384 | Tot reward x episode 791|
+|Epoch 1284/2449 | Loss 0.0894 | Tot reward x episode 763|
+|Epoch 1285/2449 | Loss 0.0678 | Tot reward x episode 772|
+|Epoch 1286/2449 | Loss 0.0908 | Tot reward x episode 752|
+|Epoch 1287/2449 | Loss 0.0464 | Tot reward x episode 775|
+|Epoch 1288/2449 | Loss 0.0312 | Tot reward x episode 779|
+|Epoch 1289/2449 | Loss 0.2488 | Tot reward x episode 477|
+|Epoch 1290/2449 | Loss 0.1634 | Tot reward x episode 197|
+|Epoch 1291/2449 | Loss 0.1109 | Tot reward x episode 163|
+|Epoch 1292/2449 | Loss 0.1156 | Tot reward x episode 163|
+|Epoch 1293/2449 | Loss 0.0352 | Tot reward x episode 158|
+|Epoch 1294/2449 | Loss 0.0471 | Tot reward x episode 176|
+|Epoch 1295/2449 | Loss 0.0813 | Tot reward x episode 168|
+|Epoch 1296/2449 | Loss 0.0635 | Tot reward x episode 184|
+|Epoch 1297/2449 | Loss 0.1242 | Tot reward x episode 165|
+|Epoch 1298/2449 | Loss 0.1179 | Tot reward x episode 183|
+|Epoch 1299/2449 | Loss 0.0574 | Tot reward x episode 185|
+|Epoch 1300/2449 | Loss 0.1309 | Tot reward x episode 381|
+|Epoch 1301/2449 | Loss 0.0404 | Tot reward x episode 767|
+|Epoch 1302/2449 | Loss 0.1534 | Tot reward x episode 697|
+|Epoch 1303/2449 | Loss 0.1020 | Tot reward x episode 709|
+|Epoch 1304/2449 | Loss 0.2150 | Tot reward x episode 552|
+|Epoch 1305/2449 | Loss 0.1121 | Tot reward x episode 556|
+|Epoch 1306/2449 | Loss 0.0529 | Tot reward x episode 573|
+|Epoch 1307/2449 | Loss 0.0780 | Tot reward x episode 554|
+|Epoch 1308/2449 | Loss 0.0498 | Tot reward x episode 566|
+|Epoch 1309/2449 | Loss 0.0765 | Tot reward x episode 558|
+|Epoch 1310/2449 | Loss 0.0222 | Tot reward x episode 563|
+|Epoch 1311/2449 | Loss 0.0711 | Tot reward x episode 541|
+|Epoch 1312/2449 | Loss 0.0260 | Tot reward x episode 550|
+|Epoch 1313/2449 | Loss 0.0177 | Tot reward x episode 604|
+|Epoch 1314/2449 | Loss 0.0629 | Tot reward x episode 563|
+|Epoch 1315/2449 | Loss 0.0343 | Tot reward x episode 572|
+|Epoch 1316/2449 | Loss 0.0511 | Tot reward x episode 586|
+|Epoch 1317/2449 | Loss 0.0443 | Tot reward x episode 574|
+|Epoch 1318/2449 | Loss 0.0307 | Tot reward x episode 562|
+|Epoch 1319/2449 | Loss 0.0069 | Tot reward x episode 564|
+|Epoch 1320/2449 | Loss 0.0368 | Tot reward x episode 557|
+|Epoch 1321/2449 | Loss 0.0428 | Tot reward x episode 546|
+|Epoch 1322/2449 | Loss 0.0507 | Tot reward x episode 555|
+|Epoch 1323/2449 | Loss 0.0245 | Tot reward x episode 577|
+|Epoch 1324/2449 | Loss 0.0167 | Tot reward x episode 577|
+|Epoch 1325/2449 | Loss 0.0510 | Tot reward x episode 547|
+|Epoch 1326/2449 | Loss 0.0281 | Tot reward x episode 545|
+|Epoch 1327/2449 | Loss 0.0261 | Tot reward x episode 577|
+|Epoch 1328/2449 | Loss 0.0331 | Tot reward x episode 564|
+|Epoch 1329/2449 | Loss 0.0245 | Tot reward x episode 566|
+|Epoch 1330/2449 | Loss 0.0294 | Tot reward x episode 579|
+|Epoch 1331/2449 | Loss 0.0362 | Tot reward x episode 581|
+|Epoch 1332/2449 | Loss 0.0374 | Tot reward x episode 567|
+|Epoch 1333/2449 | Loss 0.0497 | Tot reward x episode 533|
+|Epoch 1334/2449 | Loss 0.0207 | Tot reward x episode 576|
+|Epoch 1335/2449 | Loss 0.0267 | Tot reward x episode 573|
+|Epoch 1336/2449 | Loss 0.0433 | Tot reward x episode 535|
+|Epoch 1337/2449 | Loss 0.0264 | Tot reward x episode 583|
+|Epoch 1338/2449 | Loss 0.0228 | Tot reward x episode 535|
+|Epoch 1339/2449 | Loss 0.0640 | Tot reward x episode 574|
+|Epoch 1340/2449 | Loss 0.1754 | Tot reward x episode 679|
+|Epoch 1341/2449 | Loss 0.1576 | Tot reward x episode 731|
+|Epoch 1342/2449 | Loss 0.1089 | Tot reward x episode 741|
+|Epoch 1343/2449 | Loss 0.0845 | Tot reward x episode 757|
+|Epoch 1344/2449 | Loss 0.1005 | Tot reward x episode 743|
+|Epoch 1345/2449 | Loss 0.0521 | Tot reward x episode 721|
+|Epoch 1346/2449 | Loss 0.0483 | Tot reward x episode 745|
+|Epoch 1347/2449 | Loss 0.0578 | Tot reward x episode 779|
+|Epoch 1348/2449 | Loss 0.0828 | Tot reward x episode 715|
+|Epoch 1349/2449 | Loss 0.0311 | Tot reward x episode 769|
+|Epoch 1350/2449 | Loss 0.0484 | Tot reward x episode 739|
+|Epoch 1351/2449 | Loss 0.1066 | Tot reward x episode 692|
+|Epoch 1352/2449 | Loss 0.0742 | Tot reward x episode 729|
+|Epoch 1353/2449 | Loss 0.0777 | Tot reward x episode 727|
+|Epoch 1354/2449 | Loss 0.0953 | Tot reward x episode 721|
+|Epoch 1355/2449 | Loss 0.0371 | Tot reward x episode 746|
+|Epoch 1356/2449 | Loss 0.0718 | Tot reward x episode 744|
+|Epoch 1357/2449 | Loss 0.0355 | Tot reward x episode 741|
+|Epoch 1358/2449 | Loss 0.0258 | Tot reward x episode 725|
+|Epoch 1359/2449 | Loss 0.1363 | Tot reward x episode 676|
+|Epoch 1360/2449 | Loss 0.0699 | Tot reward x episode 732|
+|Epoch 1361/2449 | Loss 0.0277 | Tot reward x episode 743|
+|Epoch 1362/2449 | Loss 0.0812 | Tot reward x episode 707|
+|Epoch 1363/2449 | Loss 0.0364 | Tot reward x episode 740|
+|Epoch 1364/2449 | Loss 0.0846 | Tot reward x episode 692|
+|Epoch 1365/2449 | Loss 0.0329 | Tot reward x episode 772|
+|Epoch 1366/2449 | Loss 0.0642 | Tot reward x episode 731|
+|Epoch 1367/2449 | Loss 0.0697 | Tot reward x episode 695|
+|Epoch 1368/2449 | Loss 0.0729 | Tot reward x episode 721|
+|Epoch 1369/2449 | Loss 0.0514 | Tot reward x episode 710|
+|Epoch 1370/2449 | Loss 0.0452 | Tot reward x episode 748|
+|Epoch 1371/2449 | Loss 0.0365 | Tot reward x episode 735|
+|Epoch 1372/2449 | Loss 0.0432 | Tot reward x episode 729|
+|Epoch 1373/2449 | Loss 0.0807 | Tot reward x episode 722|
+|Epoch 1374/2449 | Loss 0.0676 | Tot reward x episode 730|
+|Epoch 1375/2449 | Loss 0.0418 | Tot reward x episode 700|
+|Epoch 1376/2449 | Loss 0.0706 | Tot reward x episode 717|
+|Epoch 1377/2449 | Loss 0.0295 | Tot reward x episode 748|
+|Epoch 1378/2449 | Loss 0.0722 | Tot reward x episode 724|
+|Epoch 1379/2449 | Loss 0.1566 | Tot reward x episode 608|
+|Epoch 1380/2449 | Loss 0.0523 | Tot reward x episode 593|
+|Epoch 1381/2449 | Loss 0.0847 | Tot reward x episode 550|
+|Epoch 1382/2449 | Loss 0.0547 | Tot reward x episode 566|
+|Epoch 1383/2449 | Loss 0.0869 | Tot reward x episode 581|
+|Epoch 1384/2449 | Loss 0.1281 | Tot reward x episode 551|
+|Epoch 1385/2449 | Loss 0.0375 | Tot reward x episode 580|
+|Epoch 1386/2449 | Loss 0.1020 | Tot reward x episode 597|
+|Epoch 1387/2449 | Loss 0.1181 | Tot reward x episode 607|
+|Epoch 1388/2449 | Loss 0.1228 | Tot reward x episode 596|
+|Epoch 1389/2449 | Loss 0.1007 | Tot reward x episode 608|
+|Epoch 1390/2449 | Loss 0.1518 | Tot reward x episode 617|
+|Epoch 1391/2449 | Loss 0.1314 | Tot reward x episode 586|
+|Epoch 1392/2449 | Loss 0.1738 | Tot reward x episode 628|
+|Epoch 1393/2449 | Loss 0.2177 | Tot reward x episode 694|
+|Epoch 1394/2449 | Loss 0.1513 | Tot reward x episode 717|
+|Epoch 1395/2449 | Loss 0.1701 | Tot reward x episode 678|
+|Epoch 1396/2449 | Loss 0.1905 | Tot reward x episode 695|
+|Epoch 1397/2449 | Loss 0.1793 | Tot reward x episode 699|
+|Epoch 1398/2449 | Loss 0.1847 | Tot reward x episode 674|
+|Epoch 1399/2449 | Loss 0.1661 | Tot reward x episode 738|
+|Epoch 1400/2449 | Loss 0.0958 | Tot reward x episode 753|
+|Epoch 1401/2449 | Loss 0.1525 | Tot reward x episode 729|
+|Epoch 1402/2449 | Loss 0.1076 | Tot reward x episode 721|
+|Epoch 1403/2449 | Loss 0.0806 | Tot reward x episode 738|
+|Epoch 1404/2449 | Loss 0.1019 | Tot reward x episode 748|
+|Epoch 1405/2449 | Loss 0.0999 | Tot reward x episode 708|
+|Epoch 1406/2449 | Loss 0.1720 | Tot reward x episode 709|
+|Epoch 1407/2449 | Loss 0.1459 | Tot reward x episode 744|
+|Epoch 1408/2449 | Loss 0.1259 | Tot reward x episode 753|
+|Epoch 1409/2449 | Loss 0.0889 | Tot reward x episode 766|
+|Epoch 1410/2449 | Loss 0.1287 | Tot reward x episode 762|
+|Epoch 1411/2449 | Loss 0.0727 | Tot reward x episode 741|
+|Epoch 1412/2449 | Loss 0.1303 | Tot reward x episode 730|
+|Epoch 1413/2449 | Loss 0.1059 | Tot reward x episode 731|
+|Epoch 1414/2449 | Loss 0.1607 | Tot reward x episode 730|
+|Epoch 1415/2449 | Loss 0.0854 | Tot reward x episode 727|
+|Epoch 1416/2449 | Loss 0.1631 | Tot reward x episode 702|
+|Epoch 1417/2449 | Loss 0.0916 | Tot reward x episode 723|
+|Epoch 1418/2449 | Loss 0.1519 | Tot reward x episode 727|
+|Epoch 1419/2449 | Loss 0.1426 | Tot reward x episode 698|
+|Epoch 1420/2449 | Loss 0.1585 | Tot reward x episode 684|
+|Epoch 1421/2449 | Loss 0.1167 | Tot reward x episode 726|
+|Epoch 1422/2449 | Loss 0.1025 | Tot reward x episode 716|
+|Epoch 1423/2449 | Loss 0.1218 | Tot reward x episode 734|
+|Epoch 1424/2449 | Loss 0.1264 | Tot reward x episode 719|
+|Epoch 1425/2449 | Loss 0.0815 | Tot reward x episode 744|
+|Epoch 1426/2449 | Loss 0.0717 | Tot reward x episode 737|
+|Epoch 1427/2449 | Loss 0.1244 | Tot reward x episode 707|
+|Epoch 1428/2449 | Loss 0.0760 | Tot reward x episode 761|
+|Epoch 1429/2449 | Loss 0.1845 | Tot reward x episode 654|
+|Epoch 1430/2449 | Loss 0.1117 | Tot reward x episode 566|
+|Epoch 1431/2449 | Loss 0.0801 | Tot reward x episode 556|
+|Epoch 1432/2449 | Loss 0.0711 | Tot reward x episode 569|
+|Epoch 1433/2449 | Loss 0.0945 | Tot reward x episode 552|
+|Epoch 1434/2449 | Loss 0.1714 | Tot reward x episode 711|
+|Epoch 1435/2449 | Loss 0.1095 | Tot reward x episode 708|
+|Epoch 1436/2449 | Loss 0.0966 | Tot reward x episode 757|
+|Epoch 1437/2449 | Loss 0.0704 | Tot reward x episode 748|
+|Epoch 1438/2449 | Loss 0.1303 | Tot reward x episode 718|
+|Epoch 1439/2449 | Loss 0.0830 | Tot reward x episode 737|
+|Epoch 1440/2449 | Loss 0.0672 | Tot reward x episode 733|
+|Epoch 1441/2449 | Loss 0.0635 | Tot reward x episode 754|
+|Epoch 1442/2449 | Loss 0.0543 | Tot reward x episode 773|
+|Epoch 1443/2449 | Loss 0.0932 | Tot reward x episode 741|
+|Epoch 1444/2449 | Loss 0.1626 | Tot reward x episode 695|
+|Epoch 1445/2449 | Loss 0.1135 | Tot reward x episode 715|
+|Epoch 1446/2449 | Loss 0.0876 | Tot reward x episode 710|
+|Epoch 1447/2449 | Loss 0.1906 | Tot reward x episode 656|
+|Epoch 1448/2449 | Loss 0.0862 | Tot reward x episode 571|
+|Epoch 1449/2449 | Loss 0.0649 | Tot reward x episode 614|
+|Epoch 1450/2449 | Loss 0.3194 | Tot reward x episode 572|
+|Epoch 1451/2449 | Loss 0.1118 | Tot reward x episode 708|
+|Epoch 1452/2449 | Loss 0.1898 | Tot reward x episode 676|
+|Epoch 1453/2449 | Loss 0.1576 | Tot reward x episode 701|
+|Epoch 1454/2449 | Loss 0.0954 | Tot reward x episode 708|
+|Epoch 1455/2449 | Loss 0.1528 | Tot reward x episode 694|
+|Epoch 1456/2449 | Loss 0.1543 | Tot reward x episode 710|
+|Epoch 1457/2449 | Loss 0.1384 | Tot reward x episode 718|
+|Epoch 1458/2449 | Loss 0.1518 | Tot reward x episode 723|
+|Epoch 1459/2449 | Loss 0.0829 | Tot reward x episode 714|
+|Epoch 1460/2449 | Loss 0.0935 | Tot reward x episode 710|
+|Epoch 1461/2449 | Loss 0.1190 | Tot reward x episode 682|
+|Epoch 1462/2449 | Loss 0.1306 | Tot reward x episode 719|
+|Epoch 1463/2449 | Loss 0.1052 | Tot reward x episode 729|
+|Epoch 1464/2449 | Loss 0.0962 | Tot reward x episode 751|
+|Epoch 1465/2449 | Loss 0.0416 | Tot reward x episode 758|
+|Epoch 1466/2449 | Loss 0.0864 | Tot reward x episode 710|
+|Epoch 1467/2449 | Loss 0.1969 | Tot reward x episode 705|
+|Epoch 1468/2449 | Loss 0.1203 | Tot reward x episode 725|
+|Epoch 1469/2449 | Loss 0.0773 | Tot reward x episode 742|
+|Epoch 1470/2449 | Loss 0.0983 | Tot reward x episode 759|
+|Epoch 1471/2449 | Loss 0.0858 | Tot reward x episode 744|
+|Epoch 1472/2449 | Loss 0.0872 | Tot reward x episode 718|
+|Epoch 1473/2449 | Loss 0.1076 | Tot reward x episode 732|
+|Epoch 1474/2449 | Loss 0.0435 | Tot reward x episode 750|
+|Epoch 1475/2449 | Loss 0.2012 | Tot reward x episode 612|
+|Epoch 1476/2449 | Loss 0.0668 | Tot reward x episode 610|
+|Epoch 1477/2449 | Loss 0.0720 | Tot reward x episode 564|
+|Epoch 1478/2449 | Loss 0.0222 | Tot reward x episode 577|
+|Epoch 1479/2449 | Loss 0.0669 | Tot reward x episode 561|
+|Epoch 1480/2449 | Loss 0.0204 | Tot reward x episode 536|
+|Epoch 1481/2449 | Loss 0.0209 | Tot reward x episode 573|
+|Epoch 1482/2449 | Loss 0.1789 | Tot reward x episode 576|
+|Epoch 1483/2449 | Loss 0.1049 | Tot reward x episode 651|
+|Epoch 1484/2449 | Loss 0.1322 | Tot reward x episode 611|
+|Epoch 1485/2449 | Loss 0.2224 | Tot reward x episode 651|
+|Epoch 1486/2449 | Loss 0.1772 | Tot reward x episode 676|
+|Epoch 1487/2449 | Loss 0.1315 | Tot reward x episode 723|
+|Epoch 1488/2449 | Loss 0.1019 | Tot reward x episode 743|
+|Epoch 1489/2449 | Loss 0.0885 | Tot reward x episode 734|
+|Epoch 1490/2449 | Loss 0.0884 | Tot reward x episode 727|
+|Epoch 1491/2449 | Loss 0.0849 | Tot reward x episode 722|
+|Epoch 1492/2449 | Loss 0.0719 | Tot reward x episode 750|
+|Epoch 1493/2449 | Loss 0.0774 | Tot reward x episode 745|
+|Epoch 1494/2449 | Loss 0.0928 | Tot reward x episode 708|
+|Epoch 1495/2449 | Loss 0.1994 | Tot reward x episode 575|
+|Epoch 1496/2449 | Loss 0.0431 | Tot reward x episode 570|
+|Epoch 1497/2449 | Loss 0.2166 | Tot reward x episode 593|
+|Epoch 1498/2449 | Loss 0.3438 | Tot reward x episode 207|
+|Epoch 1499/2449 | Loss 0.2072 | Tot reward x episode 236|
+|Epoch 1500/2449 | Loss 0.0843 | Tot reward x episode 782|
+|Epoch 1501/2449 | Loss 0.0300 | Tot reward x episode 776|
+|Epoch 1502/2449 | Loss 0.0742 | Tot reward x episode 761|
+|Epoch 1503/2449 | Loss 0.2720 | Tot reward x episode 608|
+|Epoch 1504/2449 | Loss 0.0371 | Tot reward x episode 767|
+|Epoch 1505/2449 | Loss 0.0874 | Tot reward x episode 726|
+|Epoch 1506/2449 | Loss 0.0767 | Tot reward x episode 726|
+|Epoch 1507/2449 | Loss 0.0455 | Tot reward x episode 765|
+|Epoch 1508/2449 | Loss 0.0537 | Tot reward x episode 752|
+|Epoch 1509/2449 | Loss 0.0860 | Tot reward x episode 753|
+|Epoch 1510/2449 | Loss 0.0652 | Tot reward x episode 758|
+|Epoch 1511/2449 | Loss 0.0205 | Tot reward x episode 763|
+|Epoch 1512/2449 | Loss 0.0462 | Tot reward x episode 771|
+|Epoch 1513/2449 | Loss 0.1659 | Tot reward x episode 681|
+|Epoch 1514/2449 | Loss 0.1623 | Tot reward x episode 672|
+|Epoch 1515/2449 | Loss 0.1006 | Tot reward x episode 752|
+|Epoch 1516/2449 | Loss 0.0813 | Tot reward x episode 740|
+|Epoch 1517/2449 | Loss 0.2227 | Tot reward x episode 639|
+|Epoch 1518/2449 | Loss 0.1585 | Tot reward x episode 702|
+|Epoch 1519/2449 | Loss 0.2147 | Tot reward x episode 497|
+|Epoch 1520/2449 | Loss 0.2166 | Tot reward x episode 083|
+|Epoch 1521/2449 | Loss 0.2866 | Tot reward x episode 184|
+|Epoch 1522/2449 | Loss 0.2156 | Tot reward x episode 225|
+|Epoch 1523/2449 | Loss 0.1430 | Tot reward x episode 194|
+|Epoch 1524/2449 | Loss 0.0999 | Tot reward x episode 207|
+|Epoch 1525/2449 | Loss 0.0834 | Tot reward x episode 182|
+|Epoch 1526/2449 | Loss 0.0424 | Tot reward x episode 197|
+|Epoch 1527/2449 | Loss 0.0383 | Tot reward x episode 197|
+|Epoch 1528/2449 | Loss 0.0385 | Tot reward x episode 197|
+|Epoch 1529/2449 | Loss 0.0294 | Tot reward x episode 200|
+|Epoch 1530/2449 | Loss 0.0195 | Tot reward x episode 213|
+|Epoch 1531/2449 | Loss 0.1984 | Tot reward x episode 607|
+|Epoch 1532/2449 | Loss 0.2988 | Tot reward x episode 603|
+|Epoch 1533/2449 | Loss 0.2437 | Tot reward x episode 563|
+|Epoch 1534/2449 | Loss 0.1703 | Tot reward x episode 562|
+|Epoch 1535/2449 | Loss 0.1435 | Tot reward x episode 573|
+|Epoch 1536/2449 | Loss 0.0835 | Tot reward x episode 597|
+|Epoch 1537/2449 | Loss 0.1081 | Tot reward x episode 574|
+|Epoch 1538/2449 | Loss 0.0857 | Tot reward x episode 546|
+|Epoch 1539/2449 | Loss 0.0620 | Tot reward x episode 573|
+|Epoch 1540/2449 | Loss 0.0655 | Tot reward x episode 559|
+|Epoch 1541/2449 | Loss 0.1596 | Tot reward x episode 519|
+|Epoch 1542/2449 | Loss 0.0613 | Tot reward x episode 538|
+|Epoch 1543/2449 | Loss 0.0450 | Tot reward x episode 560|
+|Epoch 1544/2449 | Loss 0.0335 | Tot reward x episode 559|
+|Epoch 1545/2449 | Loss 0.0261 | Tot reward x episode 578|
+|Epoch 1546/2449 | Loss 0.0208 | Tot reward x episode 594|
+|Epoch 1547/2449 | Loss 0.0742 | Tot reward x episode 549|
+|Epoch 1548/2449 | Loss 0.0386 | Tot reward x episode 570|
+|Epoch 1549/2449 | Loss 0.0210 | Tot reward x episode 575|
+|Epoch 1550/2449 | Loss 0.1281 | Tot reward x episode 554|
+|Epoch 1551/2449 | Loss 0.0299 | Tot reward x episode 563|
+|Epoch 1552/2449 | Loss 0.1144 | Tot reward x episode 585|
+|Epoch 1553/2449 | Loss 0.0248 | Tot reward x episode 572|
+|Epoch 1554/2449 | Loss 0.0658 | Tot reward x episode 589|
+|Epoch 1555/2449 | Loss 0.0105 | Tot reward x episode 564|
+|Epoch 1556/2449 | Loss 0.0410 | Tot reward x episode 573|
+|Epoch 1557/2449 | Loss 0.0155 | Tot reward x episode 545|
+|Epoch 1558/2449 | Loss 0.0180 | Tot reward x episode 562|
+|Epoch 1559/2449 | Loss 0.0858 | Tot reward x episode 563|
+|Epoch 1560/2449 | Loss 0.0080 | Tot reward x episode 580|
+|Epoch 1561/2449 | Loss 0.0239 | Tot reward x episode 547|
+|Epoch 1562/2449 | Loss 0.0082 | Tot reward x episode 591|
+|Epoch 1563/2449 | Loss 0.0421 | Tot reward x episode 568|
+|Epoch 1564/2449 | Loss 0.0484 | Tot reward x episode 532|
+|Epoch 1565/2449 | Loss 0.0351 | Tot reward x episode 601|
+|Epoch 1566/2449 | Loss 0.0210 | Tot reward x episode 578|
+|Epoch 1567/2449 | Loss 0.0326 | Tot reward x episode 564|
+|Epoch 1568/2449 | Loss 0.0199 | Tot reward x episode 592|
+|Epoch 1569/2449 | Loss 0.0345 | Tot reward x episode 559|
+|Epoch 1570/2449 | Loss 0.1198 | Tot reward x episode 534|
+|Epoch 1571/2449 | Loss 0.0306 | Tot reward x episode 558|
+|Epoch 1572/2449 | Loss 0.0175 | Tot reward x episode 556|
+|Epoch 1573/2449 | Loss 0.0532 | Tot reward x episode 558|
+|Epoch 1574/2449 | Loss 0.0718 | Tot reward x episode 562|
+|Epoch 1575/2449 | Loss 0.0474 | Tot reward x episode 553|
+|Epoch 1576/2449 | Loss 0.0848 | Tot reward x episode 558|
+|Epoch 1577/2449 | Loss 0.0482 | Tot reward x episode 576|
+|Epoch 1578/2449 | Loss 0.0147 | Tot reward x episode 580|
+|Epoch 1579/2449 | Loss 0.0591 | Tot reward x episode 547|
+|Epoch 1580/2449 | Loss 0.0256 | Tot reward x episode 570|
+|Epoch 1581/2449 | Loss 0.0329 | Tot reward x episode 575|
+|Epoch 1582/2449 | Loss 0.1487 | Tot reward x episode 447|
+|Epoch 1583/2449 | Loss 0.0085 | Tot reward x episode 574|
+|Epoch 1584/2449 | Loss 0.0538 | Tot reward x episode 559|
+|Epoch 1585/2449 | Loss 0.0040 | Tot reward x episode 587|
+|Epoch 1586/2449 | Loss 0.0193 | Tot reward x episode 560|
+|Epoch 1587/2449 | Loss 0.0211 | Tot reward x episode 563|
+|Epoch 1588/2449 | Loss 0.0363 | Tot reward x episode 550|
+|Epoch 1589/2449 | Loss 0.0190 | Tot reward x episode 593|
+|Epoch 1590/2449 | Loss 0.0073 | Tot reward x episode 574|
+|Epoch 1591/2449 | Loss 0.0248 | Tot reward x episode 575|
+|Epoch 1592/2449 | Loss 0.0171 | Tot reward x episode 575|
+|Epoch 1593/2449 | Loss 0.0229 | Tot reward x episode 525|
+|Epoch 1594/2449 | Loss 0.0193 | Tot reward x episode 533|
+|Epoch 1595/2449 | Loss 0.0310 | Tot reward x episode 580|
+|Epoch 1596/2449 | Loss 0.0552 | Tot reward x episode 545|
+|Epoch 1597/2449 | Loss 0.0275 | Tot reward x episode 587|
+|Epoch 1598/2449 | Loss 0.0971 | Tot reward x episode 548|
+|Epoch 1599/2449 | Loss 0.0203 | Tot reward x episode 575|
+|Epoch 1600/2449 | Loss 0.0306 | Tot reward x episode 589|
+|Epoch 1601/2449 | Loss 0.0415 | Tot reward x episode 554|
+|Epoch 1602/2449 | Loss 0.0454 | Tot reward x episode 555|
+|Epoch 1603/2449 | Loss 0.0040 | Tot reward x episode 575|
+|Epoch 1604/2449 | Loss 0.0280 | Tot reward x episode 566|
+|Epoch 1605/2449 | Loss 0.0460 | Tot reward x episode 531|
+|Epoch 1606/2449 | Loss 0.0680 | Tot reward x episode 572|
+|Epoch 1607/2449 | Loss 0.0333 | Tot reward x episode 533|
+|Epoch 1608/2449 | Loss 0.0552 | Tot reward x episode 539|
+|Epoch 1609/2449 | Loss 0.0046 | Tot reward x episode 587|
+|Epoch 1610/2449 | Loss 0.0161 | Tot reward x episode 556|
+|Epoch 1611/2449 | Loss 0.0017 | Tot reward x episode 554|
+|Epoch 1612/2449 | Loss 0.0431 | Tot reward x episode 549|
+|Epoch 1613/2449 | Loss 0.0240 | Tot reward x episode 560|
+|Epoch 1614/2449 | Loss 0.0424 | Tot reward x episode 575|
+|Epoch 1615/2449 | Loss 0.0498 | Tot reward x episode 558|
+|Epoch 1616/2449 | Loss 0.0277 | Tot reward x episode 567|
+|Epoch 1617/2449 | Loss 0.0150 | Tot reward x episode 575|
+|Epoch 1618/2449 | Loss 0.0267 | Tot reward x episode 579|
+|Epoch 1619/2449 | Loss 0.0230 | Tot reward x episode 569|
+|Epoch 1620/2449 | Loss 0.0145 | Tot reward x episode 569|
+|Epoch 1621/2449 | Loss 0.0561 | Tot reward x episode 555|
+|Epoch 1622/2449 | Loss 0.0168 | Tot reward x episode 556|
+|Epoch 1623/2449 | Loss 0.0297 | Tot reward x episode 561|
+|Epoch 1624/2449 | Loss 0.0308 | Tot reward x episode 549|
+|Epoch 1625/2449 | Loss 0.0349 | Tot reward x episode 559|
+|Epoch 1626/2449 | Loss 0.0518 | Tot reward x episode 539|
+|Epoch 1627/2449 | Loss 0.0536 | Tot reward x episode 555|
+|Epoch 1628/2449 | Loss 0.0288 | Tot reward x episode 556|
+|Epoch 1629/2449 | Loss 0.0130 | Tot reward x episode 569|
+|Epoch 1630/2449 | Loss 0.0491 | Tot reward x episode 567|
+|Epoch 1631/2449 | Loss 0.0212 | Tot reward x episode 560|
+|Epoch 1632/2449 | Loss 0.0279 | Tot reward x episode 559|
+|Epoch 1633/2449 | Loss 0.0446 | Tot reward x episode 560|
+|Epoch 1634/2449 | Loss 0.0516 | Tot reward x episode 551|
+|Epoch 1635/2449 | Loss 0.0244 | Tot reward x episode 566|
+|Epoch 1636/2449 | Loss 0.0223 | Tot reward x episode 592|
+|Epoch 1637/2449 | Loss 0.0319 | Tot reward x episode 562|
+|Epoch 1638/2449 | Loss 0.0253 | Tot reward x episode 586|
+|Epoch 1639/2449 | Loss 0.0259 | Tot reward x episode 546|
+|Epoch 1640/2449 | Loss 0.0598 | Tot reward x episode 562|
+|Epoch 1641/2449 | Loss 0.0537 | Tot reward x episode 584|
+|Epoch 1642/2449 | Loss 0.0327 | Tot reward x episode 594|
+|Epoch 1643/2449 | Loss 0.0311 | Tot reward x episode 539|
+|Epoch 1644/2449 | Loss 0.0174 | Tot reward x episode 588|
+|Epoch 1645/2449 | Loss 0.0232 | Tot reward x episode 562|
+|Epoch 1646/2449 | Loss 0.0225 | Tot reward x episode 587|
+|Epoch 1647/2449 | Loss 0.0405 | Tot reward x episode 536|
+|Epoch 1648/2449 | Loss 0.0240 | Tot reward x episode 590|
+|Epoch 1649/2449 | Loss 0.0357 | Tot reward x episode 570|
+|Epoch 1650/2449 | Loss 0.0149 | Tot reward x episode 580|
+|Epoch 1651/2449 | Loss 0.0138 | Tot reward x episode 557|
+|Epoch 1652/2449 | Loss 0.0142 | Tot reward x episode 562|
+|Epoch 1653/2449 | Loss 0.0005 | Tot reward x episode 559|
+|Epoch 1654/2449 | Loss 0.0128 | Tot reward x episode 572|
+|Epoch 1655/2449 | Loss 0.0109 | Tot reward x episode 563|
+|Epoch 1656/2449 | Loss 0.0222 | Tot reward x episode 548|
+|Epoch 1657/2449 | Loss 0.0018 | Tot reward x episode 575|
+|Epoch 1658/2449 | Loss 0.0186 | Tot reward x episode 560|
+|Epoch 1659/2449 | Loss 0.0136 | Tot reward x episode 563|
+|Epoch 1660/2449 | Loss 0.0017 | Tot reward x episode 578|
+|Epoch 1661/2449 | Loss 0.0221 | Tot reward x episode 578|
+|Epoch 1662/2449 | Loss 0.0021 | Tot reward x episode 566|
+|Epoch 1663/2449 | Loss 0.0021 | Tot reward x episode 578|
+|Epoch 1664/2449 | Loss 0.0253 | Tot reward x episode 562|
+|Epoch 1665/2449 | Loss 0.0162 | Tot reward x episode 567|
+|Epoch 1666/2449 | Loss 0.0156 | Tot reward x episode 587|
+|Epoch 1667/2449 | Loss 0.0246 | Tot reward x episode 584|
+|Epoch 1668/2449 | Loss 0.0141 | Tot reward x episode 560|
+|Epoch 1669/2449 | Loss 0.0378 | Tot reward x episode 551|
+|Epoch 1670/2449 | Loss 0.0096 | Tot reward x episode 551|
+|Epoch 1671/2449 | Loss 0.0168 | Tot reward x episode 563|
+|Epoch 1672/2449 | Loss 0.0351 | Tot reward x episode 524|
+|Epoch 1673/2449 | Loss 0.0195 | Tot reward x episode 557|
+|Epoch 1674/2449 | Loss 0.0339 | Tot reward x episode 590|
+|Epoch 1675/2449 | Loss 0.0157 | Tot reward x episode 571|
+|Epoch 1676/2449 | Loss 0.0007 | Tot reward x episode 589|
+|Epoch 1677/2449 | Loss 0.0016 | Tot reward x episode 554|
+|Epoch 1678/2449 | Loss 0.0038 | Tot reward x episode 575|
+|Epoch 1679/2449 | Loss 0.0012 | Tot reward x episode 596|
+|Epoch 1680/2449 | Loss 0.0140 | Tot reward x episode 564|
+|Epoch 1681/2449 | Loss 0.0168 | Tot reward x episode 604|
+|Epoch 1682/2449 | Loss 0.0118 | Tot reward x episode 561|
+|Epoch 1683/2449 | Loss 0.0270 | Tot reward x episode 586|
+|Epoch 1684/2449 | Loss 0.0147 | Tot reward x episode 563|
+|Epoch 1685/2449 | Loss 0.0120 | Tot reward x episode 552|
+|Epoch 1686/2449 | Loss 0.0179 | Tot reward x episode 568|
+|Epoch 1687/2449 | Loss 0.0027 | Tot reward x episode 571|
+|Epoch 1688/2449 | Loss 0.0233 | Tot reward x episode 563|
+|Epoch 1689/2449 | Loss 0.0246 | Tot reward x episode 564|
+|Epoch 1690/2449 | Loss 0.0279 | Tot reward x episode 579|
+|Epoch 1691/2449 | Loss 0.0239 | Tot reward x episode 555|
+|Epoch 1692/2449 | Loss 0.0126 | Tot reward x episode 570|
+|Epoch 1693/2449 | Loss 0.0124 | Tot reward x episode 600|
+|Epoch 1694/2449 | Loss 0.0146 | Tot reward x episode 599|
+|Epoch 1695/2449 | Loss 0.0518 | Tot reward x episode 574|
+|Epoch 1696/2449 | Loss 0.0023 | Tot reward x episode 565|
+|Epoch 1697/2449 | Loss 0.0353 | Tot reward x episode 570|
+|Epoch 1698/2449 | Loss 0.0147 | Tot reward x episode 558|
+|Epoch 1699/2449 | Loss 0.0135 | Tot reward x episode 552|
+|Epoch 1700/2449 | Loss 0.0137 | Tot reward x episode 557|
+|Epoch 1701/2449 | Loss 0.0092 | Tot reward x episode 571|
+|Epoch 1702/2449 | Loss 0.0112 | Tot reward x episode 579|
+|Epoch 1703/2449 | Loss 0.0198 | Tot reward x episode 576|
+|Epoch 1704/2449 | Loss 0.0154 | Tot reward x episode 569|
+|Epoch 1705/2449 | Loss 0.0182 | Tot reward x episode 565|
+|Epoch 1706/2449 | Loss 0.0223 | Tot reward x episode 575|
+|Epoch 1707/2449 | Loss 0.0140 | Tot reward x episode 553|
+|Epoch 1708/2449 | Loss 0.0017 | Tot reward x episode 579|
+|Epoch 1709/2449 | Loss 0.0178 | Tot reward x episode 596|
+|Epoch 1710/2449 | Loss 0.0146 | Tot reward x episode 560|
+|Epoch 1711/2449 | Loss 0.0210 | Tot reward x episode 565|
+|Epoch 1712/2449 | Loss 0.0149 | Tot reward x episode 569|
+|Epoch 1713/2449 | Loss 0.0481 | Tot reward x episode 568|
+|Epoch 1714/2449 | Loss 0.0322 | Tot reward x episode 553|
+|Epoch 1715/2449 | Loss 0.0171 | Tot reward x episode 583|
+|Epoch 1716/2449 | Loss 0.0189 | Tot reward x episode 581|
+|Epoch 1717/2449 | Loss 0.0246 | Tot reward x episode 555|
+|Epoch 1718/2449 | Loss 0.0221 | Tot reward x episode 582|
+|Epoch 1719/2449 | Loss 0.0456 | Tot reward x episode 566|
+|Epoch 1720/2449 | Loss 0.0147 | Tot reward x episode 554|
+|Epoch 1721/2449 | Loss 0.0198 | Tot reward x episode 558|
+|Epoch 1722/2449 | Loss 0.0333 | Tot reward x episode 576|
+|Epoch 1723/2449 | Loss 0.0146 | Tot reward x episode 580|
+|Epoch 1724/2449 | Loss 0.0129 | Tot reward x episode 562|
+|Epoch 1725/2449 | Loss 0.0031 | Tot reward x episode 563|
+|Epoch 1726/2449 | Loss 0.0331 | Tot reward x episode 556|
+|Epoch 1727/2449 | Loss 0.0308 | Tot reward x episode 552|
+|Epoch 1728/2449 | Loss 0.0182 | Tot reward x episode 519|
+|Epoch 1729/2449 | Loss 0.0203 | Tot reward x episode 583|
+|Epoch 1730/2449 | Loss 0.0143 | Tot reward x episode 578|
+|Epoch 1731/2449 | Loss 0.0182 | Tot reward x episode 564|
+|Epoch 1732/2449 | Loss 0.0185 | Tot reward x episode 559|
+|Epoch 1733/2449 | Loss 0.0048 | Tot reward x episode 551|
+|Epoch 1734/2449 | Loss 0.0197 | Tot reward x episode 579|
+|Epoch 1735/2449 | Loss 0.0175 | Tot reward x episode 569|
+|Epoch 1736/2449 | Loss 0.0228 | Tot reward x episode 554|
+|Epoch 1737/2449 | Loss 0.0200 | Tot reward x episode 554|
+|Epoch 1738/2449 | Loss 0.0039 | Tot reward x episode 575|
+|Epoch 1739/2449 | Loss 0.0177 | Tot reward x episode 537|
+|Epoch 1740/2449 | Loss 0.0162 | Tot reward x episode 575|
+|Epoch 1741/2449 | Loss 0.0293 | Tot reward x episode 541|
+|Epoch 1742/2449 | Loss 0.0164 | Tot reward x episode 580|
+|Epoch 1743/2449 | Loss 0.0195 | Tot reward x episode 563|
+|Epoch 1744/2449 | Loss 0.0282 | Tot reward x episode 580|
+|Epoch 1745/2449 | Loss 0.0213 | Tot reward x episode 598|
+|Epoch 1746/2449 | Loss 0.0011 | Tot reward x episode 587|
+|Epoch 1747/2449 | Loss 0.0012 | Tot reward x episode 543|
+|Epoch 1748/2449 | Loss 0.0148 | Tot reward x episode 601|
+|Epoch 1749/2449 | Loss 0.0197 | Tot reward x episode 567|
+|Epoch 1750/2449 | Loss 0.0005 | Tot reward x episode 575|
+|Epoch 1751/2449 | Loss 0.0028 | Tot reward x episode 572|
+|Epoch 1752/2449 | Loss 0.0173 | Tot reward x episode 573|
+|Epoch 1753/2449 | Loss 0.0029 | Tot reward x episode 556|
+|Epoch 1754/2449 | Loss 0.0219 | Tot reward x episode 582|
+|Epoch 1755/2449 | Loss 0.0259 | Tot reward x episode 564|
+|Epoch 1756/2449 | Loss 0.0197 | Tot reward x episode 572|
+|Epoch 1757/2449 | Loss 0.0340 | Tot reward x episode 566|
+|Epoch 1758/2449 | Loss 0.0179 | Tot reward x episode 548|
+|Epoch 1759/2449 | Loss 0.0357 | Tot reward x episode 567|
+|Epoch 1760/2449 | Loss 0.0167 | Tot reward x episode 541|
+|Epoch 1761/2449 | Loss 0.0302 | Tot reward x episode 596|
+|Epoch 1762/2449 | Loss 0.0200 | Tot reward x episode 585|
+|Epoch 1763/2449 | Loss 0.0218 | Tot reward x episode 587|
+|Epoch 1764/2449 | Loss 0.0033 | Tot reward x episode 598|
+|Epoch 1765/2449 | Loss 0.0337 | Tot reward x episode 563|
+|Epoch 1766/2449 | Loss 0.0275 | Tot reward x episode 556|
+|Epoch 1767/2449 | Loss 0.0019 | Tot reward x episode 591|
+|Epoch 1768/2449 | Loss 0.0218 | Tot reward x episode 554|
+|Epoch 1769/2449 | Loss 0.0510 | Tot reward x episode 565|
+|Epoch 1770/2449 | Loss 0.0182 | Tot reward x episode 583|
+|Epoch 1771/2449 | Loss 0.0092 | Tot reward x episode 567|
+|Epoch 1772/2449 | Loss 0.0163 | Tot reward x episode 574|
+|Epoch 1773/2449 | Loss 0.0113 | Tot reward x episode 572|
+|Epoch 1774/2449 | Loss 0.0167 | Tot reward x episode 566|
+|Epoch 1775/2449 | Loss 0.0082 | Tot reward x episode 576|
+|Epoch 1776/2449 | Loss 0.0005 | Tot reward x episode 569|
+|Epoch 1777/2449 | Loss 0.0327 | Tot reward x episode 584|
+|Epoch 1778/2449 | Loss 0.0033 | Tot reward x episode 568|
+|Epoch 1779/2449 | Loss 0.0011 | Tot reward x episode 586|
+|Epoch 1780/2449 | Loss 0.0014 | Tot reward x episode 566|
+|Epoch 1781/2449 | Loss 0.0010 | Tot reward x episode 576|
+|Epoch 1782/2449 | Loss 0.0259 | Tot reward x episode 575|
+|Epoch 1783/2449 | Loss 0.0087 | Tot reward x episode 567|
+|Epoch 1784/2449 | Loss 0.0009 | Tot reward x episode 578|
+|Epoch 1785/2449 | Loss 0.0190 | Tot reward x episode 560|
+|Epoch 1786/2449 | Loss 0.0016 | Tot reward x episode 590|
+|Epoch 1787/2449 | Loss 0.0174 | Tot reward x episode 561|
+|Epoch 1788/2449 | Loss 0.0160 | Tot reward x episode 576|
+|Epoch 1789/2449 | Loss 0.0014 | Tot reward x episode 570|
+|Epoch 1790/2449 | Loss 0.0026 | Tot reward x episode 583|
+|Epoch 1791/2449 | Loss 0.0007 | Tot reward x episode 571|
+|Epoch 1792/2449 | Loss 0.0145 | Tot reward x episode 585|
+|Epoch 1793/2449 | Loss 0.0032 | Tot reward x episode 543|
+|Epoch 1794/2449 | Loss 0.0338 | Tot reward x episode 544|
+|Epoch 1795/2449 | Loss 0.0203 | Tot reward x episode 558|
+|Epoch 1796/2449 | Loss 0.0028 | Tot reward x episode 560|
+|Epoch 1797/2449 | Loss 0.0158 | Tot reward x episode 565|
+|Epoch 1798/2449 | Loss 0.0010 | Tot reward x episode 591|
+|Epoch 1799/2449 | Loss 0.0010 | Tot reward x episode 578|
+|Epoch 1800/2449 | Loss 0.0014 | Tot reward x episode 566|
+|Epoch 1801/2449 | Loss 0.0258 | Tot reward x episode 576|
+|Epoch 1802/2449 | Loss 0.0009 | Tot reward x episode 579|
+|Epoch 1803/2449 | Loss 0.0051 | Tot reward x episode 567|
+|Epoch 1804/2449 | Loss 0.0050 | Tot reward x episode 568|
+|Epoch 1805/2449 | Loss 0.0005 | Tot reward x episode 570|
+|Epoch 1806/2449 | Loss 0.0003 | Tot reward x episode 592|
+|Epoch 1807/2449 | Loss 0.0037 | Tot reward x episode 583|
+|Epoch 1808/2449 | Loss 0.0003 | Tot reward x episode 601|
+|Epoch 1809/2449 | Loss 0.0002 | Tot reward x episode 576|
+|Epoch 1810/2449 | Loss 0.0011 | Tot reward x episode 546|
+|Epoch 1811/2449 | Loss 0.0030 | Tot reward x episode 569|
+|Epoch 1812/2449 | Loss 0.0003 | Tot reward x episode 572|
+|Epoch 1813/2449 | Loss 0.0001 | Tot reward x episode 593|
+|Epoch 1814/2449 | Loss 0.0007 | Tot reward x episode 579|
+|Epoch 1815/2449 | Loss 0.0038 | Tot reward x episode 583|
+|Epoch 1816/2449 | Loss 0.0006 | Tot reward x episode 569|
+|Epoch 1817/2449 | Loss 0.0013 | Tot reward x episode 570|
+|Epoch 1818/2449 | Loss 0.0012 | Tot reward x episode 568|
+|Epoch 1819/2449 | Loss 0.0006 | Tot reward x episode 562|
+|Epoch 1820/2449 | Loss 0.0016 | Tot reward x episode 576|
+|Epoch 1821/2449 | Loss 0.0026 | Tot reward x episode 545|
+|Epoch 1822/2449 | Loss 0.0020 | Tot reward x episode 607|
+|Epoch 1823/2449 | Loss 0.0148 | Tot reward x episode 576|
+|Epoch 1824/2449 | Loss 0.0062 | Tot reward x episode 554|
+|Epoch 1825/2449 | Loss 0.0202 | Tot reward x episode 560|
+|Epoch 1826/2449 | Loss 0.0059 | Tot reward x episode 554|
+|Epoch 1827/2449 | Loss 0.0321 | Tot reward x episode 568|
+|Epoch 1828/2449 | Loss 0.0006 | Tot reward x episode 589|
+|Epoch 1829/2449 | Loss 0.0006 | Tot reward x episode 583|
+|Epoch 1830/2449 | Loss 0.0009 | Tot reward x episode 557|
+|Epoch 1831/2449 | Loss 0.0061 | Tot reward x episode 566|
+|Epoch 1832/2449 | Loss 0.0035 | Tot reward x episode 567|
+|Epoch 1833/2449 | Loss 0.0063 | Tot reward x episode 576|
+|Epoch 1834/2449 | Loss 0.0057 | Tot reward x episode 559|
+|Epoch 1835/2449 | Loss 0.0010 | Tot reward x episode 584|
+|Epoch 1836/2449 | Loss 0.0175 | Tot reward x episode 581|
+|Epoch 1837/2449 | Loss 0.0247 | Tot reward x episode 568|
+|Epoch 1838/2449 | Loss 0.0127 | Tot reward x episode 579|
+|Epoch 1839/2449 | Loss 0.0198 | Tot reward x episode 550|
+|Epoch 1840/2449 | Loss 0.0058 | Tot reward x episode 545|
+|Epoch 1841/2449 | Loss 0.0191 | Tot reward x episode 555|
+|Epoch 1842/2449 | Loss 0.0189 | Tot reward x episode 562|
+|Epoch 1843/2449 | Loss 0.0266 | Tot reward x episode 564|
+|Epoch 1844/2449 | Loss 0.0018 | Tot reward x episode 586|
+|Epoch 1845/2449 | Loss 0.0224 | Tot reward x episode 578|
+|Epoch 1846/2449 | Loss 0.0278 | Tot reward x episode 558|
+|Epoch 1847/2449 | Loss 0.0241 | Tot reward x episode 570|
+|Epoch 1848/2449 | Loss 0.0170 | Tot reward x episode 563|
+|Epoch 1849/2449 | Loss 0.0057 | Tot reward x episode 570|
+|Epoch 1850/2449 | Loss 0.0198 | Tot reward x episode 583|
+|Epoch 1851/2449 | Loss 0.0272 | Tot reward x episode 558|
+|Epoch 1852/2449 | Loss 0.0165 | Tot reward x episode 543|
+|Epoch 1853/2449 | Loss 0.0165 | Tot reward x episode 551|
+|Epoch 1854/2449 | Loss 0.0402 | Tot reward x episode 588|
+|Epoch 1855/2449 | Loss 0.0210 | Tot reward x episode 568|
+|Epoch 1856/2449 | Loss 0.0071 | Tot reward x episode 565|
+|Epoch 1857/2449 | Loss 0.0177 | Tot reward x episode 564|
+|Epoch 1858/2449 | Loss 0.0161 | Tot reward x episode 566|
+|Epoch 1859/2449 | Loss 0.0343 | Tot reward x episode 545|
+|Epoch 1860/2449 | Loss 0.0042 | Tot reward x episode 579|
+|Epoch 1861/2449 | Loss 0.0277 | Tot reward x episode 569|
+|Epoch 1862/2449 | Loss 0.0244 | Tot reward x episode 537|
+|Epoch 1863/2449 | Loss 0.0013 | Tot reward x episode 613|
+|Epoch 1864/2449 | Loss 0.0011 | Tot reward x episode 582|
+|Epoch 1865/2449 | Loss 0.0029 | Tot reward x episode 555|
+|Epoch 1866/2449 | Loss 0.0167 | Tot reward x episode 556|
+|Epoch 1867/2449 | Loss 0.0024 | Tot reward x episode 582|
+|Epoch 1868/2449 | Loss 0.0215 | Tot reward x episode 586|
+|Epoch 1869/2449 | Loss 0.0020 | Tot reward x episode 589|
+|Epoch 1870/2449 | Loss 0.0030 | Tot reward x episode 577|
+|Epoch 1871/2449 | Loss 0.0094 | Tot reward x episode 548|
+|Epoch 1872/2449 | Loss 0.0011 | Tot reward x episode 574|
+|Epoch 1873/2449 | Loss 0.0139 | Tot reward x episode 599|
+|Epoch 1874/2449 | Loss 0.0085 | Tot reward x episode 581|
+|Epoch 1875/2449 | Loss 0.0171 | Tot reward x episode 564|
+|Epoch 1876/2449 | Loss 0.0033 | Tot reward x episode 578|
+|Epoch 1877/2449 | Loss 0.0039 | Tot reward x episode 562|
+|Epoch 1878/2449 | Loss 0.0174 | Tot reward x episode 568|
+|Epoch 1879/2449 | Loss 0.0080 | Tot reward x episode 571|
+|Epoch 1880/2449 | Loss 0.0289 | Tot reward x episode 579|
+|Epoch 1881/2449 | Loss 0.0046 | Tot reward x episode 604|
+|Epoch 1882/2449 | Loss 0.0145 | Tot reward x episode 561|
+|Epoch 1883/2449 | Loss 0.0112 | Tot reward x episode 573|
+|Epoch 1884/2449 | Loss 0.0094 | Tot reward x episode 580|
+|Epoch 1885/2449 | Loss 0.0192 | Tot reward x episode 553|
+|Epoch 1886/2449 | Loss 0.0084 | Tot reward x episode 577|
+|Epoch 1887/2449 | Loss 0.0030 | Tot reward x episode 572|
+|Epoch 1888/2449 | Loss 0.0259 | Tot reward x episode 564|
+|Epoch 1889/2449 | Loss 0.0053 | Tot reward x episode 554|
+|Epoch 1890/2449 | Loss 0.0145 | Tot reward x episode 559|
+|Epoch 1891/2449 | Loss 0.0008 | Tot reward x episode 562|
+|Epoch 1892/2449 | Loss 0.0172 | Tot reward x episode 565|
+|Epoch 1893/2449 | Loss 0.0242 | Tot reward x episode 584|
+|Epoch 1894/2449 | Loss 0.0010 | Tot reward x episode 545|
+|Epoch 1895/2449 | Loss 0.0353 | Tot reward x episode 554|
+|Epoch 1896/2449 | Loss 0.0172 | Tot reward x episode 581|
+|Epoch 1897/2449 | Loss 0.0243 | Tot reward x episode 563|
+|Epoch 1898/2449 | Loss 0.0058 | Tot reward x episode 583|
+|Epoch 1899/2449 | Loss 0.0167 | Tot reward x episode 536|
+|Epoch 1900/2449 | Loss 0.0064 | Tot reward x episode 563|
+|Epoch 1901/2449 | Loss 0.0150 | Tot reward x episode 580|
+|Epoch 1902/2449 | Loss 0.0218 | Tot reward x episode 554|
+|Epoch 1903/2449 | Loss 0.0177 | Tot reward x episode 563|
+|Epoch 1904/2449 | Loss 0.0156 | Tot reward x episode 565|
+|Epoch 1905/2449 | Loss 0.0014 | Tot reward x episode 549|
+|Epoch 1906/2449 | Loss 0.0389 | Tot reward x episode 567|
+|Epoch 1907/2449 | Loss 0.0008 | Tot reward x episode 585|
+|Epoch 1908/2449 | Loss 0.0062 | Tot reward x episode 580|
+|Epoch 1909/2449 | Loss 0.0013 | Tot reward x episode 567|
+|Epoch 1910/2449 | Loss 0.0018 | Tot reward x episode 550|
+|Epoch 1911/2449 | Loss 0.0023 | Tot reward x episode 589|
+|Epoch 1912/2449 | Loss 0.0023 | Tot reward x episode 605|
+|Epoch 1913/2449 | Loss 0.0147 | Tot reward x episode 603|
+|Epoch 1914/2449 | Loss 0.0317 | Tot reward x episode 557|
+|Epoch 1915/2449 | Loss 0.0088 | Tot reward x episode 579|
+|Epoch 1916/2449 | Loss 0.0322 | Tot reward x episode 585|
+|Epoch 1917/2449 | Loss 0.0006 | Tot reward x episode 576|
+|Epoch 1918/2449 | Loss 0.0006 | Tot reward x episode 578|
+|Epoch 1919/2449 | Loss 0.0013 | Tot reward x episode 585|
+|Epoch 1920/2449 | Loss 0.0004 | Tot reward x episode 603|
+|Epoch 1921/2449 | Loss 0.0025 | Tot reward x episode 576|
+|Epoch 1922/2449 | Loss 0.0148 | Tot reward x episode 553|
+|Epoch 1923/2449 | Loss 0.0143 | Tot reward x episode 581|
+|Epoch 1924/2449 | Loss 0.0162 | Tot reward x episode 545|
+|Epoch 1925/2449 | Loss 0.0022 | Tot reward x episode 590|
+|Epoch 1926/2449 | Loss 0.0138 | Tot reward x episode 552|
+|Epoch 1927/2449 | Loss 0.0042 | Tot reward x episode 575|
+|Epoch 1928/2449 | Loss 0.0319 | Tot reward x episode 566|
+|Epoch 1929/2449 | Loss 0.0008 | Tot reward x episode 566|
+|Epoch 1930/2449 | Loss 0.0006 | Tot reward x episode 564|
+|Epoch 1931/2449 | Loss 0.0006 | Tot reward x episode 582|
+|Epoch 1932/2449 | Loss 0.0019 | Tot reward x episode 558|
+|Epoch 1933/2449 | Loss 0.0204 | Tot reward x episode 580|
+|Epoch 1934/2449 | Loss 0.0004 | Tot reward x episode 570|
+|Epoch 1935/2449 | Loss 0.0002 | Tot reward x episode 582|
+|Epoch 1936/2449 | Loss 0.0005 | Tot reward x episode 574|
+|Epoch 1937/2449 | Loss 0.0004 | Tot reward x episode 568|
+|Epoch 1938/2449 | Loss 0.0005 | Tot reward x episode 559|
+|Epoch 1939/2449 | Loss 0.0011 | Tot reward x episode 550|
+|Epoch 1940/2449 | Loss 0.0005 | Tot reward x episode 578|
+|Epoch 1941/2449 | Loss 0.0018 | Tot reward x episode 562|
+|Epoch 1942/2449 | Loss 0.0005 | Tot reward x episode 565|
+|Epoch 1943/2449 | Loss 0.0009 | Tot reward x episode 547|
+|Epoch 1944/2449 | Loss 0.0011 | Tot reward x episode 604|
+|Epoch 1945/2449 | Loss 0.0085 | Tot reward x episode 584|
+|Epoch 1946/2449 | Loss 0.0161 | Tot reward x episode 556|
+|Epoch 1947/2449 | Loss 0.0005 | Tot reward x episode 596|
+|Epoch 1948/2449 | Loss 0.0012 | Tot reward x episode 560|
+|Epoch 1949/2449 | Loss 0.0029 | Tot reward x episode 567|
+|Epoch 1950/2449 | Loss 0.0144 | Tot reward x episode 574|
+|Epoch 1951/2449 | Loss 0.0083 | Tot reward x episode 560|
+|Epoch 1952/2449 | Loss 0.0131 | Tot reward x episode 571|
+|Epoch 1953/2449 | Loss 0.0015 | Tot reward x episode 566|
+|Epoch 1954/2449 | Loss 0.0164 | Tot reward x episode 573|
+|Epoch 1955/2449 | Loss 0.0009 | Tot reward x episode 520|
+|Epoch 1956/2449 | Loss 0.0112 | Tot reward x episode 575|
+|Epoch 1957/2449 | Loss 0.0030 | Tot reward x episode 571|
+|Epoch 1958/2449 | Loss 0.0248 | Tot reward x episode 580|
+|Epoch 1959/2449 | Loss 0.0009 | Tot reward x episode 577|
+|Epoch 1960/2449 | Loss 0.0015 | Tot reward x episode 585|
+|Epoch 1961/2449 | Loss 0.0168 | Tot reward x episode 582|
+|Epoch 1962/2449 | Loss 0.0205 | Tot reward x episode 574|
+|Epoch 1963/2449 | Loss 0.0013 | Tot reward x episode 576|
+|Epoch 1964/2449 | Loss 0.0011 | Tot reward x episode 568|
+|Epoch 1965/2449 | Loss 0.0206 | Tot reward x episode 560|
+|Epoch 1966/2449 | Loss 0.0008 | Tot reward x episode 578|
+|Epoch 1967/2449 | Loss 0.0013 | Tot reward x episode 570|
+|Epoch 1968/2449 | Loss 0.0008 | Tot reward x episode 574|
+|Epoch 1969/2449 | Loss 0.0019 | Tot reward x episode 566|
+|Epoch 1970/2449 | Loss 0.0110 | Tot reward x episode 594|
+|Epoch 1971/2449 | Loss 0.0184 | Tot reward x episode 570|
+|Epoch 1972/2449 | Loss 0.0022 | Tot reward x episode 596|
+|Epoch 1973/2449 | Loss 0.0036 | Tot reward x episode 560|
+|Epoch 1974/2449 | Loss 0.0005 | Tot reward x episode 551|
+|Epoch 1975/2449 | Loss 0.0017 | Tot reward x episode 578|
+|Epoch 1976/2449 | Loss 0.0011 | Tot reward x episode 589|
+|Epoch 1977/2449 | Loss 0.0022 | Tot reward x episode 569|
+|Epoch 1978/2449 | Loss 0.0210 | Tot reward x episode 550|
+|Epoch 1979/2449 | Loss 0.0186 | Tot reward x episode 565|
+|Epoch 1980/2449 | Loss 0.0142 | Tot reward x episode 563|
+|Epoch 1981/2449 | Loss 0.0144 | Tot reward x episode 579|
+|Epoch 1982/2449 | Loss 0.0145 | Tot reward x episode 605|
+|Epoch 1983/2449 | Loss 0.0245 | Tot reward x episode 560|
+|Epoch 1984/2449 | Loss 0.0212 | Tot reward x episode 571|
+|Epoch 1985/2449 | Loss 0.0010 | Tot reward x episode 575|
+|Epoch 1986/2449 | Loss 0.0007 | Tot reward x episode 569|
+|Epoch 1987/2449 | Loss 0.0012 | Tot reward x episode 577|
+|Epoch 1988/2449 | Loss 0.0015 | Tot reward x episode 571|
+|Epoch 1989/2449 | Loss 0.0058 | Tot reward x episode 576|
+|Epoch 1990/2449 | Loss 0.0260 | Tot reward x episode 556|
+|Epoch 1991/2449 | Loss 0.0007 | Tot reward x episode 598|
+|Epoch 1992/2449 | Loss 0.0009 | Tot reward x episode 577|
+|Epoch 1993/2449 | Loss 0.0011 | Tot reward x episode 563|
+|Epoch 1994/2449 | Loss 0.0042 | Tot reward x episode 568|
+|Epoch 1995/2449 | Loss 0.0082 | Tot reward x episode 585|
+|Epoch 1996/2449 | Loss 0.0083 | Tot reward x episode 569|
+|Epoch 1997/2449 | Loss 0.0163 | Tot reward x episode 570|
+|Epoch 1998/2449 | Loss 0.0016 | Tot reward x episode 568|
+|Epoch 1999/2449 | Loss 0.0017 | Tot reward x episode 570|
+|Epoch 2000/2449 | Loss 0.0030 | Tot reward x episode 575|
+|Epoch 2001/2449 | Loss 0.0011 | Tot reward x episode 591|
+|Epoch 2002/2449 | Loss 0.0062 | Tot reward x episode 576|
+|Epoch 2003/2449 | Loss 0.0036 | Tot reward x episode 549|
+|Epoch 2004/2449 | Loss 0.0056 | Tot reward x episode 559|
+|Epoch 2005/2449 | Loss 0.0166 | Tot reward x episode 576|
+|Epoch 2006/2449 | Loss 0.0079 | Tot reward x episode 554|
+|Epoch 2007/2449 | Loss 0.0189 | Tot reward x episode 547|
+|Epoch 2008/2449 | Loss 0.0073 | Tot reward x episode 567|
+|Epoch 2009/2449 | Loss 0.0206 | Tot reward x episode 564|
+|Epoch 2010/2449 | Loss 0.0041 | Tot reward x episode 566|
+|Epoch 2011/2449 | Loss 0.0007 | Tot reward x episode 561|
+|Epoch 2012/2449 | Loss 0.0274 | Tot reward x episode 561|
+|Epoch 2013/2449 | Loss 0.0133 | Tot reward x episode 576|
+|Epoch 2014/2449 | Loss 0.0011 | Tot reward x episode 553|
+|Epoch 2015/2449 | Loss 0.0017 | Tot reward x episode 570|
+|Epoch 2016/2449 | Loss 0.0190 | Tot reward x episode 551|
+|Epoch 2017/2449 | Loss 0.0255 | Tot reward x episode 552|
+|Epoch 2018/2449 | Loss 0.0012 | Tot reward x episode 561|
+|Epoch 2019/2449 | Loss 0.0032 | Tot reward x episode 585|
+|Epoch 2020/2449 | Loss 0.0032 | Tot reward x episode 574|
+|Epoch 2021/2449 | Loss 0.0055 | Tot reward x episode 575|
+|Epoch 2022/2449 | Loss 0.0354 | Tot reward x episode 548|
+|Epoch 2023/2449 | Loss 0.0018 | Tot reward x episode 560|
+|Epoch 2024/2449 | Loss 0.0014 | Tot reward x episode 571|
+|Epoch 2025/2449 | Loss 0.0022 | Tot reward x episode 573|
+|Epoch 2026/2449 | Loss 0.0270 | Tot reward x episode 579|
+|Epoch 2027/2449 | Loss 0.0005 | Tot reward x episode 551|
+|Epoch 2028/2449 | Loss 0.0013 | Tot reward x episode 560|
+|Epoch 2029/2449 | Loss 0.0009 | Tot reward x episode 570|
+|Epoch 2030/2449 | Loss 0.0107 | Tot reward x episode 590|
+|Epoch 2031/2449 | Loss 0.0016 | Tot reward x episode 564|
+|Epoch 2032/2449 | Loss 0.0131 | Tot reward x episode 587|
+|Epoch 2033/2449 | Loss 0.0016 | Tot reward x episode 598|
+|Epoch 2034/2449 | Loss 0.0015 | Tot reward x episode 587|
+|Epoch 2035/2449 | Loss 0.0202 | Tot reward x episode 587|
+|Epoch 2036/2449 | Loss 0.0269 | Tot reward x episode 572|
+|Epoch 2037/2449 | Loss 0.0125 | Tot reward x episode 563|
+|Epoch 2038/2449 | Loss 0.0167 | Tot reward x episode 569|
+|Epoch 2039/2449 | Loss 0.0247 | Tot reward x episode 547|
+|Epoch 2040/2449 | Loss 0.0054 | Tot reward x episode 559|
+|Epoch 2041/2449 | Loss 0.0110 | Tot reward x episode 569|
+|Epoch 2042/2449 | Loss 0.0194 | Tot reward x episode 562|
+|Epoch 2043/2449 | Loss 0.0084 | Tot reward x episode 577|
+|Epoch 2044/2449 | Loss 0.0009 | Tot reward x episode 579|
+|Epoch 2045/2449 | Loss 0.0162 | Tot reward x episode 574|
+|Epoch 2046/2449 | Loss 0.0124 | Tot reward x episode 596|
+|Epoch 2047/2449 | Loss 0.0229 | Tot reward x episode 556|
+|Epoch 2048/2449 | Loss 0.0009 | Tot reward x episode 543|
+|Epoch 2049/2449 | Loss 0.0029 | Tot reward x episode 588|
+|Epoch 2050/2449 | Loss 0.0139 | Tot reward x episode 570|
+|Epoch 2051/2449 | Loss 0.0035 | Tot reward x episode 578|
+|Epoch 2052/2449 | Loss 0.0051 | Tot reward x episode 576|
+|Epoch 2053/2449 | Loss 0.0380 | Tot reward x episode 546|
+|Epoch 2054/2449 | Loss 0.0004 | Tot reward x episode 584|
+|Epoch 2055/2449 | Loss 0.0017 | Tot reward x episode 549|
+|Epoch 2056/2449 | Loss 0.0023 | Tot reward x episode 598|
+|Epoch 2057/2449 | Loss 0.0524 | Tot reward x episode 569|
+|Epoch 2058/2449 | Loss 0.0205 | Tot reward x episode 579|
+|Epoch 2059/2449 | Loss 0.0406 | Tot reward x episode 557|
+|Epoch 2060/2449 | Loss 0.0190 | Tot reward x episode 583|
+|Epoch 2061/2449 | Loss 0.0019 | Tot reward x episode 557|
+|Epoch 2062/2449 | Loss 0.0401 | Tot reward x episode 538|
+|Epoch 2063/2449 | Loss 0.0051 | Tot reward x episode 550|
+|Epoch 2064/2449 | Loss 0.0134 | Tot reward x episode 561|
+|Epoch 2065/2449 | Loss 0.0217 | Tot reward x episode 575|
+|Epoch 2066/2449 | Loss 0.0011 | Tot reward x episode 583|
+|Epoch 2067/2449 | Loss 0.0006 | Tot reward x episode 572|
+|Epoch 2068/2449 | Loss 0.0010 | Tot reward x episode 587|
+|Epoch 2069/2449 | Loss 0.0057 | Tot reward x episode 584|
+|Epoch 2070/2449 | Loss 0.0200 | Tot reward x episode 595|
+|Epoch 2071/2449 | Loss 0.0025 | Tot reward x episode 538|
+|Epoch 2072/2449 | Loss 0.0062 | Tot reward x episode 568|
+|Epoch 2073/2449 | Loss 0.0180 | Tot reward x episode 563|
+|Epoch 2074/2449 | Loss 0.0026 | Tot reward x episode 596|
+|Epoch 2075/2449 | Loss 0.0161 | Tot reward x episode 569|
+|Epoch 2076/2449 | Loss 0.0202 | Tot reward x episode 565|
+|Epoch 2077/2449 | Loss 0.0462 | Tot reward x episode 550|
+|Epoch 2078/2449 | Loss 0.0313 | Tot reward x episode 579|
+|Epoch 2079/2449 | Loss 0.0031 | Tot reward x episode 555|
+|Epoch 2080/2449 | Loss 0.0119 | Tot reward x episode 580|
+|Epoch 2081/2449 | Loss 0.0185 | Tot reward x episode 573|
+|Epoch 2082/2449 | Loss 0.0116 | Tot reward x episode 593|
+|Epoch 2083/2449 | Loss 0.0301 | Tot reward x episode 559|
+|Epoch 2084/2449 | Loss 0.0084 | Tot reward x episode 560|
+|Epoch 2085/2449 | Loss 0.0134 | Tot reward x episode 574|
+|Epoch 2086/2449 | Loss 0.0081 | Tot reward x episode 563|
+|Epoch 2087/2449 | Loss 0.0385 | Tot reward x episode 580|
+|Epoch 2088/2449 | Loss 0.0170 | Tot reward x episode 568|
+|Epoch 2089/2449 | Loss 0.0146 | Tot reward x episode 590|
+|Epoch 2090/2449 | Loss 0.0244 | Tot reward x episode 593|
+|Epoch 2091/2449 | Loss 0.0104 | Tot reward x episode 595|
+|Epoch 2092/2449 | Loss 0.0270 | Tot reward x episode 552|
+|Epoch 2093/2449 | Loss 0.0227 | Tot reward x episode 545|
+|Epoch 2094/2449 | Loss 0.0383 | Tot reward x episode 539|
+|Epoch 2095/2449 | Loss 0.0052 | Tot reward x episode 576|
+|Epoch 2096/2449 | Loss 0.0160 | Tot reward x episode 568|
+|Epoch 2097/2449 | Loss 0.0170 | Tot reward x episode 553|
+|Epoch 2098/2449 | Loss 0.0378 | Tot reward x episode 537|
+|Epoch 2099/2449 | Loss 0.0309 | Tot reward x episode 592|
+|Epoch 2100/2449 | Loss 0.0395 | Tot reward x episode 555|
+|Epoch 2101/2449 | Loss 0.0275 | Tot reward x episode 544|
+|Epoch 2102/2449 | Loss 0.0234 | Tot reward x episode 577|
+|Epoch 2103/2449 | Loss 0.0286 | Tot reward x episode 559|
+|Epoch 2104/2449 | Loss 0.0280 | Tot reward x episode 565|
+|Epoch 2105/2449 | Loss 0.0399 | Tot reward x episode 564|
+|Epoch 2106/2449 | Loss 0.0323 | Tot reward x episode 571|
+|Epoch 2107/2449 | Loss 0.0161 | Tot reward x episode 560|
+|Epoch 2108/2449 | Loss 0.0217 | Tot reward x episode 544|
+|Epoch 2109/2449 | Loss 0.0389 | Tot reward x episode 529|
+|Epoch 2110/2449 | Loss 0.0155 | Tot reward x episode 597|
+|Epoch 2111/2449 | Loss 0.0404 | Tot reward x episode 566|
+|Epoch 2112/2449 | Loss 0.0125 | Tot reward x episode 551|
+|Epoch 2113/2449 | Loss 0.0283 | Tot reward x episode 575|
+|Epoch 2114/2449 | Loss 0.0318 | Tot reward x episode 562|
+|Epoch 2115/2449 | Loss 0.0033 | Tot reward x episode 606|
+|Epoch 2116/2449 | Loss 0.0196 | Tot reward x episode 564|
+|Epoch 2117/2449 | Loss 0.0329 | Tot reward x episode 539|
+|Epoch 2118/2449 | Loss 0.0226 | Tot reward x episode 584|
+|Epoch 2119/2449 | Loss 0.0113 | Tot reward x episode 587|
+|Epoch 2120/2449 | Loss 0.0248 | Tot reward x episode 578|
+|Epoch 2121/2449 | Loss 0.0020 | Tot reward x episode 593|
+|Epoch 2122/2449 | Loss 0.0027 | Tot reward x episode 564|
+|Epoch 2123/2449 | Loss 0.0118 | Tot reward x episode 552|
+|Epoch 2124/2449 | Loss 0.0285 | Tot reward x episode 567|
+|Epoch 2125/2449 | Loss 0.0029 | Tot reward x episode 601|
+|Epoch 2126/2449 | Loss 0.0009 | Tot reward x episode 573|
+|Epoch 2127/2449 | Loss 0.0008 | Tot reward x episode 596|
+|Epoch 2128/2449 | Loss 0.0021 | Tot reward x episode 568|
+|Epoch 2129/2449 | Loss 0.0014 | Tot reward x episode 588|
+|Epoch 2130/2449 | Loss 0.0172 | Tot reward x episode 580|
+|Epoch 2131/2449 | Loss 0.0161 | Tot reward x episode 557|
+|Epoch 2132/2449 | Loss 0.0305 | Tot reward x episode 563|
+|Epoch 2133/2449 | Loss 0.0231 | Tot reward x episode 577|
+|Epoch 2134/2449 | Loss 0.0484 | Tot reward x episode 577|
+|Epoch 2135/2449 | Loss 0.0147 | Tot reward x episode 579|
+|Epoch 2136/2449 | Loss 0.0184 | Tot reward x episode 582|
+|Epoch 2137/2449 | Loss 0.0190 | Tot reward x episode 589|
+|Epoch 2138/2449 | Loss 0.0161 | Tot reward x episode 615|
+|Epoch 2139/2449 | Loss 0.0004 | Tot reward x episode 585|
+|Epoch 2140/2449 | Loss 0.0006 | Tot reward x episode 580|
+|Epoch 2141/2449 | Loss 0.0014 | Tot reward x episode 570|
+|Epoch 2142/2449 | Loss 0.0007 | Tot reward x episode 564|
+|Epoch 2143/2449 | Loss 0.0018 | Tot reward x episode 538|
+|Epoch 2144/2449 | Loss 0.0185 | Tot reward x episode 589|
+|Epoch 2145/2449 | Loss 0.0072 | Tot reward x episode 606|
+|Epoch 2146/2449 | Loss 0.0136 | Tot reward x episode 566|
+|Epoch 2147/2449 | Loss 0.0206 | Tot reward x episode 570|
+|Epoch 2148/2449 | Loss 0.0115 | Tot reward x episode 545|
+|Epoch 2149/2449 | Loss 0.0165 | Tot reward x episode 583|
+|Epoch 2150/2449 | Loss 0.0322 | Tot reward x episode 553|
+|Epoch 2151/2449 | Loss 0.0155 | Tot reward x episode 579|
+|Epoch 2152/2449 | Loss 0.0101 | Tot reward x episode 564|
+|Epoch 2153/2449 | Loss 0.0262 | Tot reward x episode 556|
+|Epoch 2154/2449 | Loss 0.0152 | Tot reward x episode 557|
+|Epoch 2155/2449 | Loss 0.0213 | Tot reward x episode 565|
+|Epoch 2156/2449 | Loss 0.0095 | Tot reward x episode 586|
+|Epoch 2157/2449 | Loss 0.0121 | Tot reward x episode 582|
+|Epoch 2158/2449 | Loss 0.0139 | Tot reward x episode 579|
+|Epoch 2159/2449 | Loss 0.0167 | Tot reward x episode 563|
+|Epoch 2160/2449 | Loss 0.0063 | Tot reward x episode 566|
+|Epoch 2161/2449 | Loss 0.0116 | Tot reward x episode 590|
+|Epoch 2162/2449 | Loss 0.0218 | Tot reward x episode 549|
+|Epoch 2163/2449 | Loss 0.0285 | Tot reward x episode 553|
+|Epoch 2164/2449 | Loss 0.0305 | Tot reward x episode 544|
+|Epoch 2165/2449 | Loss 0.0067 | Tot reward x episode 590|
+|Epoch 2166/2449 | Loss 0.0115 | Tot reward x episode 562|
+|Epoch 2167/2449 | Loss 0.0214 | Tot reward x episode 559|
+|Epoch 2168/2449 | Loss 0.0013 | Tot reward x episode 571|
+|Epoch 2169/2449 | Loss 0.0110 | Tot reward x episode 586|
+|Epoch 2170/2449 | Loss 0.0009 | Tot reward x episode 578|
+|Epoch 2171/2449 | Loss 0.0218 | Tot reward x episode 572|
+|Epoch 2172/2449 | Loss 0.0190 | Tot reward x episode 562|
+|Epoch 2173/2449 | Loss 0.0148 | Tot reward x episode 581|
+|Epoch 2174/2449 | Loss 0.0257 | Tot reward x episode 571|
+|Epoch 2175/2449 | Loss 0.0018 | Tot reward x episode 553|
+|Epoch 2176/2449 | Loss 0.0013 | Tot reward x episode 561|
+|Epoch 2177/2449 | Loss 0.0003 | Tot reward x episode 580|
+|Epoch 2178/2449 | Loss 0.0006 | Tot reward x episode 582|
+|Epoch 2179/2449 | Loss 0.0004 | Tot reward x episode 588|
+|Epoch 2180/2449 | Loss 0.0002 | Tot reward x episode 565|
+|Epoch 2181/2449 | Loss 0.0011 | Tot reward x episode 573|
+|Epoch 2182/2449 | Loss 0.0006 | Tot reward x episode 561|
+|Epoch 2183/2449 | Loss 0.0005 | Tot reward x episode 599|
+|Epoch 2184/2449 | Loss 0.0017 | Tot reward x episode 586|
+|Epoch 2185/2449 | Loss 0.0133 | Tot reward x episode 561|
+|Epoch 2186/2449 | Loss 0.0017 | Tot reward x episode 565|
+|Epoch 2187/2449 | Loss 0.0191 | Tot reward x episode 597|
+|Epoch 2188/2449 | Loss 0.0016 | Tot reward x episode 575|
+|Epoch 2189/2449 | Loss 0.0316 | Tot reward x episode 582|
+|Epoch 2190/2449 | Loss 0.0020 | Tot reward x episode 569|
+|Epoch 2191/2449 | Loss 0.0167 | Tot reward x episode 597|
+|Epoch 2192/2449 | Loss 0.0250 | Tot reward x episode 589|
+|Epoch 2193/2449 | Loss 0.0160 | Tot reward x episode 550|
+|Epoch 2194/2449 | Loss 0.0028 | Tot reward x episode 579|
+|Epoch 2195/2449 | Loss 0.0011 | Tot reward x episode 583|
+|Epoch 2196/2449 | Loss 0.0040 | Tot reward x episode 572|
+|Epoch 2197/2449 | Loss 0.0182 | Tot reward x episode 584|
+|Epoch 2198/2449 | Loss 0.0020 | Tot reward x episode 599|
+|Epoch 2199/2449 | Loss 0.0035 | Tot reward x episode 565|
+|Epoch 2200/2449 | Loss 0.0060 | Tot reward x episode 601|
+|Epoch 2201/2449 | Loss 0.0053 | Tot reward x episode 577|
+|Epoch 2202/2449 | Loss 0.0072 | Tot reward x episode 589|
+|Epoch 2203/2449 | Loss 0.0183 | Tot reward x episode 583|
+|Epoch 2204/2449 | Loss 0.0011 | Tot reward x episode 611|
+|Epoch 2205/2449 | Loss 0.0217 | Tot reward x episode 556|
+|Epoch 2206/2449 | Loss 0.0036 | Tot reward x episode 565|
+|Epoch 2207/2449 | Loss 0.0161 | Tot reward x episode 539|
+|Epoch 2208/2449 | Loss 0.0059 | Tot reward x episode 582|
+|Epoch 2209/2449 | Loss 0.0157 | Tot reward x episode 572|
+|Epoch 2210/2449 | Loss 0.0234 | Tot reward x episode 575|
+|Epoch 2211/2449 | Loss 0.0290 | Tot reward x episode 567|
+|Epoch 2212/2449 | Loss 0.0009 | Tot reward x episode 574|
+|Epoch 2213/2449 | Loss 0.0071 | Tot reward x episode 576|
+|Epoch 2214/2449 | Loss 0.0183 | Tot reward x episode 594|
+|Epoch 2215/2449 | Loss 0.0146 | Tot reward x episode 573|
+|Epoch 2216/2449 | Loss 0.0027 | Tot reward x episode 594|
+|Epoch 2217/2449 | Loss 0.0005 | Tot reward x episode 591|
+|Epoch 2218/2449 | Loss 0.0051 | Tot reward x episode 579|
+|Epoch 2219/2449 | Loss 0.0183 | Tot reward x episode 564|
+|Epoch 2220/2449 | Loss 0.0159 | Tot reward x episode 546|
+|Epoch 2221/2449 | Loss 0.0006 | Tot reward x episode 599|
+|Epoch 2222/2449 | Loss 0.0037 | Tot reward x episode 587|
+|Epoch 2223/2449 | Loss 0.0034 | Tot reward x episode 559|
+|Epoch 2224/2449 | Loss 0.0014 | Tot reward x episode 548|
+|Epoch 2225/2449 | Loss 0.0203 | Tot reward x episode 562|
+|Epoch 2226/2449 | Loss 0.0332 | Tot reward x episode 567|
+|Epoch 2227/2449 | Loss 0.0065 | Tot reward x episode 563|
+|Epoch 2228/2449 | Loss 0.0164 | Tot reward x episode 568|
+|Epoch 2229/2449 | Loss 0.0037 | Tot reward x episode 564|
+|Epoch 2230/2449 | Loss 0.0005 | Tot reward x episode 553|
+|Epoch 2231/2449 | Loss 0.0006 | Tot reward x episode 561|
+|Epoch 2232/2449 | Loss 0.0013 | Tot reward x episode 516|
+|Epoch 2233/2449 | Loss 0.0012 | Tot reward x episode 596|
+|Epoch 2234/2449 | Loss 0.0010 | Tot reward x episode 584|
+|Epoch 2235/2449 | Loss 0.0359 | Tot reward x episode 604|
+|Epoch 2236/2449 | Loss 0.0084 | Tot reward x episode 549|
+|Epoch 2237/2449 | Loss 0.0212 | Tot reward x episode 544|
+|Epoch 2238/2449 | Loss 0.0061 | Tot reward x episode 577|
+|Epoch 2239/2449 | Loss 0.0170 | Tot reward x episode 572|
+|Epoch 2240/2449 | Loss 0.0502 | Tot reward x episode 563|
+|Epoch 2241/2449 | Loss 0.0142 | Tot reward x episode 614|
+|Epoch 2242/2449 | Loss 0.0423 | Tot reward x episode 565|
+|Epoch 2243/2449 | Loss 0.0143 | Tot reward x episode 565|
+|Epoch 2244/2449 | Loss 0.0517 | Tot reward x episode 574|
+|Epoch 2245/2449 | Loss 0.0029 | Tot reward x episode 552|
+|Epoch 2246/2449 | Loss 0.0342 | Tot reward x episode 560|
+|Epoch 2247/2449 | Loss 0.0117 | Tot reward x episode 579|
+|Epoch 2248/2449 | Loss 0.0179 | Tot reward x episode 581|
+|Epoch 2249/2449 | Loss 0.0108 | Tot reward x episode 578|
+|Epoch 2250/2449 | Loss 0.0060 | Tot reward x episode 563|
+|Epoch 2251/2449 | Loss 0.0163 | Tot reward x episode 577|
+|Epoch 2252/2449 | Loss 0.0227 | Tot reward x episode 574|
+|Epoch 2253/2449 | Loss 0.0023 | Tot reward x episode 572|
+|Epoch 2254/2449 | Loss 0.0165 | Tot reward x episode 556|
+|Epoch 2255/2449 | Loss 0.0067 | Tot reward x episode 569|
+|Epoch 2256/2449 | Loss 0.0230 | Tot reward x episode 558|
+|Epoch 2257/2449 | Loss 0.0145 | Tot reward x episode 559|
+|Epoch 2258/2449 | Loss 0.0496 | Tot reward x episode 578|
+|Epoch 2259/2449 | Loss 0.0022 | Tot reward x episode 579|
+|Epoch 2260/2449 | Loss 0.0097 | Tot reward x episode 561|
+|Epoch 2261/2449 | Loss 0.0191 | Tot reward x episode 576|
+|Epoch 2262/2449 | Loss 0.0156 | Tot reward x episode 553|
+|Epoch 2263/2449 | Loss 0.0197 | Tot reward x episode 597|
+|Epoch 2264/2449 | Loss 0.0122 | Tot reward x episode 560|
+|Epoch 2265/2449 | Loss 0.0248 | Tot reward x episode 586|
+|Epoch 2266/2449 | Loss 0.0286 | Tot reward x episode 566|
+|Epoch 2267/2449 | Loss 0.0011 | Tot reward x episode 568|
+|Epoch 2268/2449 | Loss 0.0154 | Tot reward x episode 575|
+|Epoch 2269/2449 | Loss 0.0014 | Tot reward x episode 579|
+|Epoch 2270/2449 | Loss 0.0265 | Tot reward x episode 565|
+|Epoch 2271/2449 | Loss 0.0026 | Tot reward x episode 569|
+|Epoch 2272/2449 | Loss 0.0006 | Tot reward x episode 559|
+|Epoch 2273/2449 | Loss 0.0007 | Tot reward x episode 568|
+|Epoch 2274/2449 | Loss 0.0231 | Tot reward x episode 539|
+|Epoch 2275/2449 | Loss 0.0153 | Tot reward x episode 578|
+|Epoch 2276/2449 | Loss 0.0114 | Tot reward x episode 559|
+|Epoch 2277/2449 | Loss 0.0274 | Tot reward x episode 543|
+|Epoch 2278/2449 | Loss 0.0143 | Tot reward x episode 575|
+|Epoch 2279/2449 | Loss 0.0020 | Tot reward x episode 566|
+|Epoch 2280/2449 | Loss 0.0015 | Tot reward x episode 569|
+|Epoch 2281/2449 | Loss 0.0121 | Tot reward x episode 557|
+|Epoch 2282/2449 | Loss 0.0011 | Tot reward x episode 576|
+|Epoch 2283/2449 | Loss 0.0186 | Tot reward x episode 558|
+|Epoch 2284/2449 | Loss 0.0132 | Tot reward x episode 587|
+|Epoch 2285/2449 | Loss 0.0154 | Tot reward x episode 575|
+|Epoch 2286/2449 | Loss 0.0021 | Tot reward x episode 557|
+|Epoch 2287/2449 | Loss 0.0142 | Tot reward x episode 571|
+|Epoch 2288/2449 | Loss 0.0020 | Tot reward x episode 550|
+|Epoch 2289/2449 | Loss 0.0291 | Tot reward x episode 555|
+|Epoch 2290/2449 | Loss 0.0174 | Tot reward x episode 564|
+|Epoch 2291/2449 | Loss 0.0150 | Tot reward x episode 573|
+|Epoch 2292/2449 | Loss 0.0147 | Tot reward x episode 566|
+|Epoch 2293/2449 | Loss 0.0281 | Tot reward x episode 526|
+|Epoch 2294/2449 | Loss 0.0140 | Tot reward x episode 580|
+|Epoch 2295/2449 | Loss 0.0138 | Tot reward x episode 576|
+|Epoch 2296/2449 | Loss 0.0284 | Tot reward x episode 573|
+|Epoch 2297/2449 | Loss 0.0069 | Tot reward x episode 583|
+|Epoch 2298/2449 | Loss 0.0050 | Tot reward x episode 570|
+|Epoch 2299/2449 | Loss 0.0147 | Tot reward x episode 568|
+|Epoch 2300/2449 | Loss 0.0182 | Tot reward x episode 594|
+|Epoch 2301/2449 | Loss 0.0055 | Tot reward x episode 565|
+|Epoch 2302/2449 | Loss 0.0150 | Tot reward x episode 578|
+|Epoch 2303/2449 | Loss 0.0260 | Tot reward x episode 562|
+|Epoch 2304/2449 | Loss 0.0199 | Tot reward x episode 548|
+|Epoch 2305/2449 | Loss 0.0163 | Tot reward x episode 580|
+|Epoch 2306/2449 | Loss 0.0232 | Tot reward x episode 519|
+|Epoch 2307/2449 | Loss 0.0015 | Tot reward x episode 585|
+|Epoch 2308/2449 | Loss 0.0043 | Tot reward x episode 575|
+|Epoch 2309/2449 | Loss 0.0082 | Tot reward x episode 555|
+|Epoch 2310/2449 | Loss 0.0214 | Tot reward x episode 588|
+|Epoch 2311/2449 | Loss 0.0044 | Tot reward x episode 553|
+|Epoch 2312/2449 | Loss 0.0210 | Tot reward x episode 530|
+|Epoch 2313/2449 | Loss 0.0161 | Tot reward x episode 544|
+|Epoch 2314/2449 | Loss 0.0195 | Tot reward x episode 582|
+|Epoch 2315/2449 | Loss 0.0140 | Tot reward x episode 558|
+|Epoch 2316/2449 | Loss 0.0128 | Tot reward x episode 590|
+|Epoch 2317/2449 | Loss 0.0217 | Tot reward x episode 545|
+|Epoch 2318/2449 | Loss 0.0161 | Tot reward x episode 566|
+|Epoch 2319/2449 | Loss 0.0271 | Tot reward x episode 562|
+|Epoch 2320/2449 | Loss 0.0198 | Tot reward x episode 560|
+|Epoch 2321/2449 | Loss 0.0008 | Tot reward x episode 582|
+|Epoch 2322/2449 | Loss 0.0273 | Tot reward x episode 567|
+|Epoch 2323/2449 | Loss 0.0142 | Tot reward x episode 560|
+|Epoch 2324/2449 | Loss 0.0239 | Tot reward x episode 559|
+|Epoch 2325/2449 | Loss 0.0185 | Tot reward x episode 563|
+|Epoch 2326/2449 | Loss 0.0152 | Tot reward x episode 567|
+|Epoch 2327/2449 | Loss 0.0251 | Tot reward x episode 554|
+|Epoch 2328/2449 | Loss 0.0428 | Tot reward x episode 543|
+|Epoch 2329/2449 | Loss 0.0023 | Tot reward x episode 578|
+|Epoch 2330/2449 | Loss 0.0192 | Tot reward x episode 590|
+|Epoch 2331/2449 | Loss 0.0016 | Tot reward x episode 572|
+|Epoch 2332/2449 | Loss 0.0245 | Tot reward x episode 570|
+|Epoch 2333/2449 | Loss 0.0134 | Tot reward x episode 563|
+|Epoch 2334/2449 | Loss 0.0205 | Tot reward x episode 537|
+|Epoch 2335/2449 | Loss 0.0014 | Tot reward x episode 593|
+|Epoch 2336/2449 | Loss 0.0524 | Tot reward x episode 528|
+|Epoch 2337/2449 | Loss 0.0195 | Tot reward x episode 567|
+|Epoch 2338/2449 | Loss 0.0052 | Tot reward x episode 590|
+|Epoch 2339/2449 | Loss 0.0138 | Tot reward x episode 589|
+|Epoch 2340/2449 | Loss 0.0318 | Tot reward x episode 577|
+|Epoch 2341/2449 | Loss 0.0149 | Tot reward x episode 555|
+|Epoch 2342/2449 | Loss 0.0155 | Tot reward x episode 566|
+|Epoch 2343/2449 | Loss 0.0194 | Tot reward x episode 575|
+|Epoch 2344/2449 | Loss 0.0186 | Tot reward x episode 573|
+|Epoch 2345/2449 | Loss 0.0200 | Tot reward x episode 545|
+|Epoch 2346/2449 | Loss 0.0162 | Tot reward x episode 570|
+|Epoch 2347/2449 | Loss 0.0319 | Tot reward x episode 547|
+|Epoch 2348/2449 | Loss 0.0052 | Tot reward x episode 591|
+|Epoch 2349/2449 | Loss 0.0474 | Tot reward x episode 525|
+|Epoch 2350/2449 | Loss 0.0210 | Tot reward x episode 572|
+|Epoch 2351/2449 | Loss 0.0281 | Tot reward x episode 549|
+|Epoch 2352/2449 | Loss 0.0032 | Tot reward x episode 568|
+|Epoch 2353/2449 | Loss 0.0273 | Tot reward x episode 567|
+|Epoch 2354/2449 | Loss 0.0284 | Tot reward x episode 591|
+|Epoch 2355/2449 | Loss 0.0025 | Tot reward x episode 553|
+|Epoch 2356/2449 | Loss 0.0181 | Tot reward x episode 587|
+|Epoch 2357/2449 | Loss 0.0163 | Tot reward x episode 565|
+|Epoch 2358/2449 | Loss 0.0025 | Tot reward x episode 602|
+|Epoch 2359/2449 | Loss 0.0181 | Tot reward x episode 604|
+|Epoch 2360/2449 | Loss 0.0237 | Tot reward x episode 555|
+|Epoch 2361/2449 | Loss 0.0169 | Tot reward x episode 560|
+|Epoch 2362/2449 | Loss 0.0210 | Tot reward x episode 557|
+|Epoch 2363/2449 | Loss 0.0136 | Tot reward x episode 574|
+|Epoch 2364/2449 | Loss 0.0442 | Tot reward x episode 547|
+|Epoch 2365/2449 | Loss 0.0019 | Tot reward x episode 554|
+|Epoch 2366/2449 | Loss 0.0111 | Tot reward x episode 560|
+|Epoch 2367/2449 | Loss 0.0222 | Tot reward x episode 593|
+|Epoch 2368/2449 | Loss 0.0019 | Tot reward x episode 580|
+|Epoch 2369/2449 | Loss 0.0070 | Tot reward x episode 592|
+|Epoch 2370/2449 | Loss 0.0135 | Tot reward x episode 579|
+|Epoch 2371/2449 | Loss 0.0135 | Tot reward x episode 570|
+|Epoch 2372/2449 | Loss 0.0096 | Tot reward x episode 578|
+|Epoch 2373/2449 | Loss 0.0009 | Tot reward x episode 558|
+|Epoch 2374/2449 | Loss 0.0128 | Tot reward x episode 569|
+|Epoch 2375/2449 | Loss 0.0329 | Tot reward x episode 561|
+|Epoch 2376/2449 | Loss 0.0165 | Tot reward x episode 570|
+|Epoch 2377/2449 | Loss 0.0287 | Tot reward x episode 579|
+|Epoch 2378/2449 | Loss 0.0109 | Tot reward x episode 559|
+|Epoch 2379/2449 | Loss 0.0009 | Tot reward x episode 581|
+|Epoch 2380/2449 | Loss 0.0237 | Tot reward x episode 553|
+|Epoch 2381/2449 | Loss 0.0016 | Tot reward x episode 606|
+|Epoch 2382/2449 | Loss 0.0015 | Tot reward x episode 584|
+|Epoch 2383/2449 | Loss 0.0040 | Tot reward x episode 543|
+|Epoch 2384/2449 | Loss 0.0119 | Tot reward x episode 566|
+|Epoch 2385/2449 | Loss 0.0204 | Tot reward x episode 579|
+|Epoch 2386/2449 | Loss 0.0010 | Tot reward x episode 594|
+|Epoch 2387/2449 | Loss 0.0054 | Tot reward x episode 598|
+|Epoch 2388/2449 | Loss 0.0119 | Tot reward x episode 559|
+|Epoch 2389/2449 | Loss 0.0165 | Tot reward x episode 549|
+|Epoch 2390/2449 | Loss 0.0085 | Tot reward x episode 584|
+|Epoch 2391/2449 | Loss 0.0139 | Tot reward x episode 574|
+|Epoch 2392/2449 | Loss 0.0183 | Tot reward x episode 554|
+|Epoch 2393/2449 | Loss 0.0143 | Tot reward x episode 569|
+|Epoch 2394/2449 | Loss 0.0190 | Tot reward x episode 550|
+|Epoch 2395/2449 | Loss 0.0110 | Tot reward x episode 582|
+|Epoch 2396/2449 | Loss 0.0040 | Tot reward x episode 568|
+|Epoch 2397/2449 | Loss 0.0198 | Tot reward x episode 573|
+|Epoch 2398/2449 | Loss 0.0174 | Tot reward x episode 553|
+|Epoch 2399/2449 | Loss 0.0013 | Tot reward x episode 596|
+|Epoch 2400/2449 | Loss 0.0010 | Tot reward x episode 600|
+|Epoch 2401/2449 | Loss 0.0010 | Tot reward x episode 598|
+|Epoch 2402/2449 | Loss 0.0010 | Tot reward x episode 575|
+|Epoch 2403/2449 | Loss 0.0013 | Tot reward x episode 577|
+|Epoch 2404/2449 | Loss 0.0287 | Tot reward x episode 578|
+|Epoch 2405/2449 | Loss 0.0116 | Tot reward x episode 560|
+|Epoch 2406/2449 | Loss 0.0161 | Tot reward x episode 567|
+|Epoch 2407/2449 | Loss 0.0142 | Tot reward x episode 561|
+|Epoch 2408/2449 | Loss 0.0113 | Tot reward x episode 578|
+|Epoch 2409/2449 | Loss 0.0269 | Tot reward x episode 564|
+|Epoch 2410/2449 | Loss 0.0240 | Tot reward x episode 561|
+|Epoch 2411/2449 | Loss 0.0187 | Tot reward x episode 561|
+|Epoch 2412/2449 | Loss 0.0161 | Tot reward x episode 582|
+|Epoch 2413/2449 | Loss 0.0040 | Tot reward x episode 565|
+|Epoch 2414/2449 | Loss 0.0136 | Tot reward x episode 546|
+|Epoch 2415/2449 | Loss 0.0021 | Tot reward x episode 570|
+|Epoch 2416/2449 | Loss 0.0111 | Tot reward x episode 579|
+|Epoch 2417/2449 | Loss 0.0192 | Tot reward x episode 583|
+|Epoch 2418/2449 | Loss 0.0168 | Tot reward x episode 560|
+|Epoch 2419/2449 | Loss 0.0295 | Tot reward x episode 569|
+|Epoch 2420/2449 | Loss 0.0102 | Tot reward x episode 581|
+|Epoch 2421/2449 | Loss 0.0238 | Tot reward x episode 578|
+|Epoch 2422/2449 | Loss 0.0279 | Tot reward x episode 601|
+|Epoch 2423/2449 | Loss 0.0087 | Tot reward x episode 584|
+|Epoch 2424/2449 | Loss 0.0261 | Tot reward x episode 573|
+|Epoch 2425/2449 | Loss 0.0280 | Tot reward x episode 573|
+|Epoch 2426/2449 | Loss 0.0191 | Tot reward x episode 548|
+|Epoch 2427/2449 | Loss 0.0143 | Tot reward x episode 570|
+|Epoch 2428/2449 | Loss 0.0367 | Tot reward x episode 551|
+|Epoch 2429/2449 | Loss 0.0010 | Tot reward x episode 622|
+|Epoch 2430/2449 | Loss 0.0100 | Tot reward x episode 543|
+|Epoch 2431/2449 | Loss 0.0196 | Tot reward x episode 569|
+|Epoch 2432/2449 | Loss 0.0208 | Tot reward x episode 561|
+|Epoch 2433/2449 | Loss 0.0010 | Tot reward x episode 575|
+|Epoch 2434/2449 | Loss 0.0021 | Tot reward x episode 569|
+|Epoch 2435/2449 | Loss 0.0118 | Tot reward x episode 548|
+|Epoch 2436/2449 | Loss 0.0122 | Tot reward x episode 571|
+|Epoch 2437/2449 | Loss 0.0157 | Tot reward x episode 577|
+|Epoch 2438/2449 | Loss 0.0181 | Tot reward x episode 573|
+|Epoch 2439/2449 | Loss 0.0120 | Tot reward x episode 544|
+|Epoch 2440/2449 | Loss 0.0188 | Tot reward x episode 564|
+|Epoch 2441/2449 | Loss 0.0256 | Tot reward x episode 556|
+|Epoch 2442/2449 | Loss 0.0199 | Tot reward x episode 587|
+|Epoch 2443/2449 | Loss 0.0172 | Tot reward x episode 573|
+|Epoch 2444/2449 | Loss 0.0309 | Tot reward x episode 552|
+|Epoch 2445/2449 | Loss 0.0159 | Tot reward x episode 581|
+|Epoch 2446/2449 | Loss 0.0170 | Tot reward x episode 551|
+|Epoch 2447/2449 | Loss 0.0218 | Tot reward x episode 567|
+|Epoch 2448/2449 | Loss 0.0118 | Tot reward x episode 559|
+Press Ctrl+C to stop WebAgg server
+
+########################################################################
+# Colfax Cluster
+# End of output for job 58858.c009
+# Date: Fri Apr 13 21:40:53 PDT 2018
+########################################################################
+
