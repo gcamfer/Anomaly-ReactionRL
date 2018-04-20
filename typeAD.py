@@ -39,7 +39,7 @@ class data_cls:
         self.test_path = "../datasets/formated/test_data_type.data"
         self.loaded = False
         self.train_test = train_test
-        self.second_path = kwargs.get('join_path', '../datasets/KDDTest+.txt')
+        self.second_path = kwargs.get('join_path', '../datasets/corrected')
 
         
         self.attack_types = ['normal','DoS','Probe','R2L','U2R']
@@ -487,11 +487,10 @@ if __name__ == "__main__":
     
 
     # Initialization of the enviroment
-    env = RLenv(kdd_path,'join',batch_size,join_path='../datasets/corrected')
+    env = RLenv(kdd_path,'train',batch_size,join_path='../datasets/corrected')
     
     iterations_episode = 100
     num_episodes = int(env.data_shape[0]/(iterations_episode*batch_size)/4)
-	
 	
     valid_actions = list(range(len(env.attack_types))) # only detect type of attack
     num_actions = len(valid_actions)

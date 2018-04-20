@@ -33,7 +33,7 @@ class data_cls:
         self.test_path = "../datasets/formated/test_data.data"
         self.train_test = train_test
         
-        self.second_path = kwargs.get('join_path', '../datasets/KDDTest+.txt')
+        self.second_path = kwargs.get('join_path', '../datasets/corrected')
         
         if (not path):
             print("Path: not path name provided", flush = True)

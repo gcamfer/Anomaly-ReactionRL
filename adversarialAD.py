@@ -39,7 +39,7 @@ class data_cls:
         self.test_path = "../datasets/formated/test_data_multi.data"
         self.loaded = False
         self.train_test = train_test
-        self.second_path = kwargs.get('join_path', '../datasets/KDDTest+.txt')
+        self.second_path = kwargs.get('join_path', '../datasets/corrected')
         
         self.attack_types = ['normal','DoS','Probe','R2L','U2R']
         self.attack_names = []
@@ -89,6 +89,8 @@ class data_cls:
                 'sqlattack.': 'U2R',
                 'xterm.': 'U2R'
                 }
+        self.all_attack_names = list(self.attack_map.keys())
+
         
         # If path is not provided system out error
         if (not path):
@@ -143,7 +145,9 @@ class data_cls:
             # Create a list with the existent attacks in the df
             for att in self.attack_map:
                 if att in self.df.columns:
-                    self.attack_names.append(att)
+                # Add only if there is exist at least 1
+                    if np.sum(self.df[att].values) > 1:
+                        self.attack_names.append(att)
             
             
             
@@ -175,14 +179,6 @@ class data_cls:
                 
                 test_df.to_csv(self.test_path,sep=',',index=False)
                 self.df.to_csv(self.formated_path,sep=',',index=False)
-            
-            
-            
-            
-            
-            
-            
-            
             
             
             
@@ -221,7 +217,7 @@ class data_cls:
         self.index += batch_size
         labels = batch[self.attack_names]
         
-        batch.drop(self.attack_names,axis=1,inplace=True)
+        batch = batch.drop(self.all_attack_names,axis=1)
             
         return batch,labels
 
@@ -256,10 +252,10 @@ class data_cls:
          # Create a list with the existent attacks in the df
         for att in self.attack_map:
             if att in self.df.columns:
-                self.attack_names.append(att)
+                # Add only if there is exist at least 1
+                if np.sum(self.df[att].values) > 1:
+                    self.attack_names.append(att)
         #self.headers = list(self.df)
-
-
         
 
 
@@ -274,6 +270,9 @@ class QNetwork():
         """
         Initialize the network with the provided shape
         """
+        self.obs_size = obs_size
+        self.num_actions = num_actions
+        
         # Network arquitecture
         self.model = Sequential()
         # Add imput layer
@@ -327,22 +326,22 @@ class Epsilon_greedy(Policy):
     def __init__(self,estimator ,num_actions ,batch_size,epsilon,decay_rate, epoch_length):
         Policy.__init__(self, num_actions, estimator,batch_size)
         self.name = "Epsilon Greedy"
+        
         if (epsilon is None or epsilon < 0 or epsilon > 1):
             print("EpsilonGreedy: Invalid value of epsilon", flush = True)
             sys.exit(0)
         self.epsilon = epsilon
+        self.actions = list(range(num_actions))
         self.step_counter = 0
         self.epoch_length = epoch_length
         self.batch_size = batch_size
         self.decay_rate = decay_rate
         
-#        # if epsilon set to 1, it will be decayed over time
-#        if self.epsilon == 1:
-#            self.epsilon_decay = True
-#        else:
-#            self.epsilon_decay = False
-        # Always decay
-        self.epsilon_decay = False
+        #if epsilon is up 0.1, it will be decayed over time
+        if self.epsilon > 0.1:
+            self.epsilon_decay = True
+        else:
+            self.epsilon_decay = False
     
     def get_actions(self,states):
         # get next action
@@ -374,7 +373,7 @@ class Agent(object):
         self.num_actions = len(actions)
         self.obs_size = obs_size
         
-        self.epsilon = kwargs.get('epsilon', .01)
+        self.epsilon = kwargs.get('epsilon', 1)
         self.gamma = kwargs.get('gamma', .001)
         self.batch_size = kwargs.get('batch_size', 1)
         self.epoch_length = kwargs.get('epoch_length', 100)
@@ -394,17 +393,18 @@ class Agent(object):
         
     def update_model(self,states,actions,next_states,reward):
         # Compute Q targets
-        Q_prime = self.model_network.predict(next_states)
-        indx = np.argmax(Q_prime,axis=1)
-        sx = np.arange(len(indx))
+        Q_prime = self.model_network.predict(next_states,self.batch_size)
+        
+        next_actions = np.argmax(Q_prime,axis=1)
+        sx = np.arange(len(next_actions))
         # Compute Q(s,a)
         Q = self.model_network.predict(states)
-        
         # Q-learning update
-        targets = reward + self.gamma * Q[sx,indx]   
-        Q[sx,indx] = targets  
+        # target = reward + gamma * max_a'{Q(next_state,next_action))}
+        targets = reward + self.gamma * Q[sx,next_actions]   
+        Q[sx,next_actions] = targets  
         
-        loss = self.model_network.model.train_on_batch(states,Q)
+        loss = self.model_network.model.train_on_batch(states,Q)        
         
         return loss    
 
@@ -488,12 +488,14 @@ class RLenv(data_cls):
     '''    
     def act(self,defender_actions,attack_actions):
         # Clear previous rewards        
-        self.def_reward = np.zeros(self.batch_size,dtype=np.int32)
+        self.def_reward = np.ones(self.batch_size,dtype=np.int32)
         self.att_reward = np.ones(self.batch_size,dtype=np.int32)
         
-        self.def_reward = (defender_actions==attack_actions)*1
-#       self.att_reward = (defender_actions==attack_actions)*-1
-        self.att_reward -= self.def_reward
+        attack = [self.attack_types.index(self.attack_map[self.attack_names[att]]) for att in attack_actions]
+        
+        self.def_reward = (defender_actions!=attack)*-1
+        self.att_reward = (defender_actions==attack)*-1
+        #self.att_reward -= self.def_reward
 
 #        # Actualize new rewards == get_reward
 #        for indx,a in enumerate(defender_actions):
@@ -516,14 +518,14 @@ class RLenv(data_cls):
 #                self.def_reward[indx] = -1
 #                self.att_reward[indx] = 1
          
-        for act in defender_actions:
-            self.def_estimated_labels[act] +=1
-#        for act in attack_actions:
-#            self.def_true_labels[self.attack_types.index(self.attack_map[self.attack_names[act]])] +=1
+       
+        self.def_estimated_labels += np.bincount(defender_actions,minlength=len(self.attack_types))
+        for act in attack_actions:
+            self.def_true_labels[self.attack_types.index(self.attack_map[self.attack_names[act]])] += 1
         
-        for att, n in (np.sum(self.labels)).iteritems():
-            self.def_true_labels[self.attack_types.index(self.attack_map[att])] += n
-            
+#        self.def_true_labels += np.bincount(self.attack_types.index(self.attack_map[self.attack_names[attack_actions]]),
+#                                            minlength=len(self.attack_types))
+        
 #        # Update statistics
 #        for att in attack_actions:
 #            self.att_true_labels[att] += 1
@@ -532,15 +534,8 @@ class RLenv(data_cls):
         
         # Get new state and new true values 
         #self._update_state()
-        acquired = False
-        other = False
-        while not acquired: # Maybe the attack is not in the train but exist in test
-            attack_actions = attacker_agent.act(self.states)
-            if other:
-                attack_actions = np.random.randint(0, len(self.attack_names),self.batch_size)
-            self.states,acquired = env.get_states(attack_actions)
-            if not acquired: # Need other action randomly
-                other = True
+        attack_actions = attacker_agent.act(self.states)
+        self.states = env.get_states(attack_actions)
         
         # Done allways false in this continuous task       
         self.done = False
@@ -558,26 +553,18 @@ class RLenv(data_cls):
     '''
     def get_states(self,attacker_actions):
         first = True
-        acquired = True
         for attack in attacker_actions:
             if first:
-                if np.sum([self.df[self.attack_names[attack]]])==0:
-                    acquired = False
-                    break
                 minibatch = (self.df[self.df[self.attack_names[attack]]==1].sample(1))
                 first = False
             else:
-                if np.sum([self.df[self.attack_names[attack]]])==0:
-                    acquired = False
-                    break
                 minibatch=minibatch.append(self.df[self.df[self.attack_names[attack]]==1].sample(1))
         
-        if acquired:
-            self.labels = minibatch[self.attack_names]
-            minibatch.drop(self.attack_names,axis=1,inplace=True)
-            self.states = minibatch
+        self.labels = minibatch[self.attack_names]
+        minibatch.drop(self.all_attack_names,axis=1,inplace=True)
+        self.states = minibatch
         
-        return self.states,acquired
+        return self.states
 
 
 
@@ -597,7 +584,7 @@ if __name__ == "__main__":
     kdd_path = '../datasets/kddcup.data'
 
     
-    batch_size = 5
+    batch_size = 10
 
 
     
@@ -611,9 +598,9 @@ if __name__ == "__main__":
     env = RLenv(kdd_path,'join',batch_size,join_path='../datasets/corrected')
     
     # obs_size = size of the state
-    obs_size = env.data_shape[1]-len(env.attack_names)
+    obs_size = env.data_shape[1]-len(env.all_attack_names)
     
-    iterations_episode = 10
+    iterations_episode = 100
     num_episodes = int(env.data_shape[0]/(iterations_episode*batch_size)/10)
 
     
@@ -623,11 +610,12 @@ if __name__ == "__main__":
     defender_valid_actions = list(range(len(env.attack_types))) # only detect type of attack
     defender_num_actions = len(defender_valid_actions)    
 	
-    def_decay_rate = 0.99
+    def_epsilon = .5 # exploration
     def_gamma = 0.001
+    def_decay_rate = 0.99
+    
     def_hidden_size = 100
     def_hidden_layers = 3
-    def_epsilon = .2  # exploration
 
     
     defender_agent = DefenderAgent(defender_valid_actions,obs_size,"EpsilonGreedy",
@@ -647,9 +635,10 @@ if __name__ == "__main__":
     attack_valid_actions = list(range(len(env.attack_names)))
     attack_num_actions = len(attack_valid_actions)
 	
-    att_epsilon = 0.01
-    att_gamma = 0.2
-    att_decay_rate = 1
+    att_epsilon = 0.1
+    att_gamma = 0.002
+    att_decay_rate = 0.99
+    
     att_hidden_layers = 100
     att_hidden_size = 3
     
@@ -706,17 +695,9 @@ if __name__ == "__main__":
         states = env.reset()
         
         # Get actions for actual states following the policy
-        # Acquired an other needed to avoid attack with an action that 
-        # not exists in the train/test dataset
-        acquired = False
-        other = False
-        while not acquired:
-            attack_actions = attacker_agent.act(states)
-            if other:
-                attack_actions = np.random.randint(0, attack_num_actions,batch_size)
-            states,acquired = env.get_states(attack_actions)    
-            if not acquired: # Need other action randomly
-                other = True
+        attack_actions = attacker_agent.act(states)
+        states = env.get_states(attack_actions)    
+
         
         
         
@@ -774,7 +755,7 @@ if __name__ == "__main__":
                 att_loss, att_total_reward_by_episode))
         
         
-        print("|Def Estimated: {}| Def Labels: {}".format(env.def_estimated_labels,
+        print("|Def Estimated: {}| Att Labels: {}".format(env.def_estimated_labels,
               env.def_true_labels))
         
     # Save trained model weights and architecture, used in test

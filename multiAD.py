@@ -36,7 +36,7 @@ class data_cls:
         self.test_path = "../datasets/formated/test_data_multi.data"
         self.loaded = False
         self.train_test = train_test
-        self.second_path = kwargs.get('join_path', '../datasets/KDDTest+.txt')
+        self.second_path = kwargs.get('join_path', '../datasets/corrected')
 
         
         if (not path):
@@ -243,7 +243,6 @@ if __name__ == "__main__":
     
     iterations_episode = 100
     num_episodes = int(env.state_shape[0]/(iterations_episode*batch_size)/10)
-
 
     valid_actions = list(range(len(env.attack_names)))
     num_actions = len(valid_actions)
