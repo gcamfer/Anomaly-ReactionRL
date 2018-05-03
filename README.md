@@ -12,4 +12,4 @@ multiAD.py presents the multiple anomaly detection selecting one of all availabl
 
 tipeAD.py selects only the attack type between normal, DoS, Probe, R2L, U2R.
 
-adversarialAD.py pretends to use the beneficts of adversarial to send most optimal attacks and train a better defender
+adversarialAD.py pretends to use the benefits of adversarial to send most optimal attacks and train a better defender
