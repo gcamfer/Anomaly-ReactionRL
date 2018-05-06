@@ -378,7 +378,8 @@ class Agent(object):
         self.batch_size = kwargs.get('batch_size', 1)
         self.epoch_length = kwargs.get('epoch_length', 100)
         self.decay_rate = kwargs.get('decay_rate',0.99)
-        
+        self.memory = ReplayMemory(self.obs_size, kwargs.get('mem_size', 10))
+
         
         self.model_network = QNetwork(self.obs_size, self.num_actions,
                                       kwargs.get('batch_size',1),
@@ -391,7 +392,17 @@ class Agent(object):
                                          self.decay_rate,self.epoch_length)
         
         
-    def update_model(self,states,actions,next_states,reward):
+    def learn(self, states, actions,next_states, reward, done):
+        self.memory.observe(states, actions, reward, done)
+        # start training after 1 epoch
+        if self.step_counter > self.epoch_length:
+            self.current_loss = self.update_model()
+            
+        
+    def update_model(self):
+        
+        (state, action, reward, next_states, done) = self.memory.sample_minibatch(self.minibatch_size)
+
         # Compute Q targets
         Q_prime = self.model_network.predict(next_states,self.batch_size)
         
@@ -568,6 +579,43 @@ class RLenv(data_cls):
 
 
 
+class ReplayMemory(object):
+    """Implements basic replay memory"""
+
+    def __init__(self, observation_size, max_size):
+        self.observation_size = observation_size
+        self.num_observed = 0
+        self.max_size = max_size
+        self.samples = {
+                 'obs'      : np.zeros(self.max_size * 1 * self.observation_size,
+                                       dtype=np.float32).reshape(self.max_size, 1, self.observation_size),
+                 'action'   : np.zeros(self.max_size * 1, dtype=np.int16).reshape(self.max_size, 1),
+                 'reward'   : np.zeros(self.max_size * 1).reshape(self.max_size, 1),
+                 'terminal' : np.zeros(self.max_size * 1, dtype=np.int16).reshape(self.max_size, 1),
+               }
+
+    def observe(self, state, action, reward, done):
+        index = self.num_observed % self.max_size
+        self.samples['obs'][index, :] = state
+        self.samples['action'][index, :] = action
+        self.samples['reward'][index, :] = reward
+        self.samples['terminal'][index, :] = done
+
+        self.num_observed += 1
+
+    def sample_minibatch(self, minibatch_size):
+        max_index = min(self.num_observed, self.max_size) - 1
+        sampled_indices = np.random.randint(max_index, size=minibatch_size)
+
+        s      = np.asarray(self.samples['obs'][sampled_indices, :], dtype=np.float32)
+        s_next = np.asarray(self.samples['obs'][sampled_indices+1, :], dtype=np.float32)
+
+        a      = self.samples['action'][sampled_indices].reshape(minibatch_size)
+        r      = self.samples['reward'][sampled_indices].reshape((minibatch_size, 1))
+        done   = self.samples['terminal'][sampled_indices].reshape((minibatch_size, 1))
+
+        return (s, a, r, s_next, done)
+
 
 
 
@@ -585,10 +633,6 @@ if __name__ == "__main__":
 
     
     batch_size = 10
-
-
-    
-    
     
     
     # dataset for prgram
@@ -601,7 +645,7 @@ if __name__ == "__main__":
     obs_size = env.data_shape[1]-len(env.all_attack_names)
     
     iterations_episode = 100
-    num_episodes = int(env.data_shape[0]/(iterations_episode*batch_size)/10)
+    num_episodes = int(env.data_shape[0]/(iterations_episode*batch_size)/1)
 
     
     '''
@@ -718,13 +762,15 @@ if __name__ == "__main__":
             if next_states.shape[0] != batch_size:
                 break # finished df
             
+            attacker_agent.learn(states,attack_actions,next_states,att_reward,done)
+            defender_agent.learn(states,defender_actions,next_states,def_reward,done)
             
             act_end_time = time.time()
             
             # Train network, update loss
-            def_loss += defender_agent.update_model(states,defender_actions,next_states,def_reward)
+            def_loss += defender_agent.update_model()
             
-            att_loss += attacker_agent.update_model(states,attack_actions,next_states,att_reward)
+            att_loss += attacker_agent.update_model()
 
             update_end_time = time.time()
 
