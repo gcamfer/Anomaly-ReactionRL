@@ -346,10 +346,11 @@ class Epsilon_greedy(Policy):
     def get_actions(self,states):
         # get next action
         if np.random.rand() <= self.epsilon:
-            actions = np.random.randint(0, self.num_actions,self.batch_size)
+            actions = np.random.randint(0, self.num_actions,states.shape[0])
         else:
-            self.Q = self.estimator.predict(states,self.batch_size)
-            actions = np.argmax(self.Q,axis=1)
+            self.Q = self.estimator.predict(states,states.shape[0])
+            best_actions = np.argwhere(self.Q[0] == np.amax(self.Q[0]))
+            actions = best_actions[np.random.choice(len(best_actions))]
             
         self.step_counter += 1 
         # decay epsilon after each epoch
@@ -376,6 +377,7 @@ class Agent(object):
         self.epsilon = kwargs.get('epsilon', 1)
         self.gamma = kwargs.get('gamma', .001)
         self.batch_size = kwargs.get('batch_size', 1)
+        self.minibatch_size = kwargs.get('minibatch_size', 2)
         self.epoch_length = kwargs.get('epoch_length', 100)
         self.decay_rate = kwargs.get('decay_rate',0.99)
         self.memory = ReplayMemory(self.obs_size, kwargs.get('mem_size', 10))
@@ -393,26 +395,24 @@ class Agent(object):
         
         
     def learn(self, states, actions,next_states, reward, done):
-        self.memory.observe(states, actions, reward, done)
-        # start training after 1 epoch
-        if self.step_counter > self.epoch_length:
-            self.current_loss = self.update_model()
-            
+        self.memory.observe(states, actions, reward, done)            
         
     def update_model(self):
         
-        (state, action, reward, next_states, done) = self.memory.sample_minibatch(self.minibatch_size)
-
+        (states, action, reward, next_states, done) = self.memory.sample_minibatch(self.minibatch_size)
+        next_actions = []
         # Compute Q targets
-        Q_prime = self.model_network.predict(next_states,self.batch_size)
-        
-        next_actions = np.argmax(Q_prime,axis=1)
+        Q_prime = self.model_network.predict(next_states,self.minibatch_size)
+        # TODO: fix performance in this loop
+        for row in range(Q_prime.shape[0]):
+            best_next_actions = np.argwhere(Q_prime[row] == np.amax(Q_prime[row]))
+            next_actions.append(best_next_actions[np.random.choice(len(best_next_actions))].item())
         sx = np.arange(len(next_actions))
         # Compute Q(s,a)
-        Q = self.model_network.predict(states)
+        Q = self.model_network.predict(states,self.minibatch_size)
         # Q-learning update
         # target = reward + gamma * max_a'{Q(next_state,next_action))}
-        targets = reward + self.gamma * Q[sx,next_actions]   
+        targets = reward[:,0] + self.gamma * Q[sx,next_actions] * (1-done)[:,0]   
         Q[sx,next_actions] = targets  
         
         loss = self.model_network.model.train_on_batch(states,Q)        
@@ -588,7 +588,7 @@ class ReplayMemory(object):
         self.max_size = max_size
         self.samples = {
                  'obs'      : np.zeros(self.max_size * 1 * self.observation_size,
-                                       dtype=np.float32).reshape(self.max_size, 1, self.observation_size),
+                                       dtype=np.float32).reshape(self.max_size,self.observation_size),
                  'action'   : np.zeros(self.max_size * 1, dtype=np.int16).reshape(self.max_size, 1),
                  'reward'   : np.zeros(self.max_size * 1).reshape(self.max_size, 1),
                  'terminal' : np.zeros(self.max_size * 1, dtype=np.int16).reshape(self.max_size, 1),
@@ -632,7 +632,7 @@ if __name__ == "__main__":
     kdd_path = '../datasets/kddcup.data'
 
     
-    batch_size = 10
+    batch_size = 1
     
     
     # dataset for prgram
@@ -653,6 +653,8 @@ if __name__ == "__main__":
     '''
     defender_valid_actions = list(range(len(env.attack_types))) # only detect type of attack
     defender_num_actions = len(defender_valid_actions)    
+    
+    minibatch_size = 2
 	
     def_epsilon = .5 # exploration
     def_gamma = 0.001
@@ -669,7 +671,8 @@ if __name__ == "__main__":
                           decay_rate = def_decay_rate,
                           gamma = def_gamma,
                           hidden_size=def_hidden_size,
-                          hidden_layers=def_hidden_layers)    
+                          hidden_layers=def_hidden_layers,
+                          minibatch_size = minibatch_size)    
     
     '''
     Definition for the attacker agent.
@@ -693,7 +696,8 @@ if __name__ == "__main__":
                           decay_rate = att_decay_rate,
                           gamma = att_gamma,
                           hidden_size=att_hidden_size,
-                          hidden_layers=att_hidden_layers) 
+                          hidden_layers=att_hidden_layers,
+                          minibatch_size = minibatch_size)
     
     
     
@@ -767,10 +771,10 @@ if __name__ == "__main__":
             
             act_end_time = time.time()
             
-            # Train network, update loss
-            def_loss += defender_agent.update_model()
-            
-            att_loss += attacker_agent.update_model()
+            # Train network, update loss after at least minibatch_learns
+            if epoch*iterations_episode + i_iteration >= minibatch_size:
+                def_loss += defender_agent.update_model()
+                att_loss += attacker_agent.update_model()
 
             update_end_time = time.time()
 
