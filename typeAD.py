@@ -243,7 +243,7 @@ class QNetwork():
     Represents the global model for the table
     """
 
-    def __init__(self,obs_size,num_actions,batch_size=1,hidden_size = 100,
+    def __init__(self,obs_size,num_actions,hidden_size = 100,
                  hidden_layers = 1,learning_rate=.2):
         """
         Initialize the network with the provided shape
@@ -292,14 +292,13 @@ class QNetwork():
 
 #Policy interface
 class Policy:
-    def __init__(self, num_actions, estimator,batch_size):
+    def __init__(self, num_actions, estimator):
         self.num_actions = num_actions
         self.estimator = estimator
-        self.batch_size = batch_size
     
 class Epsilon_greedy(Policy):
-    def __init__(self,estimator ,num_actions ,batch_size,epsilon,decay_rate, epoch_length):
-        Policy.__init__(self, num_actions, estimator,batch_size)
+    def __init__(self,estimator ,num_actions,epsilon,decay_rate, epoch_length):
+        Policy.__init__(self, num_actions, estimator)
         self.name = "Epsilon Greedy"
         if (epsilon is None or epsilon < 0 or epsilon > 1):
             print("EpsilonGreedy: Invalid value of epsilon", flush = True)
@@ -307,7 +306,6 @@ class Epsilon_greedy(Policy):
         self.epsilon = epsilon
         self.step_counter = 0
         self.epoch_length = epoch_length
-        self.batch_size = batch_size
         self.decay_rate = decay_rate
         
 #        # if epsilon set to 1, it will be decayed over time
@@ -322,10 +320,11 @@ class Epsilon_greedy(Policy):
     def get_actions(self,states):
         # get next action
         if np.random.rand() <= self.epsilon:
-            actions = np.random.randint(0, self.num_actions,self.batch_size)
+            actions = np.random.randint(0, self.num_actions,states.shape[0])
         else:
-            self.Q = self.estimator.predict(states,self.batch_size)
-            actions = np.argmax(self.Q,axis=1)
+            self.Q = self.estimator.predict(states,states.shape[0])
+            best_actions = np.argwhere(self.Q[0] == np.amax(self.Q[0]))
+            actions = best_actions[np.random.choice(len(best_actions))]
             
         self.step_counter += 1 
         # decay epsilon after each epoch
@@ -341,77 +340,110 @@ class Epsilon_greedy(Policy):
 '''
 Reinforcement learning Agent definition
 '''
-
-class Agent(object):  
-        
-    def __init__(self, actions,obs_size):
+class Agent(object):   
+    def __init__(self, actions,obs_size, policy="EpsilonGreedy", **kwargs):
         self.actions = actions
         self.num_actions = len(actions)
         self.obs_size = obs_size
         
-
-    def act(self, state,policy):
-        raise NotImplementedError
-
-#class AttackerAgent(Agent):
-#
-#    def __init__(self, actions, obs_size, **kwargs):
-#        super().__init__(actions)
-
-
-class DefenderAgent(Agent):      
-    def __init__(self, actions, obs_size, policy="EpsilonGreedy", **kwargs):
-        super().__init__(actions,obs_size)
-        
-        self.epsilon = kwargs.get('epsilon', .01)
+        self.epsilon = kwargs.get('epsilon', 1)
         self.gamma = kwargs.get('gamma', .001)
-        self.batch_size = kwargs.get('batch_size', 1)
+        self.minibatch_size = kwargs.get('minibatch_size', 2)
         self.epoch_length = kwargs.get('epoch_length', 100)
         self.decay_rate = kwargs.get('decay_rate',0.99)
-        
+        self.memory = ReplayMemory(self.obs_size, kwargs.get('mem_size', 10))
+
         
         self.model_network = QNetwork(self.obs_size, self.num_actions,
-                                      kwargs.get('batch_size',1),
                                       kwargs.get('hidden_size', 100),
                                       kwargs.get('hidden_layers',1),
                                       kwargs.get('learning_rate',.2))
         if policy == "EpsilonGreedy":
             self.policy = Epsilon_greedy(self.model_network,len(actions),
-                                         self.batch_size,self.epsilon,
-                                         self.decay_rate,self.epoch_length)
-        
+                                         self.epsilon,self.decay_rate,
+                                         self.epoch_length)
         
     def act(self,states):
         # Get actions under the policy
         actions = self.policy.get_actions(states)
         return actions
     
-    def update_model(self,states,actions,next_states,reward):
+    def learn(self, states, actions,next_states, reward, done):
+        self.memory.observe(states, actions, reward, done)
+
+
+    def update_model(self):
+        
+        (states, action, reward, next_states, done) = self.memory.sample_minibatch(self.minibatch_size)
+        next_actions = []
         # Compute Q targets
-        Q_prime = self.model_network.predict(next_states)
-        indx = np.argmax(Q_prime,axis=1)
-        sx = np.arange(len(indx))
+        Q_prime = self.model_network.predict(next_states,self.minibatch_size)
+        # TODO: fix performance in this loop
+        for row in range(Q_prime.shape[0]):
+            best_next_actions = np.argwhere(Q_prime[row] == np.amax(Q_prime[row]))
+            next_actions.append(best_next_actions[np.random.choice(len(best_next_actions))].item())
+        sx = np.arange(len(next_actions))
         # Compute Q(s,a)
-        Q = self.model_network.predict(states)
-        
+        Q = self.model_network.predict(states,self.minibatch_size)
         # Q-learning update
-        targets = reward + self.gamma * Q[sx,indx]   
-        Q[sx,indx] = targets  
+        # target = reward + gamma * max_a'{Q(next_state,next_action))}
+        targets = reward[:,0] + self.gamma * Q[sx,next_actions] * (1-done)[:,0]   
+        Q[sx,next_actions] = targets  
         
-        loss = self.model_network.model.train_on_batch(states,Q)
+        loss = self.model_network.model.train_on_batch(states,Q)#inputs,targets        
         
-        return loss
+        return loss    
         
+      
         
+    
+class ReplayMemory(object):
+    """Implements basic replay memory"""
+
+    def __init__(self, observation_size, max_size):
+        self.observation_size = observation_size
+        self.num_observed = 0
+        self.max_size = max_size
+        self.samples = {
+                 'obs'      : np.zeros(self.max_size * 1 * self.observation_size,
+                                       dtype=np.float32).reshape(self.max_size, self.observation_size),
+                 'action'   : np.zeros(self.max_size * 1, dtype=np.int16).reshape(self.max_size, 1),
+                 'reward'   : np.zeros(self.max_size * 1).reshape(self.max_size, 1),
+                 'terminal' : np.zeros(self.max_size * 1, dtype=np.int16).reshape(self.max_size, 1),
+               }
+
+    def observe(self, state, action, reward, done):
+        index = self.num_observed % self.max_size
+        self.samples['obs'][index, :] = state
+        self.samples['action'][index, :] = action
+        self.samples['reward'][index, :] = reward
+        self.samples['terminal'][index, :] = done
+
+        self.num_observed += 1
+
+    def sample_minibatch(self, minibatch_size):
+        max_index = min(self.num_observed, self.max_size) - 1
+        sampled_indices = np.random.randint(max_index, size=minibatch_size)
+
+        s      = np.asarray(self.samples['obs'][sampled_indices, :], dtype=np.float32)
+        s_next = np.asarray(self.samples['obs'][sampled_indices+1, :], dtype=np.float32)
+
+        a      = self.samples['action'][sampled_indices].reshape(minibatch_size)
+        r      = self.samples['reward'][sampled_indices].reshape((minibatch_size, 1))
+        done   = self.samples['terminal'][sampled_indices].reshape((minibatch_size, 1))
+
+        return (s, a, r, s_next, done)
+
+    
 
 '''
 Reinforcement learning Enviroment Definition
 '''
 class RLenv(data_cls):
-    def __init__(self,path,train_test,batch_size = 10,**kwargs):
+    def __init__(self,path,train_test,**kwargs):
         data_cls.__init__(self,path,train_test,**kwargs)
-        self.batch_size = batch_size
         self.data_shape = data_cls.get_shape(self)
+        self.batch_size = 1 # experience replay -> batch = 1
 
     def _update_state(self):
         self.states,self.labels = data_cls.get_batch(self,self.batch_size)
@@ -448,14 +480,12 @@ class RLenv(data_cls):
     '''    
     def act(self,actions):
         # Clear previous rewards        
-        self.reward = np.zeros(self.batch_size)
+        self.reward = 0
         
         # Actualize new rewards == get_reward
-        for indx,a in enumerate(actions):
-            self.estimated_labels[a] += 1              
-            if a == np.argmax(self.labels.iloc[indx].values):
-                self.reward[indx] = 1
-        
+        if actions == np.argmax(self.labels.values):
+            self.reward = 1
+        self.estimated_labels[actions] +=1
         # Get new state and new true values
         self._update_state()
         
@@ -475,7 +505,7 @@ if __name__ == "__main__":
     # Valid actions = '0' supose no attack, '1' supose attack
     epsilon = 1  # exploration
 
-    batch_size = 10
+    minibatch_size = 50
 
     #3max_memory = 100
     decay_rate = 0.99
@@ -487,10 +517,10 @@ if __name__ == "__main__":
     
 
     # Initialization of the enviroment
-    env = RLenv(kdd_path,'train',batch_size,join_path='../datasets/corrected')
+    env = RLenv(kdd_path,'train',join_path='../datasets/corrected')
     
     iterations_episode = 100
-    num_episodes = int(env.data_shape[0]/(iterations_episode*batch_size)/10)
+    num_episodes = int(env.data_shape[0]/(iterations_episode)/10)
 	
     valid_actions = list(range(len(env.attack_types))) # only detect type of attack
     num_actions = len(valid_actions)
@@ -498,14 +528,15 @@ if __name__ == "__main__":
     # Initialization of the Agent
     obs_size = env.data_shape[1]-len(env.attack_types)
     
-    agent = DefenderAgent(valid_actions,obs_size,"EpsilonGreedy",
-                          batch_size=batch_size,
+    agent = Agent(valid_actions,obs_size,"EpsilonGreedy",
                           epoch_length = iterations_episode,
                           epsilon = epsilon,
                           decay_rate = decay_rate,
                           gamma = gamma,
                           hidden_size=hidden_size,
-                          hidden_layers=hidden_layers)    
+                          hidden_layers=hidden_layers,
+                          minibatch_size=minibatch_size,
+                          mem_size = 1000)    
     
     
     # Statistics
@@ -534,12 +565,14 @@ if __name__ == "__main__":
             #Enviroment actuation for this actions
             next_states, reward, done = env.act(actions)
             # If the epoch*batch_size*iterations_episode is largest than the df
-            if next_states.shape[0] != batch_size:
+            if next_states.shape[0] != 1:
                 break # finished df
             
+            agent.learn(states,actions,next_states,reward,done)
             
-            # Train network, update loss
-            loss += agent.update_model(states,actions,next_states,reward)
+            # Train network, update loss after at least minibatch_learns
+            if epoch*iterations_episode + i_iteration >= minibatch_size:
+                loss += agent.update_model()
             
             update_end_time = time.time()
 
@@ -548,9 +581,9 @@ if __name__ == "__main__":
             
             
             # Update statistics
-            total_reward_by_episode += int(sum(reward))
+            total_reward_by_episode += reward
         
-        if next_states.shape[0] != batch_size:
+        if next_states.shape[0] != 1:
                 break # finished df
         # Update user view
         reward_chain.append(total_reward_by_episode)    
@@ -570,7 +603,7 @@ if __name__ == "__main__":
         
     # Save test dataset deleting the data used to train
     print("Shape: ",env.data_shape)
-    print("Used: ",num_episodes*iterations_episode*batch_size)
+    print("Used: ",num_episodes*iterations_episode)
     #env.save_test()
     
     # Plot training results
