@@ -5,6 +5,7 @@ Multiple anomaly detection file
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import keras
 from keras.models import Sequential
 from keras.layers.core import Dense
 from keras import optimizers
@@ -311,6 +312,11 @@ class QNetwork():
         """
         loss = self.model.train_on_batch(states, q)
         return loss
+    
+    def copy_model(model):
+        """Returns a copy of a keras model."""
+        model.save('tmp_model')
+        return keras.models.load_model('tmp_model')
 
 
 
@@ -378,12 +384,20 @@ class Agent(object):
         self.epoch_length = kwargs.get('epoch_length', 100)
         self.decay_rate = kwargs.get('decay_rate',0.99)
         self.memory = ReplayMemory(self.obs_size, kwargs.get('mem_size', 10))
+        self.ddqn_time = 100
+        self.ddqn_update = self.ddqn_time
 
         
         self.model_network = QNetwork(self.obs_size, self.num_actions,
                                       kwargs.get('hidden_size', 100),
                                       kwargs.get('hidden_layers',1),
                                       kwargs.get('learning_rate',.2))
+        self.target_model_network = QNetwork(self.obs_size, self.num_actions,
+                                      kwargs.get('hidden_size', 100),
+                                      kwargs.get('hidden_layers',1),
+                                      kwargs.get('learning_rate',.2))
+        self.target_model_network.model = QNetwork.copy_model(self.model_network.model)
+        
         if policy == "EpsilonGreedy":
             self.policy = Epsilon_greedy(self.model_network,len(actions),
                                          self.epsilon,
@@ -398,7 +412,8 @@ class Agent(object):
         (states, action, reward, next_states, done) = self.memory.sample_minibatch(self.minibatch_size)
         next_actions = []
         # Compute Q targets
-        Q_prime = self.model_network.predict(next_states,self.minibatch_size)
+#        Q_prime = self.model_network.predict(next_states,self.minibatch_size)
+        Q_prime = self.target_model_network.predict(next_states,self.minibatch_size)
         # TODO: fix performance in this loop
         for row in range(Q_prime.shape[0]):
             best_next_actions = np.argwhere(Q_prime[row] == np.amax(Q_prime[row]))
@@ -412,6 +427,13 @@ class Agent(object):
         Q[sx,next_actions] = targets  
         
         loss = self.model_network.model.train_on_batch(states,Q)#inputs,targets        
+        
+        # timer to ddqn update
+        self.ddqn_update -= 1
+        if self.ddqn_update == 0:
+            self.ddqn_update = self.ddqn_time
+#            self.target_model_network.model = QNetwork.copy_model(self.model_network.model)
+            self.target_model_network.model.set_weights(self.model_network.model.get_weights()) 
         
         return loss    
 
@@ -652,7 +674,8 @@ if __name__ == "__main__":
     
     def_hidden_size = 100
     def_hidden_layers = 3
-
+    
+    def_learning_rate = .02
     
     defender_agent = DefenderAgent(defender_valid_actions,obs_size,"EpsilonGreedy",
                           epoch_length = iterations_episode,
@@ -662,7 +685,8 @@ if __name__ == "__main__":
                           hidden_size=def_hidden_size,
                           hidden_layers=def_hidden_layers,
                           minibatch_size = minibatch_size,
-                          mem_size = 1000)
+                          mem_size = 1000,
+                          learning_rate=def_learning_rate)
     #Pretrained defender
     #defender_agent.model_network.model.load_weights("models/type_model.h5")    
     
@@ -681,6 +705,8 @@ if __name__ == "__main__":
     att_hidden_layers = 100
     att_hidden_size = 3
     
+    att_learning_rate = 0.2
+    
     attacker_agent = AttackAgent(attack_valid_actions,obs_size,"EpsilonGreedy",
                           epoch_length = iterations_episode,
                           epsilon = att_epsilon,
@@ -689,7 +715,8 @@ if __name__ == "__main__":
                           hidden_size=att_hidden_size,
                           hidden_layers=att_hidden_layers,
                           minibatch_size = minibatch_size,
-                          mem_size = 1000)
+                          mem_size = 1000,
+                          learning_rate=att_learning_rate)
     
     
     
