@@ -13,6 +13,10 @@ if __name__ == "__main__":
     with open("models/type_model.json", "r") as jfile:
         model = model_from_json(json.load(jfile))
     model.load_weights("models/type_model.h5")
+#    with open("models/defender_agent_model.json", "r") as jfile:
+#        model = model_from_json(json.load(jfile))
+#    model.load_weights("models/defender_agent_model.h5")
+    
     model.compile("sgd", "mse")
 
     # Define environment, game, make sure the batch_size is the same in train

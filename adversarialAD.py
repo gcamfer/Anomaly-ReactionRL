@@ -5,6 +5,7 @@ Multiple anomaly detection file
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import keras
 from keras.models import Sequential
 from keras.layers.core import Dense
 from keras import optimizers
@@ -206,8 +207,8 @@ class data_cls:
     ''' Get n-rows from loaded data 
         The dataset must be loaded in RAM
     '''
-    def get_batch(self, batch_size=100):
-        
+    def get_batch(self):
+        batch_size = 1
         if self.loaded is False:
             self._load_df()
         
@@ -265,7 +266,7 @@ class QNetwork():
     Represents the global model for the table
     """
 
-    def __init__(self,obs_size,num_actions,batch_size=1,hidden_size = 100,
+    def __init__(self,obs_size,num_actions,hidden_size = 100,
                  hidden_layers = 1,learning_rate=.2):
         """
         Initialize the network with the provided shape
@@ -311,20 +312,24 @@ class QNetwork():
         """
         loss = self.model.train_on_batch(states, q)
         return loss
+    
+    def copy_model(model):
+        """Returns a copy of a keras model."""
+        model.save('tmp_model')
+        return keras.models.load_model('tmp_model')
 
 
 
 
 #Policy interface
 class Policy:
-    def __init__(self, num_actions, estimator,batch_size):
+    def __init__(self, num_actions, estimator):
         self.num_actions = num_actions
         self.estimator = estimator
-        self.batch_size = batch_size
     
 class Epsilon_greedy(Policy):
-    def __init__(self,estimator ,num_actions ,batch_size,epsilon,decay_rate, epoch_length):
-        Policy.__init__(self, num_actions, estimator,batch_size)
+    def __init__(self,estimator ,num_actions ,epsilon,decay_rate, epoch_length):
+        Policy.__init__(self, num_actions, estimator)
         self.name = "Epsilon Greedy"
         
         if (epsilon is None or epsilon < 0 or epsilon > 1):
@@ -334,7 +339,6 @@ class Epsilon_greedy(Policy):
         self.actions = list(range(num_actions))
         self.step_counter = 0
         self.epoch_length = epoch_length
-        self.batch_size = batch_size
         self.decay_rate = decay_rate
         
         #if epsilon is up 0.1, it will be decayed over time
@@ -346,10 +350,11 @@ class Epsilon_greedy(Policy):
     def get_actions(self,states):
         # get next action
         if np.random.rand() <= self.epsilon:
-            actions = np.random.randint(0, self.num_actions,self.batch_size)
+            actions = np.random.randint(0, self.num_actions,states.shape[0])
         else:
-            self.Q = self.estimator.predict(states,self.batch_size)
-            actions = np.argmax(self.Q,axis=1)
+            self.Q = self.estimator.predict(states,states.shape[0])
+            best_actions = np.argwhere(self.Q[0] == np.amax(self.Q[0]))
+            actions = best_actions[np.random.choice(len(best_actions))]
             
         self.step_counter += 1 
         # decay epsilon after each epoch
@@ -375,36 +380,60 @@ class Agent(object):
         
         self.epsilon = kwargs.get('epsilon', 1)
         self.gamma = kwargs.get('gamma', .001)
-        self.batch_size = kwargs.get('batch_size', 1)
+        self.minibatch_size = kwargs.get('minibatch_size', 2)
         self.epoch_length = kwargs.get('epoch_length', 100)
         self.decay_rate = kwargs.get('decay_rate',0.99)
-        
+        self.memory = ReplayMemory(self.obs_size, kwargs.get('mem_size', 10))
+        self.ddqn_time = 100
+        self.ddqn_update = self.ddqn_time
+
         
         self.model_network = QNetwork(self.obs_size, self.num_actions,
-                                      kwargs.get('batch_size',1),
                                       kwargs.get('hidden_size', 100),
                                       kwargs.get('hidden_layers',1),
                                       kwargs.get('learning_rate',.2))
+        self.target_model_network = QNetwork(self.obs_size, self.num_actions,
+                                      kwargs.get('hidden_size', 100),
+                                      kwargs.get('hidden_layers',1),
+                                      kwargs.get('learning_rate',.2))
+        self.target_model_network.model = QNetwork.copy_model(self.model_network.model)
+        
         if policy == "EpsilonGreedy":
             self.policy = Epsilon_greedy(self.model_network,len(actions),
-                                         self.batch_size,self.epsilon,
+                                         self.epsilon,
                                          self.decay_rate,self.epoch_length)
         
         
-    def update_model(self,states,actions,next_states,reward):
-        # Compute Q targets
-        Q_prime = self.model_network.predict(next_states,self.batch_size)
+    def learn(self, states, actions,next_states, reward, done):
+        self.memory.observe(states, actions, reward, done)            
         
-        next_actions = np.argmax(Q_prime,axis=1)
+    def update_model(self):
+        
+        (states, action, reward, next_states, done) = self.memory.sample_minibatch(self.minibatch_size)
+        next_actions = []
+        # Compute Q targets
+#        Q_prime = self.model_network.predict(next_states,self.minibatch_size)
+        Q_prime = self.target_model_network.predict(next_states,self.minibatch_size)
+        # TODO: fix performance in this loop
+        for row in range(Q_prime.shape[0]):
+            best_next_actions = np.argwhere(Q_prime[row] == np.amax(Q_prime[row]))
+            next_actions.append(best_next_actions[np.random.choice(len(best_next_actions))].item())
         sx = np.arange(len(next_actions))
         # Compute Q(s,a)
-        Q = self.model_network.predict(states)
+        Q = self.model_network.predict(states,self.minibatch_size)
         # Q-learning update
         # target = reward + gamma * max_a'{Q(next_state,next_action))}
-        targets = reward + self.gamma * Q[sx,next_actions]   
+        targets = reward[:,0] + self.gamma * Q[sx,next_actions] * (1-done)[:,0]   
         Q[sx,next_actions] = targets  
         
-        loss = self.model_network.model.train_on_batch(states,Q)        
+        loss = self.model_network.model.train_on_batch(states,Q)#inputs,targets        
+        
+        # timer to ddqn update
+        self.ddqn_update -= 1
+        if self.ddqn_update == 0:
+            self.ddqn_update = self.ddqn_time
+#            self.target_model_network.model = QNetwork.copy_model(self.model_network.model)
+            self.target_model_network.model.set_weights(self.model_network.model.get_weights()) 
         
         return loss    
 
@@ -436,9 +465,8 @@ class AttackAgent(Agent):
 Reinforcement learning Enviroment Definition
 '''
 class RLenv(data_cls):
-    def __init__(self,path,train_test,batch_size = 10,**kwargs):
+    def __init__(self,path,train_test,**kwargs):
         data_cls.__init__(self,path,train_test,**kwargs)
-        self.batch_size = batch_size
         self.data_shape = data_cls.get_shape(self)
 
 
@@ -451,7 +479,7 @@ class RLenv(data_cls):
     Also modifies the true labels to get learning knowledge
     '''
     def _update_state(self):        
-        self.states,self.labels = data_cls.get_batch(self,self.batch_size)
+        self.states,self.labels = data_cls.get_batch(self)
         
         # Update statistics
         self.true_labels += np.sum(self.labels).values
@@ -468,8 +496,7 @@ class RLenv(data_cls):
         
         self.state_numb = 0
         
-        #self.states,self.labels = data_cls.get_sequential_batch(self,self.batch_size)
-        self.states,self.labels = data_cls.get_batch(self,self.batch_size)
+        self.states,self.labels = data_cls.get_batch(self)
         
         
         
@@ -488,8 +515,8 @@ class RLenv(data_cls):
     '''    
     def act(self,defender_actions,attack_actions):
         # Clear previous rewards        
-        self.def_reward = np.ones(self.batch_size,dtype=np.int32)
-        self.att_reward = np.ones(self.batch_size,dtype=np.int32)
+        self.def_reward = 1
+        self.att_reward = 1
         
         attack = [self.attack_types.index(self.attack_map[self.attack_names[att]]) for att in attack_actions]
         
@@ -568,6 +595,43 @@ class RLenv(data_cls):
 
 
 
+class ReplayMemory(object):
+    """Implements basic replay memory"""
+
+    def __init__(self, observation_size, max_size):
+        self.observation_size = observation_size
+        self.num_observed = 0
+        self.max_size = max_size
+        self.samples = {
+                 'obs'      : np.zeros(self.max_size * 1 * self.observation_size,
+                                       dtype=np.float32).reshape(self.max_size,self.observation_size),
+                 'action'   : np.zeros(self.max_size * 1, dtype=np.int16).reshape(self.max_size, 1),
+                 'reward'   : np.zeros(self.max_size * 1).reshape(self.max_size, 1),
+                 'terminal' : np.zeros(self.max_size * 1, dtype=np.int16).reshape(self.max_size, 1),
+               }
+
+    def observe(self, state, action, reward, done):
+        index = self.num_observed % self.max_size
+        self.samples['obs'][index, :] = state
+        self.samples['action'][index, :] = action
+        self.samples['reward'][index, :] = reward
+        self.samples['terminal'][index, :] = done
+
+        self.num_observed += 1
+
+    def sample_minibatch(self, minibatch_size):
+        max_index = min(self.num_observed, self.max_size) - 1
+        sampled_indices = np.random.randint(max_index, size=minibatch_size)
+
+        s      = np.asarray(self.samples['obs'][sampled_indices, :], dtype=np.float32)
+        s_next = np.asarray(self.samples['obs'][sampled_indices+1, :], dtype=np.float32)
+
+        a      = self.samples['action'][sampled_indices].reshape(minibatch_size)
+        r      = self.samples['reward'][sampled_indices].reshape((minibatch_size, 1))
+        done   = self.samples['terminal'][sampled_indices].reshape((minibatch_size, 1))
+
+        return (s, a, r, s_next, done)
+
 
 
 
@@ -581,27 +645,19 @@ class RLenv(data_cls):
 if __name__ == "__main__":
   
     kdd_10_path = '../datasets/kddcup.data_10_percent_corrected'
-    kdd_path = '../datasets/kddcup.data'
-
-    
-    batch_size = 10
-
-
-    
-    
-    
+    kdd_path = '../datasets/kddcup.data'    
     
     # dataset for prgram
     # '../datasets/micro_kddcup.data'
     
     # Initialization of the enviroment
-    env = RLenv(kdd_path,'join',batch_size,join_path='../datasets/corrected')
+    env = RLenv(kdd_path,'join',join_path='../datasets/corrected')
     
     # obs_size = size of the state
     obs_size = env.data_shape[1]-len(env.all_attack_names)
     
     iterations_episode = 100
-    num_episodes = int(env.data_shape[0]/(iterations_episode*batch_size)/10)
+    num_episodes = int(env.data_shape[0]/(iterations_episode)/25)
 
     
     '''
@@ -609,23 +665,30 @@ if __name__ == "__main__":
     '''
     defender_valid_actions = list(range(len(env.attack_types))) # only detect type of attack
     defender_num_actions = len(defender_valid_actions)    
+    
+    minibatch_size = 100
 	
-    def_epsilon = .5 # exploration
+    def_epsilon = .01 # exploration
     def_gamma = 0.001
     def_decay_rate = 0.99
     
     def_hidden_size = 100
     def_hidden_layers = 3
-
+    
+    def_learning_rate = .02
     
     defender_agent = DefenderAgent(defender_valid_actions,obs_size,"EpsilonGreedy",
-                          batch_size=batch_size,
                           epoch_length = iterations_episode,
                           epsilon = def_epsilon,
                           decay_rate = def_decay_rate,
                           gamma = def_gamma,
                           hidden_size=def_hidden_size,
-                          hidden_layers=def_hidden_layers)    
+                          hidden_layers=def_hidden_layers,
+                          minibatch_size = minibatch_size,
+                          mem_size = 1000,
+                          learning_rate=def_learning_rate)
+    #Pretrained defender
+    #defender_agent.model_network.model.load_weights("models/type_model.h5")    
     
     '''
     Definition for the attacker agent.
@@ -642,14 +705,18 @@ if __name__ == "__main__":
     att_hidden_layers = 100
     att_hidden_size = 3
     
+    att_learning_rate = 0.2
+    
     attacker_agent = AttackAgent(attack_valid_actions,obs_size,"EpsilonGreedy",
-                          batch_size=batch_size,
                           epoch_length = iterations_episode,
                           epsilon = att_epsilon,
                           decay_rate = att_decay_rate,
                           gamma = att_gamma,
                           hidden_size=att_hidden_size,
-                          hidden_layers=att_hidden_layers) 
+                          hidden_layers=att_hidden_layers,
+                          minibatch_size = minibatch_size,
+                          mem_size = 1000,
+                          learning_rate=att_learning_rate)
     
     
     
@@ -665,9 +732,9 @@ if __name__ == "__main__":
 	# Print parameters
     print("-------------------------------------------------------------------------------")
     print("Total epoch: {} | Iterations in epoch: {}"
-          "| Batch size: {} | Total Samples: {}|".format(num_episodes,
-                         iterations_episode,batch_size,
-                         num_episodes*iterations_episode*batch_size))
+          "| Minibatch from mem size: {} | Total Samples: {}|".format(num_episodes,
+                         iterations_episode,minibatch_size,
+                         num_episodes*iterations_episode))
     print("-------------------------------------------------------------------------------")
     print("Dataset shape: {}".format(env.data_shape))
     print("-------------------------------------------------------------------------------")
@@ -715,16 +782,18 @@ if __name__ == "__main__":
             #Enviroment actuation for this actions
             next_states,def_reward, att_reward,next_attack_actions, done = env.act(defender_actions,attack_actions)
             # If the epoch*batch_size*iterations_episode is largest than the df
-            if next_states.shape[0] != batch_size:
+            if next_states.shape[0] != 1:
                 break # finished df
             
+            attacker_agent.learn(states,attack_actions,next_states,att_reward,done)
+            defender_agent.learn(states,defender_actions,next_states,def_reward,done)
             
             act_end_time = time.time()
             
-            # Train network, update loss
-            def_loss += defender_agent.update_model(states,defender_actions,next_states,def_reward)
-            
-            att_loss += attacker_agent.update_model(states,attack_actions,next_states,att_reward)
+            # Train network, update loss after at least minibatch_learns
+            if epoch*iterations_episode + i_iteration >= minibatch_size:
+                def_loss += defender_agent.update_model()
+                att_loss += attacker_agent.update_model()
 
             update_end_time = time.time()
 
@@ -737,7 +806,7 @@ if __name__ == "__main__":
             def_total_reward_by_episode += int(sum(def_reward))
             att_total_reward_by_episode += int(sum(att_reward))
         
-        if next_states.shape[0] != batch_size:
+        if next_states.shape[0] != 1:
                 break # finished df
         # Update user view
         def_reward_chain.append(def_total_reward_by_episode) 
