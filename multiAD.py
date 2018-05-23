@@ -141,13 +141,20 @@ class data_cls:
     ''' Get n-rows from the dataset'''
     def get_batch(self, batch_size=100):
         
+
         if self.loaded is False:
             self._load_df()
         
-        # Read the df rows
-        batch = self.df.iloc[self.index:self.index+batch_size]
+        indexes = list(range(self.index,self.index+batch_size))    
+        if max(indexes)>self.data_shape[0]-1:
+            dif = max(indexes)-self.data_shape[0]
+            indexes[len(indexes)-dif-1:len(indexes)] = list(range(dif+1))
+            self.index=batch_size-dif
+            batch = self.df.iloc[indexes]
+        else: 
+            batch = self.df.iloc[indexes]
+            self.index += batch_size   
         
-        self.index += batch_size
         
         labels = batch[self.attack_names]
         
@@ -242,8 +249,9 @@ if __name__ == "__main__":
     env = RLenv(kdd_path,'join',batch_size,join_path='../datasets/corrected')
     
     iterations_episode = 100
-    num_episodes = int(env.state_shape[0]/(iterations_episode*batch_size)/10)
-
+#    num_episodes = int(env.state_shape[0]/(iterations_episode*batch_size)/10)
+    num_episodes = 500
+    
     valid_actions = list(range(len(env.attack_names)))
     num_actions = len(valid_actions)
     
@@ -299,7 +307,7 @@ if __name__ == "__main__":
             sx = np.arange(len(indx))
             # Update q values
             targets = reward + gamma * q[sx,indx]   
-            q[sx,indx] = targets         
+            q[sx,actions] = targets         
             
             # Train network, update loss
             loss += model.train_on_batch(states, q)

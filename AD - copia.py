@@ -246,108 +246,123 @@ if __name__ == "__main__":
     gamma = 0.001
     
     
-    hidden_size = 100
     batch_size = 10
 
-    # Initialization of the enviroment
-    # '../datasets/KDDTest+.txt'
-    env = RLenv(kdd_path,'join',batch_size,join_path='../datasets/corrected')
+      
+    reward_chain = {1:[],2:[],3:[],4:[],5:[]}
+    loss_chain = {1:[],2:[],3:[],4:[],5:[]}  
+        # Initialization of the enviroment
+        # '../datasets/KDDTest+.txt'
+    lista = [0.01,0.05,0.1,0.2,0.5]
+    for iteracion,learning_rate in enumerate(lista):
+        env = RLenv(kdd_path,'join',batch_size,join_path='../datasets/corrected')
 
-    
-    # Network arquitecture
-    model = Sequential()
-    model.add(Dense(hidden_size, input_shape=(env.state_shape[1]-1,),
-                    batch_size=batch_size, activation='relu'))
-    model.add(Dense(hidden_size, activation='relu'))
-    model.add(Dense(num_actions))
-    model.compile(sgd(lr=.2), "mse")
-    
-    plot_model(model,to_file='models/AD.png')
-    
-    reward_chain = []
-    loss_chain = []
-    
+        hidden_size = 100
+        
+        # Network arquitecture
+        model = Sequential()
+        model.add(Dense(hidden_size, input_shape=(env.state_shape[1]-1,),
+                        batch_size=batch_size, activation='relu'))
+        model.add(Dense(hidden_size, activation='relu'))
+        model.add(Dense(num_actions))
+        model.compile(sgd(lr=learning_rate), "mse")
+        
+        plot_model(model,to_file='models/AD.png')
 
+        
     
-    # Main loop
-    for epoch in range(num_episodes):
-        loss = 0.
-        total_reward_by_episode = 0
-        # Reset enviromet, actualize the data batch
-        states = env.reset()
         
-        done = False
-        # Get control of the actions taken
-        ones = 0
-        zeros = 0
-        
-        # Define exploration to improve performance
-        exploration = 1
-        # Iteration in one episode
-        for i_iteration in range(iterations_episode):
+        # Main loop
+        for epoch in range(num_episodes):
+            loss = 0.
+            total_reward_by_episode = 0
+            # Reset enviromet, actualize the data batch
+            states = env.reset()
             
-            # get next action
-            if exploration > 0.001:
-                exploration = epsilon*decay_rate**(epoch*i_iteration)            
+            done = False
+            # Get control of the actions taken
+            ones = 0
+            zeros = 0
             
-            if np.random.rand() <= exploration:
-                actions = np.random.randint(0, num_actions,batch_size)
-            else:
-                q = model.predict(states)
-                actions = np.argmax(q,axis=1)
+            # Define exploration to improve performance
+            exploration = 1
+            # Iteration in one episode
+            for i_iteration in range(iterations_episode):
+                
+                # get next action
+                if exploration > 0.001:
+                    exploration = epsilon*decay_rate**(epoch*i_iteration)            
+                
+                if np.random.rand() <= exploration:
+                    actions = np.random.randint(0, num_actions,batch_size)
+                else:
+                    q = model.predict(states)
+                    actions = np.argmax(q,axis=1)
+                
+                # apply actions, get rewards and new state
+                next_states, reward, done = env.act(actions)
+                # If the epoch*batch_size*iterations_episode is largest than the df
+                if next_states.shape[0] != batch_size:
+                    break # finished df
+                
+                
+                q_prime = model.predict(next_states)
+                indx = np.argmax(q_prime,axis=1)
+                sx = np.arange(len(indx))
+                # Update q values
+                targets = reward + gamma * q[sx,indx]   
+                q[sx,indx] = targets         
+                
+                # Train network, update loss
+                loss += model.train_on_batch(states, q)
+                
+                # Update the state
+                states = next_states
+                
+                
+                ones += int(sum(actions))
+                zeros += batch_size - int(sum(actions))
+                total_reward_by_episode += int(sum(reward))
             
-            # apply actions, get rewards and new state
-            next_states, reward, done = env.act(actions)
-            # If the epoch*batch_size*iterations_episode is largest than the df
             if next_states.shape[0] != batch_size:
-                break # finished df
+                    break # finished df
+            reward_chain[iteracion+1].append(total_reward_by_episode)    
+            loss_chain[iteracion+1].append(loss)
+                
+            print("\rEpoch {:03d}/{:03d} | Loss {:4.4f} | Tot reward x episode {:03d}| Ones/Zeros: {}/{} ".format(epoch,
+                  num_episodes ,loss, total_reward_by_episode,ones,zeros))
             
-            
-            q_prime = model.predict(next_states)
-            indx = np.argmax(q_prime,axis=1)
-            sx = np.arange(len(indx))
-            # Update q values
-            targets = reward + gamma * q[sx,indx]   
-            q[sx,actions] = targets         
-            
-            # Train network, update loss
-            loss += model.train_on_batch(states, q)
-            
-            # Update the state
-            states = next_states
-            
-            
-            ones += int(sum(actions))
-            zeros += batch_size - int(sum(actions))
-            total_reward_by_episode += int(sum(reward))
-        
-        if next_states.shape[0] != batch_size:
-                break # finished df
-        reward_chain.append(total_reward_by_episode)    
-        loss_chain.append(loss)
-            
-        print("\rEpoch {:03d}/{:03d} | Loss {:4.4f} | Tot reward x episode {:03d}| Ones/Zeros: {}/{} ".format(epoch,
-              num_episodes ,loss, total_reward_by_episode,ones,zeros))
-        
-        
-    # Save trained model weights and architecture, used in test
-    model.save_weights("models/model.h5", overwrite=True)
-    with open("models/model.json", "w") as outfile:
-        json.dump(model.to_json(), outfile)
-    
+
     plt.figure(1)
-    plt.subplot(211)
-    plt.plot(np.arange(len(reward_chain)),reward_chain)
-    plt.title('Total reward by episode')
+    ax=plt.subplot(211)
+    p1=plt.plot(np.arange(len(reward_chain[1])),reward_chain[1],label='.01')
+    p2=plt.plot(np.arange(len(reward_chain[2])),reward_chain[2],label='.05')
+    p3=plt.plot(np.arange(len(reward_chain[3])),reward_chain[3],label='.1')
+    p4=plt.plot(np.arange(len(reward_chain[4])),reward_chain[4],label='.2')
+    p5=plt.plot(np.arange(len(reward_chain[5])),reward_chain[5],label='.5')
+
+
+    plt.title('Total reward by episode (lr)', y=1.35)
     plt.xlabel('n Episode')
     plt.ylabel('Total reward')
-    
-    plt.subplot(212)
-    plt.plot(np.arange(len(loss_chain)),loss_chain)
-    plt.title('Loss by episode')
+    plt.legend(bbox_to_anchor=(0., 1.2, 1., .15), loc=9,
+           ncol=5, mode="expand", borderaxespad=0.)
+    plt.tight_layout()
+        
+    ax=plt.subplot(212)
+    plt.plot(np.arange(len(loss_chain[1])),loss_chain[1],label='.01')
+    plt.plot(np.arange(len(loss_chain[2])),loss_chain[2],label='.05')
+    plt.plot(np.arange(len(loss_chain[3])),loss_chain[3],label='.1')
+    plt.plot(np.arange(len(loss_chain[4])),loss_chain[4],label='.2')
+    plt.plot(np.arange(len(loss_chain[5])),loss_chain[5],label='.5')
+
+
+    plt.legend()
+    plt.title('Loss by episode (lr)', y=1.35)
     plt.xlabel('n Episode')
     plt.ylabel('loss')
-    plt.tight_layout()
-    #plt.show()
-    plt.savefig('results/train_simple.eps', format='eps', dpi=1000)
+    plt.legend(bbox_to_anchor=(0., 1.2, 1., .15), loc=9,
+           ncol=5, mode="expand", borderaxespad=0.)
+    plt.tight_layout()    #plt.show()
+    plt.savefig('results/train_simple_learning_rate.eps', format='eps', dpi=1000)
 

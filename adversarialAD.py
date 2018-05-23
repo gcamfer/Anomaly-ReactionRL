@@ -657,7 +657,7 @@ if __name__ == "__main__":
     obs_size = env.data_shape[1]-len(env.all_attack_names)
     
     iterations_episode = 100
-    num_episodes = int(env.data_shape[0]/(iterations_episode)/25)
+    num_episodes = int(env.data_shape[0]/(iterations_episode)/10)
 
     
     '''

@@ -3,20 +3,20 @@ import numpy as np
 import pandas as pd
 from keras.models import model_from_json
 from adversarialAD import RLenv
-from sklearn.metrics import f1_score
+
 
 if __name__ == "__main__":
-    batch_size = 10
-    test_path = '../datasets/test_multiple_data.data'
+    batch_size = 1
+    test_path = '../datasets/formated/test_data_type.data'
 
-
-    with open("multi_model.json", "r") as jfile:
+    with open("models/defender_agent_model.json", "r") as jfile:
         model = model_from_json(json.load(jfile))
-    model.load_weights("multi_model.h5")
+    model.load_weights("models/defender_agent_model.h5")
+    
     model.compile("sgd", "mse")
 
     # Define environment, game, make sure the batch_size is the same in train
-    env = RLenv(test_path,batch_size)
+    env = RLenv(test_path,'test')
     
 
     total_reward = 0    
@@ -49,11 +49,10 @@ if __name__ == "__main__":
         
     Accuracy = estimated_correct_labels / true_labels
     Mismatch = estimated_labels - true_labels
-    score = f1_score(true_labels, estimated_labels, average=None)
 
     print('\r\nTotal reward: {} | Number of samples: {} | Accuracy = {}%'.format(total_reward,
           int(epochs*env.batch_size),float(100*total_reward/(epochs*env.batch_size))))
-    outputs_df = pd.DataFrame(index = env.attack_types,columns = ["Estimated","Correct","Total","Acuracy","Mismatch"])
+    outputs_df = pd.DataFrame(index = env.attack_types,columns = ["Estimated","Correct","Total","Acuracy"])
     for indx,att in enumerate(env.attack_types):
        outputs_df.iloc[indx].Estimated = estimated_labels[indx]
        outputs_df.iloc[indx].Correct = estimated_correct_labels[indx]
@@ -61,8 +60,6 @@ if __name__ == "__main__":
        outputs_df.iloc[indx].Acuracy = Accuracy[indx]*100
        outputs_df.iloc[indx].Mismatch = abs(Mismatch[indx])
 
-    print("F1 Score = {}".format(score))
-       
 
         
     print(outputs_df)
@@ -70,4 +67,5 @@ if __name__ == "__main__":
         #plt.imshow(input_t.reshape((grid_size,)*2),
         #           interpolation='none', cmap='gray')
         #plt.savefig("error.png")
+
 
