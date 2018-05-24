@@ -4,6 +4,7 @@ import pandas as pd
 from keras.models import model_from_json
 from typeAD import RLenv
 import matplotlib.pyplot as plt
+from typeAD import huber_loss
 
 
 if __name__ == "__main__":
@@ -18,7 +19,7 @@ if __name__ == "__main__":
 #        model = model_from_json(json.load(jfile))
 #    model.load_weights("models/defender_agent_model.h5")
     
-    model.compile("sgd", "mse")
+    model.compile(loss=huber_loss,optimizer="sgd")
 
     # Define environment, game, make sure the batch_size is the same in train
     env = RLenv('test',formated_test_path = formated_test_path,batch_size=batch_size)

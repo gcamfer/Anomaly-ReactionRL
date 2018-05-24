@@ -342,7 +342,7 @@ class Epsilon_greedy(Policy):
         self.decay_rate = decay_rate
         
         #if epsilon is up 0.1, it will be decayed over time
-        if self.epsilon > 0.1:
+        if self.epsilon > 0.01:
             self.epsilon_decay = True
         else:
             self.epsilon_decay = False
@@ -579,14 +579,14 @@ class RLenv(data_cls):
     '''    
     def act(self,defender_actions,attack_actions):
         # Clear previous rewards        
-        self.att_reward = np.ones(len(attack_actions))       
-        self.def_reward = np.ones(len(defender_actions))
+        self.att_reward = np.zeros(len(attack_actions))       
+        self.def_reward = np.zeros(len(defender_actions))
         
         
         attack = [self.attack_types.index(self.attack_map[self.attack_names[att]]) for att in attack_actions]
         
-        self.def_reward = (np.asarray(defender_actions)!=np.asarray(attack))*-1
-        self.att_reward = (np.asarray(defender_actions)==np.asarray(attack))*-1
+        self.def_reward = (np.asarray(defender_actions)==np.asarray(attack))*1
+        self.att_reward = (np.asarray(defender_actions)!=np.asarray(attack))*1
         #self.att_reward -= self.def_reward
 
 #        # Actualize new rewards == get_reward
@@ -680,10 +680,10 @@ if __name__ == "__main__":
     
     
     # Train batch
-    batch_size = 10
+    batch_size = 1
     # batch of memory ExpRep
     minibatch_size = 100
-    ExpRep = False
+    ExpRep = True
     
     iterations_episode = 10
 
@@ -698,7 +698,7 @@ if __name__ == "__main__":
     obs_size = env.data_shape[1]-len(env.all_attack_names)
     
     #num_episodes = int(env.data_shape[0]/(iterations_episode)/10)
-    num_episodes = 100
+    num_episodes = 200
     
     '''
     Definition for the defensor agent.
@@ -707,7 +707,7 @@ if __name__ == "__main__":
     defender_num_actions = len(defender_valid_actions)    
     
 	
-    def_epsilon = .01 # exploration
+    def_epsilon = .1 # exploration
     def_gamma = 0.001
     def_decay_rate = 0.99
     
@@ -728,7 +728,7 @@ if __name__ == "__main__":
                           learning_rate=def_learning_rate,
                           ExpRep=ExpRep)
     #Pretrained defender
-    #defender_agent.model_network.model.load_weights("models/type_model.h5")    
+    defender_agent.model_network.model.load_weights("models/type_model.h5")    
     
     '''
     Definition for the attacker agent.
@@ -739,13 +739,13 @@ if __name__ == "__main__":
     attack_num_actions = len(attack_valid_actions)
 	
     att_epsilon = 0.1
-    att_gamma = 0.002
+    att_gamma = 0.001
     att_decay_rate = 0.99
     
     att_hidden_layers = 100
     att_hidden_size = 3
     
-    att_learning_rate = 0.2
+    att_learning_rate = 0.02
     
     attacker_agent = AttackAgent(attack_valid_actions,obs_size,"EpsilonGreedy",
                           epoch_length = iterations_episode,
