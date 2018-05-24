@@ -9,8 +9,7 @@ import keras
 from keras.models import Sequential
 from keras.layers.core import Dense
 from keras import optimizers
-from keras import backend as K
-import tensorflow as tf
+import keras.backend as K
 import json
 from sklearn.utils import shuffle
 import os
@@ -224,29 +223,35 @@ class data_cls:
         self.loaded = True
 
 
-
-def huber_loss(y_true, y_pred):
+def huber_loss(y_true, y_pred, clip_value=1):
     # Huber loss, see https://en.wikipedia.org/wiki/Huber_loss and
     # https://medium.com/@karpathy/yes-you-should-understand-backprop-e2f06eab496b
     # for details.
-    assert 1 > 0.
+    assert clip_value > 0.
 
     x = y_true - y_pred
-    if np.isinf(1):
+    if np.isinf(clip_value):
         # Spacial case for infinity since Tensorflow does have problems
         # if we compare `K.abs(x) < np.inf`.
         return .5 * K.square(x)
 
-    condition = K.abs(x) < 1
+    condition = K.abs(x) < clip_value
     squared_loss = .5 * K.square(x)
-    linear_loss = 1 * (K.abs(x) - .5 * 1)
+    linear_loss = clip_value * (K.abs(x) - .5 * clip_value)
     if K.backend() == 'tensorflow':
+        import tensorflow as tf
         if hasattr(tf, 'select'):
             return tf.select(condition, squared_loss, linear_loss)  # condition, true, false
         else:
             return tf.where(condition, squared_loss, linear_loss)  # condition, true, false
+    elif K.backend() == 'theano':
+        from theano import tensor as T
+        return T.switch(condition, squared_loss, linear_loss)
     else:
         raise RuntimeError('Unknown backend "{}".'.format(K.backend()))
+
+import keras.losses
+keras.losses.huber_loss = huber_loss
 
 class QNetwork():
     """
@@ -272,13 +277,13 @@ class QNetwork():
         # Add output layer    
         self.model.add(Dense(num_actions))
         
-        optimizer = optimizers.SGD(learning_rate,clipvalue=1)
+        optimizer = optimizers.SGD(learning_rate)
         # optimizer = optimizers.Adam(alpha=learning_rate)
         # optimizer = optimizers.AdaGrad(learning_rate)
         # optimizer = optimizers.RMSpropGraves(learning_rate, 0.95, self.momentum, 1e-2)
         
         # Compilation of the model with optimizer and loss
-        self.model.compile(loss='mse',optimizer=optimizer)
+        self.model.compile(loss=huber_loss,optimizer=optimizer)
 
     def predict(self,state,batch_size=1):
         """
@@ -597,7 +602,7 @@ if __name__ == "__main__":
     
  
 #    num_episodes = int(env.data_shape[0]/(iterations_episode)/10)
-    num_episodes = 100
+    num_episodes = 300
     valid_actions = list(range(len(env.attack_types))) # only detect type of attack
     num_actions = len(valid_actions)
     

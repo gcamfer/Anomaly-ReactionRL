@@ -9,6 +9,7 @@ import keras
 from keras.models import Sequential
 from keras.layers.core import Dense
 from keras import optimizers
+from keras import backend as K
 import json
 from sklearn.utils import shuffle
 import os
@@ -23,7 +24,7 @@ Data class processing
 '''
 
 class data_cls:
-    def __init__(self, path,train_test,**kwargs):
+    def __init__(self,train_test,**kwargs):
         col_names = ["duration","protocol_type","service","flag","src_bytes",
             "dst_bytes","land","wrong_fragment","urgent","hot","num_failed_logins",
             "logged_in","num_compromised","root_shell","su_attempted","num_root",
@@ -36,99 +37,98 @@ class data_cls:
             "dst_host_rerror_rate","dst_host_srv_rerror_rate","labels"]
         self.index = 0
         # Data formated path and test path. 
-        self.formated_path = "../datasets/formated/formated_data_multi.data"
-        self.test_path = "../datasets/formated/test_data_multi.data"
         self.loaded = False
         self.train_test = train_test
-        self.second_path = kwargs.get('join_path', '../datasets/corrected')
+        self.train_path = kwargs.get('train_path', '../datasets/KDDTrain+.txt')
+        self.test_path = kwargs.get('test_path','../datasets/KDDTest+.txt')
+        
+        self.formated_train_path = kwargs.get('formated_train_path', 
+                                              "../datasets/formated/formated_train_type.data")
+        self.formated_test_path = kwargs.get('formated_test_path',
+                                             "../datasets/formated/formated_test_type.data")
         
         self.attack_types = ['normal','DoS','Probe','R2L','U2R']
         self.attack_names = []
-        self.attack_map =   { 
-                'normal.': 'normal',
+        self.attack_map =   { 'normal': 'normal',
                         
-                'back.': 'DoS',
-                'land.': 'DoS',
-                'neptune.': 'DoS',
-                'pod.': 'DoS',
-                'smurf.': 'DoS',
-                'teardrop.': 'DoS',
-                'mailbomb.': 'DoS',
-                'apache2.': 'DoS',
-                'processtable.': 'DoS',
-                'udpstorm.': 'DoS',
-                
-                'ipsweep.': 'Probe',
-                'nmap.': 'Probe',
-                'portsweep.': 'Probe',
-                'satan.': 'Probe',
-                'mscan.': 'Probe',
-                'saint.': 'Probe',
-            
-                'ftp_write.': 'R2L',
-                'guess_passwd.': 'R2L',
-                'imap.': 'R2L',
-                'multihop.': 'R2L',
-                'phf.': 'R2L',
-                'spy.': 'R2L',
-                'warezclient.': 'R2L',
-                'warezmaster.': 'R2L',
-                'sendmail.': 'R2L',
-                'named.': 'R2L',
-                'snmpgetattack.': 'R2L',
-                'snmpguess.': 'R2L',
-                'xlock.': 'R2L',
-                'xsnoop.': 'R2L',
-                'worm.': 'R2L',
-                
-                'buffer_overflow.': 'U2R',
-                'loadmodule.': 'U2R',
-                'perl.': 'U2R',
-                'rootkit.': 'U2R',
-                'httptunnel.': 'U2R',
-                'ps.': 'U2R',    
-                'sqlattack.': 'U2R',
-                'xterm.': 'U2R'
-                }
+                        'back': 'DoS',
+                        'land': 'DoS',
+                        'neptune': 'DoS',
+                        'pod': 'DoS',
+                        'smurf': 'DoS',
+                        'teardrop': 'DoS',
+                        'mailbomb': 'DoS',
+                        'apache2': 'DoS',
+                        'processtable': 'DoS',
+                        'udpstorm': 'DoS',
+                        
+                        'ipsweep': 'Probe',
+                        'nmap': 'Probe',
+                        'portsweep': 'Probe',
+                        'satan': 'Probe',
+                        'mscan': 'Probe',
+                        'saint': 'Probe',
+                    
+                        'ftp_write': 'R2L',
+                        'guess_passwd': 'R2L',
+                        'imap': 'R2L',
+                        'multihop': 'R2L',
+                        'phf': 'R2L',
+                        'spy': 'R2L',
+                        'warezclient': 'R2L',
+                        'warezmaster': 'R2L',
+                        'sendmail': 'R2L',
+                        'named': 'R2L',
+                        'snmpgetattack': 'R2L',
+                        'snmpguess': 'R2L',
+                        'xlock': 'R2L',
+                        'xsnoop': 'R2L',
+                        'worm': 'R2L',
+                        
+                        'buffer_overflow': 'U2R',
+                        'loadmodule': 'U2R',
+                        'perl': 'U2R',
+                        'rootkit': 'U2R',
+                        'httptunnel': 'U2R',
+                        'ps': 'U2R',    
+                        'sqlattack': 'U2R',
+                        'xterm': 'U2R'
+                    }
         self.all_attack_names = list(self.attack_map.keys())
 
-        
-        # If path is not provided system out error
-        if (not path):
-            print("Path: not path name provided", flush = True)
-            sys.exit(0)
         formated = False     
-       
-        # If the formatted data path exists, is not needed to process it again
-        if os.path.exists(self.formated_path):
+        
+        # Test formated data exists
+        if os.path.exists(self.formated_train_path) and os.path.exists(self.formated_test_path):
             formated = True
-            
+       
+       
 
         # If it does not exist, it's needed to format the data
         if not formated:
             ''' Formating the dataset for ready-2-use data'''
-            self.df = pd.read_csv(path,sep=',',names=col_names)
+            self.df = pd.read_csv(self.train_path,sep=',',names=col_names,index_col=False)
             if 'dificulty' in self.df.columns:
-                self.df.drop('dificulty', axis=1, inplace=True) #in case of difficulty            
-            
-            if train_test == 'join':
-                data2 = pd.read_csv(self.second_path,sep=',',names=col_names)
-                if 'dificulty' in data2:
-                    del(data2['dificulty'])
-                train_indx = self.df.shape[0]
-                frames = [self.df,data2]
-                self.df = pd.concat(frames)
-            # Data now is in RAM
-            self.loaded = True
+                self.df.drop('dificulty', axis=1, inplace=True) #in case of difficulty     
+                
+            data2 = pd.read_csv(self.test_path,sep=',',names=col_names,index_col=False)
+            if 'dificulty' in data2:
+                del(data2['dificulty'])
+            train_indx = self.df.shape[0]
+            frames = [self.df,data2]
+            self.df = pd.concat(frames)
             
             # Dataframe processing
             self.df = pd.concat([self.df.drop('protocol_type', axis=1), pd.get_dummies(self.df['protocol_type'])], axis=1)
             self.df = pd.concat([self.df.drop('service', axis=1), pd.get_dummies(self.df['service'])], axis=1)
             self.df = pd.concat([self.df.drop('flag', axis=1), pd.get_dummies(self.df['flag'])], axis=1)
               
-            
             # 1 if ``su root'' command attempted; 0 otherwise 
             self.df['su_attempted'] = self.df['su_attempted'].replace(2.0, 0.0)
+            
+             # One hot encoding for labels
+            self.df = pd.concat([self.df.drop('labels', axis=1),
+                            pd.get_dummies(self.df['labels'])], axis=1)
             
             # Normalization of the df
             #normalized_df=(df-df.mean())/df.std()
@@ -139,9 +139,7 @@ class data_cls:
                     else:
                         self.df[indx] = (self.df[indx]-self.df[indx].min())/(self.df[indx].max()-self.df[indx].min())
             
-            # One hot encoding for labels
-            self.df = pd.concat([self.df.drop('labels', axis=1),
-                            pd.get_dummies(self.df['labels'])], axis=1)
+           
             
             # Create a list with the existent attacks in the df
             for att in self.attack_map:
@@ -150,50 +148,13 @@ class data_cls:
                     if np.sum(self.df[att].values) > 1:
                         self.attack_names.append(att)
             
-            
-            
-             # Save data
-            # suffle data: if join shuffled before in order to save train/test
-            if train_test != 'join':
-                self.df = shuffle(self.df,random_state=np.random.randint(0,100))            
-                self.df = self.df.reset_index(drop=True)
-
-           
-            if train_test == 'train':
-                self.df.to_csv(self.formated_path,sep=',',index=False)
-            elif train_test == 'test':
-                self.df.to_csv(self.test_path,sep=',',index=False)
-            elif train_test == 'full':
-            # 70% train 30% test
-                train_indx = np.int32(self.df.shape[0]*0.7)
-                test_df = self.df.iloc[train_indx:self.df.shape[0]]
-                self.df = self.df[:train_indx]
-                test_df.to_csv(self.test_path,sep=',',index=False)
-                self.df.to_csv(self.formated_path,sep=',',index=False)
-            else: #join: index calculated before
-                test_df = self.df.iloc[train_indx:self.df.shape[0]]
-                test_df = shuffle(test_df,random_state=np.random.randint(0,100))
-                test_df = test_df.reset_index(drop=True)
-                self.df = self.df[:train_indx]
-                self.df = shuffle(self.df,random_state=np.random.randint(0,100))
-                self.df = self.df.reset_index(drop=True)
-                
-                test_df.to_csv(self.test_path,sep=',',index=False)
-                self.df.to_csv(self.formated_path,sep=',',index=False)
-            
-            
-            
-            # suffle data
-            self.df = shuffle(self.df,random_state=np.random.randint(0,100))
-            self.df = self.df.reset_index(drop=True)
-            
             # Save data
-            # 70% train 30% test
-            train_indx = np.int32(self.df.shape[0]*0.7)
             test_df = self.df.iloc[train_indx:self.df.shape[0]]
+            test_df = shuffle(test_df,random_state=np.random.randint(0,100))
             self.df = self.df[:train_indx]
-            test_df.to_csv(self.test_path,sep=',',index=False)
-            self.df.to_csv(self.formated_path,sep=',',index=False)
+            self.df = shuffle(self.df,random_state=np.random.randint(0,100))
+            test_df.to_csv(self.formated_test_path,sep=',',index=False)
+            self.df.to_csv(self.formated_train_path,sep=',',index=False)
 
 
     def get_shape(self):
@@ -213,9 +174,16 @@ class data_cls:
             self._load_df()
         
         # Read the df rows
-        batch = self.df.iloc[self.index:self.index+batch_size]
-        
-        self.index += batch_size
+        indexes = list(range(self.index,self.index+batch_size))    
+        if max(indexes)>self.data_shape[0]-1:
+            dif = max(indexes)-self.data_shape[0]
+            indexes[len(indexes)-dif-1:len(indexes)] = list(range(dif+1))
+            self.index=batch_size-dif
+            batch = self.df.iloc[indexes]
+        else: 
+            batch = self.df.iloc[indexes]
+            self.index += batch_size    
+            
         labels = batch[self.attack_names]
         
         batch = batch.drop(self.all_attack_names,axis=1)
@@ -245,10 +213,11 @@ class data_cls:
 #        return self.df,labels
 
     def _load_df(self):
-        if self.train_test == 'train' or self.train_test == 'full':
-            self.df = pd.read_csv(self.formated_path,sep=',') # Read again the csv
+        if self.train_test == 'train':
+            self.df = pd.read_csv(self.formated_train_path,sep=',') # Read again the csv
         else:
-            self.df = pd.read_csv(self.test_path,sep=',')
+            self.df = pd.read_csv(self.formated_test_path,sep=',')
+        self.index=0
         self.loaded = True
          # Create a list with the existent attacks in the df
         for att in self.attack_map:
@@ -257,8 +226,41 @@ class data_cls:
                 if np.sum(self.df[att].values) > 1:
                     self.attack_names.append(att)
         #self.headers = list(self.df)
-        
+ 
 
+
+
+# Huber loss function        
+def huber_loss(y_true, y_pred, clip_value=1):
+    # Huber loss, see https://en.wikipedia.org/wiki/Huber_loss and
+    # https://medium.com/@karpathy/yes-you-should-understand-backprop-e2f06eab496b
+    # for details.
+    assert clip_value > 0.
+
+    x = y_true - y_pred
+    if np.isinf(clip_value):
+        # Spacial case for infinity since Tensorflow does have problems
+        # if we compare `K.abs(x) < np.inf`.
+        return .5 * K.square(x)
+
+    condition = K.abs(x) < clip_value
+    squared_loss = .5 * K.square(x)
+    linear_loss = clip_value * (K.abs(x) - .5 * clip_value)
+    if K.backend() == 'tensorflow':
+        import tensorflow as tf
+        if hasattr(tf, 'select'):
+            return tf.select(condition, squared_loss, linear_loss)  # condition, true, false
+        else:
+            return tf.where(condition, squared_loss, linear_loss)  # condition, true, false
+    elif K.backend() == 'theano':
+        from theano import tensor as T
+        return T.switch(condition, squared_loss, linear_loss)
+    else:
+        raise RuntimeError('Unknown backend "{}".'.format(K.backend()))
+
+# Needed for keras huber_loss locate
+import keras.losses
+keras.losses.huber_loss = huber_loss
 
 class QNetwork():
     """
@@ -291,7 +293,7 @@ class QNetwork():
         # optimizer = optimizers.RMSpropGraves(learning_rate, 0.95, self.momentum, 1e-2)
         
         # Compilation of the model with optimizer and loss
-        self.model.compile(optimizer,"mse")
+        self.model.compile(loss=huber_loss,optimizer=optimizer)
 
     def predict(self,state,batch_size=1):
         """
@@ -353,17 +355,62 @@ class Epsilon_greedy(Policy):
             actions = np.random.randint(0, self.num_actions,states.shape[0])
         else:
             self.Q = self.estimator.predict(states,states.shape[0])
-            best_actions = np.argwhere(self.Q[0] == np.amax(self.Q[0]))
-            actions = best_actions[np.random.choice(len(best_actions))]
+            actions = []
+            for row in range(self.Q.shape[0]):
+                best_actions = np.argwhere(self.Q[row] == np.amax(self.Q[row]))
+                actions.append(best_actions[np.random.choice(len(best_actions))].item())
             
         self.step_counter += 1 
         # decay epsilon after each epoch
         if self.epsilon_decay:
             if self.step_counter % self.epoch_length == 0:
-                self.epsilon = max(.001, self.epsilon * self.decay_rate**self.step_counter)
+                self.epsilon = max(.01, self.epsilon * self.decay_rate**self.step_counter)
             
         return actions
     
+
+
+
+class ReplayMemory(object):
+    """Implements basic replay memory"""
+
+    def __init__(self, observation_size, max_size):
+        self.observation_size = observation_size
+        self.num_observed = 0
+        self.max_size = max_size
+        self.samples = {
+                 'obs'      : np.zeros(self.max_size * 1 * self.observation_size,
+                                       dtype=np.float32).reshape(self.max_size,self.observation_size),
+                 'action'   : np.zeros(self.max_size * 1, dtype=np.int16).reshape(self.max_size, 1),
+                 'reward'   : np.zeros(self.max_size * 1).reshape(self.max_size, 1),
+                 'terminal' : np.zeros(self.max_size * 1, dtype=np.int16).reshape(self.max_size, 1),
+               }
+
+    def observe(self, state, action, reward, done):
+        index = self.num_observed % self.max_size
+        self.samples['obs'][index, :] = state
+        self.samples['action'][index, :] = action
+        self.samples['reward'][index, :] = reward
+        self.samples['terminal'][index, :] = done
+
+        self.num_observed += 1
+
+    def sample_minibatch(self, minibatch_size):
+        max_index = min(self.num_observed, self.max_size) - 1
+        sampled_indices = np.random.randint(max_index, size=minibatch_size)
+
+        s      = np.asarray(self.samples['obs'][sampled_indices, :], dtype=np.float32)
+        s_next = np.asarray(self.samples['obs'][sampled_indices+1, :], dtype=np.float32)
+
+        a      = self.samples['action'][sampled_indices].reshape(minibatch_size)
+        r      = self.samples['reward'][sampled_indices].reshape((minibatch_size, 1))
+        done   = self.samples['terminal'][sampled_indices].reshape((minibatch_size, 1))
+
+        return (s, a, r, s_next, done)
+
+
+
+
 
 
 
@@ -383,7 +430,10 @@ class Agent(object):
         self.minibatch_size = kwargs.get('minibatch_size', 2)
         self.epoch_length = kwargs.get('epoch_length', 100)
         self.decay_rate = kwargs.get('decay_rate',0.99)
-        self.memory = ReplayMemory(self.obs_size, kwargs.get('mem_size', 10))
+        self.ExpRep = kwargs.get('ExpRep',True)
+        if self.ExpRep:
+            self.memory = ReplayMemory(self.obs_size, kwargs.get('mem_size', 10))
+        
         self.ddqn_time = 100
         self.ddqn_update = self.ddqn_time
 
@@ -404,12 +454,25 @@ class Agent(object):
                                          self.decay_rate,self.epoch_length)
         
         
-    def learn(self, states, actions,next_states, reward, done):
-        self.memory.observe(states, actions, reward, done)            
-        
+    def learn(self, states, actions,next_states, rewards, done):
+        if self.ExpRep:
+            self.memory.observe(states, actions, rewards, done)
+        else:
+            self.states = states
+            self.actions = actions
+            self.next_states = next_states
+            self.rewards = rewards
+            self.done = done        
     def update_model(self):
+        if self.ExpRep:
+            (states, actions, rewards, next_states, done) = self.memory.sample_minibatch(self.minibatch_size)
+        else:
+            states = self.states
+            rewards = self.rewards
+            next_states = self.next_states
+            actions = self.actions
+            done = self.done
         
-        (states, action, reward, next_states, done) = self.memory.sample_minibatch(self.minibatch_size)
         next_actions = []
         # Compute Q targets
 #        Q_prime = self.model_network.predict(next_states,self.minibatch_size)
@@ -423,8 +486,10 @@ class Agent(object):
         Q = self.model_network.predict(states,self.minibatch_size)
         # Q-learning update
         # target = reward + gamma * max_a'{Q(next_state,next_action))}
-        targets = reward[:,0] + self.gamma * Q[sx,next_actions] * (1-done)[:,0]   
-        Q[sx,next_actions] = targets  
+        targets = rewards.reshape(Q[sx,actions].shape) + \
+                  self.gamma * Q[sx,next_actions] * \
+                  (1-done.reshape(Q[sx,actions].shape))   
+        Q[sx,actions] = targets  
         
         loss = self.model_network.model.train_on_batch(states,Q)#inputs,targets        
         
@@ -465,9 +530,13 @@ class AttackAgent(Agent):
 Reinforcement learning Enviroment Definition
 '''
 class RLenv(data_cls):
-    def __init__(self,path,train_test,**kwargs):
-        data_cls.__init__(self,path,train_test,**kwargs)
+    def __init__(self,train_test,**kwargs):
+        data_cls.__init__(self,train_test,**kwargs)
         self.data_shape = data_cls.get_shape(self)
+        self.batch_size = kwargs.get('batch_size',1) # experience replay -> batch = 1
+        self.iterations_episode = kwargs.get('iterations_episode',10)
+        if self.batch_size=='full':
+            self.batch_size = int(self.data_shape[0]/iterations_episode)
 
 
     '''
@@ -515,8 +584,9 @@ class RLenv(data_cls):
     '''    
     def act(self,defender_actions,attack_actions):
         # Clear previous rewards        
-        self.def_reward = 1
-        self.att_reward = 1
+        self.att_reward = np.zeros(len(attack_actions))       
+        self.def_reward = np.zeros(len(defender_actions))
+        
         
         attack = [self.attack_types.index(self.attack_map[self.attack_names[att]]) for att in attack_actions]
         
@@ -595,48 +665,6 @@ class RLenv(data_cls):
 
 
 
-class ReplayMemory(object):
-    """Implements basic replay memory"""
-
-    def __init__(self, observation_size, max_size):
-        self.observation_size = observation_size
-        self.num_observed = 0
-        self.max_size = max_size
-        self.samples = {
-                 'obs'      : np.zeros(self.max_size * 1 * self.observation_size,
-                                       dtype=np.float32).reshape(self.max_size,self.observation_size),
-                 'action'   : np.zeros(self.max_size * 1, dtype=np.int16).reshape(self.max_size, 1),
-                 'reward'   : np.zeros(self.max_size * 1).reshape(self.max_size, 1),
-                 'terminal' : np.zeros(self.max_size * 1, dtype=np.int16).reshape(self.max_size, 1),
-               }
-
-    def observe(self, state, action, reward, done):
-        index = self.num_observed % self.max_size
-        self.samples['obs'][index, :] = state
-        self.samples['action'][index, :] = action
-        self.samples['reward'][index, :] = reward
-        self.samples['terminal'][index, :] = done
-
-        self.num_observed += 1
-
-    def sample_minibatch(self, minibatch_size):
-        max_index = min(self.num_observed, self.max_size) - 1
-        sampled_indices = np.random.randint(max_index, size=minibatch_size)
-
-        s      = np.asarray(self.samples['obs'][sampled_indices, :], dtype=np.float32)
-        s_next = np.asarray(self.samples['obs'][sampled_indices+1, :], dtype=np.float32)
-
-        a      = self.samples['action'][sampled_indices].reshape(minibatch_size)
-        r      = self.samples['reward'][sampled_indices].reshape((minibatch_size, 1))
-        done   = self.samples['terminal'][sampled_indices].reshape((minibatch_size, 1))
-
-        return (s, a, r, s_next, done)
-
-
-
-
-
-
 
 
 
@@ -644,21 +672,35 @@ class ReplayMemory(object):
 
 if __name__ == "__main__":
   
-    kdd_10_path = '../datasets/kddcup.data_10_percent_corrected'
-    kdd_path = '../datasets/kddcup.data'    
+    kdd_20_path = '../datasets/NSL/KDDTrain+_20Percent.txt'
+    kdd_train = '../datasets/NSL/KDDTrain+.txt'
+    kdd_test = '../datasets/NSL/KDDTest+.txt'
+
+    formated_train_path = "../datasets/formated/formated_train_type.data"
+    formated_test_path = "../datasets/formated/formated_test_type.data"
     
-    # dataset for prgram
-    # '../datasets/micro_kddcup.data'
     
+    
+    # Train batch
+    batch_size = 1
+    # batch of memory ExpRep
+    minibatch_size = 100
+    ExpRep = True
+    
+    iterations_episode = 100
+
+        
+  
     # Initialization of the enviroment
-    env = RLenv(kdd_path,'join',join_path='../datasets/corrected')
-    
+    env = RLenv('train',train_path=kdd_train,test_path=kdd_test,
+                formated_train_path = formated_train_path,
+                formated_test_path = formated_test_path,batch_size=batch_size,
+                iterations_episode=iterations_episode)    
     # obs_size = size of the state
     obs_size = env.data_shape[1]-len(env.all_attack_names)
     
-    iterations_episode = 100
-    num_episodes = int(env.data_shape[0]/(iterations_episode)/10)
-
+    #num_episodes = int(env.data_shape[0]/(iterations_episode)/10)
+    num_episodes = 300
     
     '''
     Definition for the defensor agent.
@@ -666,7 +708,6 @@ if __name__ == "__main__":
     defender_valid_actions = list(range(len(env.attack_types))) # only detect type of attack
     defender_num_actions = len(defender_valid_actions)    
     
-    minibatch_size = 100
 	
     def_epsilon = .01 # exploration
     def_gamma = 0.001
@@ -686,7 +727,8 @@ if __name__ == "__main__":
                           hidden_layers=def_hidden_layers,
                           minibatch_size = minibatch_size,
                           mem_size = 1000,
-                          learning_rate=def_learning_rate)
+                          learning_rate=def_learning_rate,
+                          ExpRep=ExpRep)
     #Pretrained defender
     #defender_agent.model_network.model.load_weights("models/type_model.h5")    
     
@@ -716,7 +758,8 @@ if __name__ == "__main__":
                           hidden_layers=att_hidden_layers,
                           minibatch_size = minibatch_size,
                           mem_size = 1000,
-                          learning_rate=att_learning_rate)
+                          learning_rate=att_learning_rate,
+                          ExpRep=ExpRep)
     
     
     
@@ -782,8 +825,7 @@ if __name__ == "__main__":
             #Enviroment actuation for this actions
             next_states,def_reward, att_reward,next_attack_actions, done = env.act(defender_actions,attack_actions)
             # If the epoch*batch_size*iterations_episode is largest than the df
-            if next_states.shape[0] != 1:
-                break # finished df
+
             
             attacker_agent.learn(states,attack_actions,next_states,att_reward,done)
             defender_agent.learn(states,defender_actions,next_states,def_reward,done)
@@ -791,9 +833,13 @@ if __name__ == "__main__":
             act_end_time = time.time()
             
             # Train network, update loss after at least minibatch_learns
-            if epoch*iterations_episode + i_iteration >= minibatch_size:
+            if ExpRep and epoch*iterations_episode + i_iteration >= minibatch_size:
                 def_loss += defender_agent.update_model()
                 att_loss += attacker_agent.update_model()
+            elif not ExpRep:
+                def_loss += defender_agent.update_model()
+                att_loss += attacker_agent.update_model()
+                
 
             update_end_time = time.time()
 
@@ -803,11 +849,10 @@ if __name__ == "__main__":
             
             
             # Update statistics
-            def_total_reward_by_episode += int(sum(def_reward))
-            att_total_reward_by_episode += int(sum(att_reward))
+            def_total_reward_by_episode += np.sum(def_reward,dtype=np.int32)
+            att_total_reward_by_episode += np.sum(att_reward,dtype=np.int32)
         
-        if next_states.shape[0] != 1:
-                break # finished df
+
         # Update user view
         def_reward_chain.append(def_total_reward_by_episode) 
         att_reward_chain.append(att_total_reward_by_episode) 
