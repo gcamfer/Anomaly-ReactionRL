@@ -6,15 +6,17 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import keras
-from keras.models import Sequential
-from keras.layers.core import Dense
+from keras.models import Sequential, Model
+from keras.layers import Dense,Input
+from keras.layers.merge import Add
+from keras.optimizers import Adam
 from keras import optimizers
-import keras.backend as K
 import json
 from sklearn.utils import shuffle
 import os
 import sys
 import time
+import tensorflow as tf
 
 
 
@@ -24,7 +26,7 @@ Data class processing
 '''
 
 class data_cls:
-    def __init__(self,train_test,**kwargs):
+    def __init__(self, path,train_test,**kwargs):
         col_names = ["duration","protocol_type","service","flag","src_bytes",
             "dst_bytes","land","wrong_fragment","urgent","hot","num_failed_logins",
             "logged_in","num_compromised","root_shell","su_attempted","num_root",
@@ -37,110 +39,108 @@ class data_cls:
             "dst_host_rerror_rate","dst_host_srv_rerror_rate","labels"]
         self.index = 0
         # Data formated path and test path. 
-
+        self.formated_path = "../datasets/formated/formated_data_type.data"
+        self.test_path = "../datasets/formated/test_data_type.data"
         self.loaded = False
         self.train_test = train_test
-        self.train_path = kwargs.get('train_path', '../datasets/NSL/KDDTrain+.txt')
-        self.test_path = kwargs.get('test_path','../datasets/NSL/KDDTest+.txt')
-        
-        self.formated_train_path = kwargs.get('formated_train_path', 
-                                              "../datasets/formated/formated_train_type.data")
-        self.formated_test_path = kwargs.get('formated_test_path',
-                                             "../datasets/formated/formated_test_type.data")
-
-
+        self.second_path = kwargs.get('join_path', '../datasets/corrected')
 
         
         self.attack_types = ['normal','DoS','Probe','R2L','U2R']
-        self.attack_map =   { 'normal': 'normal',
+        self.attack_map =   { 'normal.': 'normal',
                         
-                        'back': 'DoS',
-                        'land': 'DoS',
-                        'neptune': 'DoS',
-                        'pod': 'DoS',
-                        'smurf': 'DoS',
-                        'teardrop': 'DoS',
-                        'mailbomb': 'DoS',
-                        'apache2': 'DoS',
-                        'processtable': 'DoS',
-                        'udpstorm': 'DoS',
+                        'back.': 'DoS',
+                        'land.': 'DoS',
+                        'neptune.': 'DoS',
+                        'pod.': 'DoS',
+                        'smurf.': 'DoS',
+                        'teardrop.': 'DoS',
+                        'mailbomb.': 'DoS',
+                        'apache2.': 'DoS',
+                        'processtable.': 'DoS',
+                        'udpstorm.': 'DoS',
                         
-                        'ipsweep': 'Probe',
-                        'nmap': 'Probe',
-                        'portsweep': 'Probe',
-                        'satan': 'Probe',
-                        'mscan': 'Probe',
-                        'saint': 'Probe',
+                        'ipsweep.': 'Probe',
+                        'nmap.': 'Probe',
+                        'portsweep.': 'Probe',
+                        'satan.': 'Probe',
+                        'mscan.': 'Probe',
+                        'saint.': 'Probe',
                     
-                        'ftp_write': 'R2L',
-                        'guess_passwd': 'R2L',
-                        'imap': 'R2L',
-                        'multihop': 'R2L',
-                        'phf': 'R2L',
-                        'spy': 'R2L',
-                        'warezclient': 'R2L',
-                        'warezmaster': 'R2L',
-                        'sendmail': 'R2L',
-                        'named': 'R2L',
-                        'snmpgetattack': 'R2L',
-                        'snmpguess': 'R2L',
-                        'xlock': 'R2L',
-                        'xsnoop': 'R2L',
-                        'worm': 'R2L',
+                        'ftp_write.': 'R2L',
+                        'guess_passwd.': 'R2L',
+                        'imap.': 'R2L',
+                        'multihop.': 'R2L',
+                        'phf.': 'R2L',
+                        'spy.': 'R2L',
+                        'warezclient.': 'R2L',
+                        'warezmaster.': 'R2L',
+                        'sendmail.': 'R2L',
+                        'named.': 'R2L',
+                        'snmpgetattack.': 'R2L',
+                        'snmpguess.': 'R2L',
+                        'xlock.': 'R2L',
+                        'xsnoop.': 'R2L',
+                        'worm.': 'R2L',
                         
-                        'buffer_overflow': 'U2R',
-                        'loadmodule': 'U2R',
-                        'perl': 'U2R',
-                        'rootkit': 'U2R',
-                        'httptunnel': 'U2R',
-                        'ps': 'U2R',    
-                        'sqlattack': 'U2R',
-                        'xterm': 'U2R'
+                        'buffer_overflow.': 'U2R',
+                        'loadmodule.': 'U2R',
+                        'perl.': 'U2R',
+                        'rootkit.': 'U2R',
+                        'httptunnel.': 'U2R',
+                        'ps.': 'U2R',    
+                        'sqlattack.': 'U2R',
+                        'xterm.': 'U2R'
                     }
         
-        
-
-
+        # If path is not provided system out error
+        if (not path):
+            print("Path: not path name provided", flush = True)
+            sys.exit(0)
         formated = False     
         
-        # Test formated data exists
-        if os.path.exists(self.formated_train_path) and os.path.exists(self.formated_test_path):
+        
+        if os.path.exists(self.formated_path) and train_test=="train":
             formated = True
-               
+        elif os.path.exists(self.test_path) and train_test=="test":
+            formated = True
+        elif os.path.exists(self.test_path) and os.path.exists(self.formated_path) and (train_test == 'full' or train_test=='join'):
+            formated = True
+            
+       
+        # If the formatted data path exists, is not needed to process it again
+        if os.path.exists(self.formated_path):
+            formated = True
+            
 
         # If it does not exist, it's needed to format the data
         if not formated:
             ''' Formating the dataset for ready-2-use data'''
-            self.df = pd.read_csv(self.train_path,sep=',',names=col_names,index_col=False)
+            self.df = pd.read_csv(path,sep=',',names=col_names)
             if 'dificulty' in self.df.columns:
                 self.df.drop('dificulty', axis=1, inplace=True) #in case of difficulty     
                 
-            data2 = pd.read_csv(self.test_path,sep=',',names=col_names,index_col=False)
-            if 'dificulty' in data2:
-                del(data2['dificulty'])
-            train_indx = self.df.shape[0]
-            frames = [self.df,data2]
-            self.df = pd.concat(frames)
-            
+            if train_test == 'join':
+                data2 = pd.read_csv(self.second_path,sep=',',names=col_names)
+                if 'dificulty' in data2:
+                    del(data2['dificulty'])
+                train_indx = self.df.shape[0]
+                frames = [self.df,data2]
+                self.df = pd.concat(frames)
+            # Data now is in RAM
+            self.loaded = True
             
             # Dataframe processing
             self.df = pd.concat([self.df.drop('protocol_type', axis=1), pd.get_dummies(self.df['protocol_type'])], axis=1)
             self.df = pd.concat([self.df.drop('service', axis=1), pd.get_dummies(self.df['service'])], axis=1)
             self.df = pd.concat([self.df.drop('flag', axis=1), pd.get_dummies(self.df['flag'])], axis=1)
               
+            
             # 1 if ``su root'' command attempted; 0 otherwise 
             self.df['su_attempted'] = self.df['su_attempted'].replace(2.0, 0.0)
             
-            
-            # One-hot-Encoding for reaction.  
-            all_labels = self.df['labels'] # Get all labels in df
-            mapped_labels = np.vectorize(self.attack_map.get)(all_labels) # Map attacks
-            self.df = self.df.reset_index(drop=True)
-            self.df = pd.concat([self.df.drop('labels', axis=1),pd.get_dummies(mapped_labels)], axis=1)
-            
-            
             # Normalization of the df
-            #self.df = (self.df-self.df.mean())/(self.df.max()-self.df.min())
+            #normalized_df=(df-df.mean())/df.std()
             for indx,dtype in self.df.dtypes.iteritems():
                 if dtype == 'float64' or dtype == 'int64':
                     if self.df[indx].max() == 0 and self.df[indx].min()== 0:
@@ -149,14 +149,36 @@ class data_cls:
                         self.df[indx] = (self.df[indx]-self.df[indx].min())/(self.df[indx].max()-self.df[indx].min())
                     
                       
+            # One-hot-Encoding for reaction.  
+            all_labels = self.df['labels'] # Get all labels in df
+            mapped_labels = np.vectorize(self.attack_map.get)(all_labels) # Map attacks
+            self.df = self.df.reset_index(drop=True)
+            self.df = pd.concat([self.df.drop('labels', axis=1),pd.get_dummies(mapped_labels)], axis=1)
             
              # Save data
-            test_df = self.df.iloc[train_indx:self.df.shape[0]]
-            test_df = shuffle(test_df,random_state=np.random.randint(0,100))
-            self.df = self.df[:train_indx]
-            self.df = shuffle(self.df,random_state=np.random.randint(0,100))
-            test_df.to_csv(self.formated_test_path,sep=',',index=False)
-            self.df.to_csv(self.formated_train_path,sep=',',index=False)
+            # suffle data: if join shuffled before in order to save train/test
+            if train_test != 'join':
+                self.df = shuffle(self.df,random_state=np.random.randint(0,100))            
+            
+           
+            if train_test == 'train':
+                self.df.to_csv(self.formated_path,sep=',',index=False)
+            elif train_test == 'test':
+                self.df.to_csv(self.test_path,sep=',',index=False)
+            elif train_test == 'full':
+            # 70% train 30% test
+                train_indx = np.int32(self.df.shape[0]*0.7)
+                test_df = self.df.iloc[train_indx:self.df.shape[0]]
+                self.df = self.df[:train_indx]
+                test_df.to_csv(self.test_path,sep=',',index=False)
+                self.df.to_csv(self.formated_path,sep=',',index=False)
+            else: #join: index calculated before
+                test_df = self.df.iloc[train_indx:self.df.shape[0]]
+                test_df = shuffle(test_df,random_state=np.random.randint(0,100))
+                self.df = self.df[:train_indx]
+                self.df = shuffle(self.df,random_state=np.random.randint(0,100))
+                test_df.to_csv(self.test_path,sep=',',index=False)
+                self.df.to_csv(self.formated_path,sep=',',index=False)
             
             
         
@@ -187,24 +209,19 @@ class data_cls:
     def get_batch(self, batch_size=100):
         
         if self.loaded is False:
-            self._load_df()
-            
-        indexes = list(range(self.index,self.index+batch_size))    
-        if max(indexes)>self.data_shape[0]-1:
-            dif = max(indexes)-self.data_shape[0]
-            indexes[len(indexes)-dif-1:len(indexes)] = list(range(dif+1))
-            self.index=batch_size-dif
-            batch = self.df.iloc[indexes]
-        else: 
-            batch = self.df.iloc[indexes]
-            self.index += batch_size    
-            
-
+            self.df = pd.read_csv(self.formated_path,sep=',') # Read again the csv
+            self.loaded = True
+            #self.headers = list(self.df)
+        
+        batch = self.df.iloc[self.index:self.index+batch_size]
+        self.index += batch_size
         labels = batch[self.attack_types]
         
         for att in self.attack_types:
             del(batch[att])
         return batch,labels
+    
+    
     
     def get_shape(self):
         if self.loaded is False:
@@ -215,51 +232,20 @@ class data_cls:
         return self.data_shape
     
     def _load_df(self):
-        if self.train_test == 'train':
-            self.df = pd.read_csv(self.formated_train_path,sep=',') # Read again the csv
+        if self.train_test == 'train' or self.train_test == 'full':
+            self.df = pd.read_csv(self.formated_path,sep=',') # Read again the csv
         else:
-            self.df = pd.read_csv(self.formated_test_path,sep=',')
-        self.index=0
+            self.df = pd.read_csv(self.test_path,sep=',')
         self.loaded = True
 
 
-def huber_loss(y_true, y_pred, clip_value=1):
-    # Huber loss, see https://en.wikipedia.org/wiki/Huber_loss and
-    # https://medium.com/@karpathy/yes-you-should-understand-backprop-e2f06eab496b
-    # for details.
-    assert clip_value > 0.
 
-    x = y_true - y_pred
-    if np.isinf(clip_value):
-        # Spacial case for infinity since Tensorflow does have problems
-        # if we compare `K.abs(x) < np.inf`.
-        return .5 * K.square(x)
-
-    condition = K.abs(x) < clip_value
-    squared_loss = .5 * K.square(x)
-    linear_loss = clip_value * (K.abs(x) - .5 * clip_value)
-    if K.backend() == 'tensorflow':
-        import tensorflow as tf
-        if hasattr(tf, 'select'):
-            return tf.select(condition, squared_loss, linear_loss)  # condition, true, false
-        else:
-            return tf.where(condition, squared_loss, linear_loss)  # condition, true, false
-    elif K.backend() == 'theano':
-        from theano import tensor as T
-        return T.switch(condition, squared_loss, linear_loss)
-    else:
-        raise RuntimeError('Unknown backend "{}".'.format(K.backend()))
-
-import keras.losses
-keras.losses.huber_loss = huber_loss
 
 class QNetwork():
     """
     Q-Network Estimator
     Represents the global model for the table
     """
-    
-
 
     def __init__(self,obs_size,num_actions,hidden_size = 100,
                  hidden_layers = 1,learning_rate=.2):
@@ -283,7 +269,7 @@ class QNetwork():
         # optimizer = optimizers.RMSpropGraves(learning_rate, 0.95, self.momentum, 1e-2)
         
         # Compilation of the model with optimizer and loss
-        self.model.compile(loss=huber_loss,optimizer=optimizer)
+        self.model.compile(optimizer,"mse")
 
     def predict(self,state,batch_size=1):
         """
@@ -347,17 +333,14 @@ class Epsilon_greedy(Policy):
             actions = np.random.randint(0, self.num_actions,states.shape[0])
         else:
             self.Q = self.estimator.predict(states,states.shape[0])
-            # TODO: fix performance in this loop
-            actions = []
-            for row in range(self.Q.shape[0]):
-                best_actions = np.argwhere(self.Q[row] == np.amax(self.Q[row]))
-                actions.append(best_actions[np.random.choice(len(best_actions))].item())
+            best_actions = np.argwhere(self.Q[0] == np.amax(self.Q[0]))
+            actions = best_actions[np.random.choice(len(best_actions))]
             
         self.step_counter += 1 
         # decay epsilon after each epoch
         if self.epsilon_decay:
             if self.step_counter % self.epoch_length == 0:
-                self.epsilon = max(.05, self.epsilon * self.decay_rate**self.step_counter)
+                self.epsilon = max(.001, self.epsilon * self.decay_rate**self.step_counter)
             
         return actions
     
@@ -378,10 +361,7 @@ class Agent(object):
         self.minibatch_size = kwargs.get('minibatch_size', 2)
         self.epoch_length = kwargs.get('epoch_length', 100)
         self.decay_rate = kwargs.get('decay_rate',0.99)
-        self.ExpRep = kwargs.get('ExpRep',True)
-        if self.ExpRep:
-            self.memory = ReplayMemory(self.obs_size, kwargs.get('mem_size', 10))
-        
+        self.memory = ReplayMemory(self.obs_size, kwargs.get('mem_size', 10))
         self.ddqn_time = 100
         self.ddqn_update = self.ddqn_time
 
@@ -407,27 +387,13 @@ class Agent(object):
         actions = self.policy.get_actions(states)
         return actions
     
-    def learn(self, states, actions,next_states, rewards, done):
-        if self.ExpRep:
-            self.memory.observe(states, actions, rewards, done)
-        else:
-            self.states = states
-            self.actions = actions
-            self.next_states = next_states
-            self.rewards = rewards
-            self.done = done
+    def learn(self, states, actions,next_states, reward, done):
+        self.memory.observe(states, actions, reward, done)
 
 
     def update_model(self):
-        if self.ExpRep:
-            (states, actions, rewards, next_states, done) = self.memory.sample_minibatch(self.minibatch_size)
-        else:
-            states = self.states
-            rewards = self.rewards
-            next_states = self.next_states
-            actions = self.actions
-            done = self.done
-            
+        
+        (states, action, reward, next_states, done) = self.memory.sample_minibatch(self.minibatch_size)
         next_actions = []
         # Compute Q targets
         Q_prime = self.target_model_network.predict(next_states,self.minibatch_size)
@@ -440,10 +406,8 @@ class Agent(object):
         Q = self.model_network.predict(states,self.minibatch_size)
         # Q-learning update
         # target = reward + gamma * max_a'{Q(next_state,next_action))}
-        targets = rewards.reshape(Q[sx,actions].shape) + \
-                  self.gamma * Q[sx,next_actions] * \
-                  (1-done.reshape(Q[sx,actions].shape))   
-        Q[sx,actions] = targets  
+        targets = reward[:,0] + self.gamma * Q[sx,next_actions] * (1-done)[:,0]   
+        Q[sx,next_actions] = targets  
         
         loss = self.model_network.model.train_on_batch(states,Q)#inputs,targets  
         
@@ -454,11 +418,145 @@ class Agent(object):
 #            self.target_model_network.model = QNetwork.copy_model(self.model_network.model)
             self.target_model_network.model.set_weights(self.model_network.model.get_weights()) 
             
-        
         return loss    
         
-      
+class actor_critic(object):
+    def __init__(self,actions,obs_size,sess,**kwargs):
+        self.sess = sess
         
+        self.learning_rate = 0.002
+        self.obs_size = obs_size
+        self.num_actions = len(actions)       
+        self.epsilon = kwargs.get('epsilon', 1)
+        self.gamma = kwargs.get('gamma', .001)
+        self.minibatch_size = kwargs.get('minibatch_size', 2)
+        self.epoch_length = kwargs.get('epoch_length', 100)
+        self.decay_rate = kwargs.get('decay_rate',0.99)
+        
+        self.memory = ReplayMemory(self.obs_size, kwargs.get('mem_size', 10))
+        
+        
+        self.actor_state_input, self.actor_model = self.create_actor_model()
+        #_, self.target_actor_model = self.create_actor_model()
+        
+        
+        self.actor_critic_grad = tf.placeholder(tf.float32,	[None, len(actions)])
+        actor_model_weights = self.actor_model.trainable_weights
+        self.actor_grads = tf.gradients(self.actor_model.output,
+                                  actor_model_weights, -self.actor_critic_grad) 
+        grads = zip(self.actor_grads, actor_model_weights)
+        self.optimize = tf.train.AdamOptimizer(self.learning_rate).apply_gradients(grads)
+        
+        
+        
+        self.critic_state_input, self.critic_action_input, \
+            self.critic_model = self.create_critic_model()
+        #_, _, self.target_critic_model = self.create_critic_model()
+        
+        self.critic_grads = tf.gradients(self.critic_model.output,
+                                         self.critic_action_input)
+        
+        self.sess.run(tf.global_variables_initializer())
+        
+        
+        
+        
+    # Actor = policy estimation
+    def create_actor_model(self):
+       # Network arquitecture
+        
+       # Add imput layer
+       state_input = Input(shape=(self.obs_size,))
+       hidden1 = Dense(24,activation='relu')(state_input)
+       hidden2 = Dense(48,activation='relu')(hidden1)
+       hidden3 = Dense(24,activation='relu')(hidden2)
+       output = Dense(num_actions,activation='softmax')(hidden3)
+       
+       model = Model(input=state_input, output = output)
+       adam = Adam(self.learning_rate)
+       model.compile(loss='mse',optimizer=adam)
+       return state_input,model
+
+   
+
+
+    #critic Q_value estimation
+    def create_critic_model(self):
+        state_input = Input(shape=(self.obs_size,))
+        state_hidden1 = Dense(48,activation='relu')(state_input)
+        state_hidden2 = Dense(48)(state_hidden1)
+
+        action_input = Input(shape=(self.num_actions,))
+        action_hidden1 = Dense(48)(action_input)
+
+        merged = Add()([state_hidden2,action_hidden1])
+        merged_hidden1 = Dense(24,activation='relu')(merged)
+        output = Dense(1,activation='relu')(merged_hidden1)
+        model = Model(input=[state_input,action_input],output=output) 
+        
+        adam = Adam(self.learning_rate)
+        model.compile(loss='mse',optimizer=adam)
+        return state_input, action_input, model
+    
+    
+    
+    def predict(self, state):
+        return self.model.predict(state)
+    
+    def update(self):
+        (states, action, reward, next_states, done) = self.memory.sample_minibatch(self.minibatch_size)
+        td_target = np.zeros(len(states))
+        td_error = np.zeros(len(states))
+        a_one_hot = np.zeros([states.shape[0],self.num_actions])
+
+    
+        for indx,state in enumerate(states):
+            if not done[indx]:
+                # Compute action targets
+                #a_prime_probs = self.target_actor_model.predict(next_states[indx].reshape(1,len(next_states[indx])))[0]     
+                a_prime_probs = self.actor_model.predict(next_states[indx].reshape(1,len(next_states[indx])))[0]     
+                a_prime = np.random.choice(np.arange(len(a_prime_probs)), p=a_prime_probs)
+                a_one_hot[indx][a_prime] = 1
+                #r_prime = self.target_critic_model.predict([next_states[indx].reshape(1,len(next_states[indx])),a_one_hot])[0]
+                r_prime = self.critic_model.predict([next_states[indx].reshape(1,len(next_states[indx])),a_one_hot])[0]
+
+
+                # Discounted future reward
+                td_target[indx] = reward[indx] + self.gamma * r_prime
+                td_error[indx] = td_target[indx] - self.critic_model.predict([states[indx].reshape(1,len(next_states[indx])),a_one_hot])[0]
+              
+                
+        # Fit models
+        critic_loss=self.critic_model.train_on_batch([states,a_one_hot],td_target)
+        
+        
+        for indx,state in enumerate(states):
+            if not done[indx]:
+                # Compute action targets
+                #a_prime_probs = self.target_actor_model.predict(next_states[indx].reshape(1,len(next_states[indx])))[0]     
+                a_prime_probs = self.actor_model.predict(next_states[indx].reshape(1,len(next_states[indx])))[0]     
+
+                a_prime = np.random.choice(np.arange(len(a_prime_probs)), p=a_prime_probs)
+                a_one_hot[indx][a_prime] = 1
+                
+                grads = self.sess.run(self.critic_grads, 
+                                      feed_dict={self.critic_state_input:state.reshape(1,len(state)),
+                                                 self.critic_action_input: a_one_hot[indx].reshape(1,len(a_one_hot[indx]))})[0]
+                
+            
+                self.sess.run(self.optimize, 
+                              feed_dict={self.actor_state_input: state.reshape(1,len(state)),
+                                         self.actor_critic_grad: grads})
+            
+                
+    
+        
+        
+        
+        return critic_loss
+    
+    def learn(self, states, actions,next_states, reward, done):
+        self.memory.observe(states, actions, reward, done)
     
 class ReplayMemory(object):
     """Implements basic replay memory"""
@@ -503,13 +601,10 @@ class ReplayMemory(object):
 Reinforcement learning Enviroment Definition
 '''
 class RLenv(data_cls):
-    def __init__(self,train_test,**kwargs):
-        data_cls.__init__(self,train_test,**kwargs)
+    def __init__(self,path,train_test,**kwargs):
+        data_cls.__init__(self,path,train_test,**kwargs)
         self.data_shape = data_cls.get_shape(self)
-        self.batch_size = kwargs.get('batch_size',1) # experience replay -> batch = 1
-        self.iterations_episode = kwargs.get('iterations_episode',10)
-        if self.batch_size=='full':
-            self.batch_size = int(self.data_shape[0]/iterations_episode)
+        self.batch_size = 1 # experience replay -> batch = 1
 
     def _update_state(self):
         self.states,self.labels = data_cls.get_batch(self,self.batch_size)
@@ -546,12 +641,12 @@ class RLenv(data_cls):
     '''    
     def act(self,actions):
         # Clear previous rewards        
-        self.reward = np.zeros(len(actions))
+        self.reward = 0
         
         # Actualize new rewards == get_reward
-        self.reward = (actions == self.labels.values.argmax(axis=1)).astype(np.int32)
-        labels,counts = np.unique(actions,return_counts=True)
-        self.estimated_labels[labels] += counts
+        if actions == np.argmax(self.labels.values):
+            self.reward = 1
+        self.estimated_labels[actions] +=1
         # Get new state and new true values
         self._update_state()
         
@@ -565,23 +660,17 @@ class RLenv(data_cls):
 
 if __name__ == "__main__":
   
-    kdd_20_path = '../datasets/NSL/KDDTrain+_20Percent.txt'
-    kdd_train = '../datasets/NSL/KDDTrain+.txt'
-    kdd_test = '../datasets/NSL/KDDTest+.txt'
-
-    formated_train_path = "../datasets/formated/formated_train_type.data"
-    formated_test_path = "../datasets/formated/formated_test_type.data"
+    
+    sess = tf.Session()
+    
+    
+    kdd_10_path = '../datasets/kddcup.data_10_percent_corrected'
+    kdd_path = '../datasets/kddcup.data'
 
     # Valid actions = '0' supose no attack, '1' supose attack
     epsilon = 1  # exploration
-    
-    # Train batch
-    batch_size = 1
-    # batch of memory ExpRep
-    minibatch_size = 100
-    ExpRep = True
-    
-    iterations_episode = 100
+
+    minibatch_size = 2
 
     #3max_memory = 100
     decay_rate = 0.99
@@ -593,23 +682,18 @@ if __name__ == "__main__":
     
 
     # Initialization of the enviroment
-    env = RLenv('train',train_path=kdd_train,test_path=kdd_test,
-                formated_train_path = formated_train_path,
-                formated_test_path = formated_test_path,batch_size=batch_size,
-                iterations_episode=iterations_episode)
+    env = RLenv(kdd_path,'train',join_path='../datasets/corrected')
     
-
-    
- 
-#    num_episodes = int(env.data_shape[0]/(iterations_episode)/10)
-    num_episodes = 300
+    iterations_episode = 100
+    num_episodes = int(env.data_shape[0]/(iterations_episode)/10)
+	
     valid_actions = list(range(len(env.attack_types))) # only detect type of attack
     num_actions = len(valid_actions)
     
     # Initialization of the Agent
     obs_size = env.data_shape[1]-len(env.attack_types)
     
-    agent = Agent(valid_actions,obs_size,"EpsilonGreedy",
+    agent = actor_critic(valid_actions,obs_size,sess,
                           epoch_length = iterations_episode,
                           epsilon = epsilon,
                           decay_rate = decay_rate,
@@ -617,19 +701,20 @@ if __name__ == "__main__":
                           hidden_size=hidden_size,
                           hidden_layers=hidden_layers,
                           minibatch_size=minibatch_size,
-                          mem_size = 10000,ExpRep=ExpRep)    
+                          mem_size = 1000)    
     
     
     # Statistics
     reward_chain = []
-    loss_chain = []
-    
+    actor_loss_chain = []
+    critic_loss_chain=[]
 
     
     # Main loop
     for epoch in range(num_episodes):
         start_time = time.time()
-        loss = 0.
+        t_critic_loss = 0.
+        t_actor_loss = 0.
         total_reward_by_episode = 0
         # Reset enviromet, actualize the data batch
         states = env.reset()
@@ -642,19 +727,21 @@ if __name__ == "__main__":
             
 
             # Get actions for actual states following the policy
-            actions = agent.act(states)
+            actions_prob = agent.actor_model.predict(states)[0]
+            actions = np.random.choice(np.arange(len(actions_prob)), p=actions_prob)
             #Enviroment actuation for this actions
             next_states, reward, done = env.act(actions)
             # If the epoch*batch_size*iterations_episode is largest than the df
-
+            if next_states.shape[0] != 1:
+                break # finished df
+            
             agent.learn(states,actions,next_states,reward,done)
             
             # Train network, update loss after at least minibatch_learns
-            if ExpRep and epoch*iterations_episode + i_iteration >= minibatch_size:
-                loss += agent.update_model()
-            elif not ExpRep:
-                loss += agent.update_model()
-            
+            if epoch*iterations_episode + i_iteration >= minibatch_size:
+                critic_loss = agent.update()
+                t_critic_loss += critic_loss
+                #t_actor_loss += actor_loss
             update_end_time = time.time()
 
             # Update the state
@@ -662,20 +749,20 @@ if __name__ == "__main__":
             
             
             # Update statistics
-            total_reward_by_episode += np.sum(reward,dtype=np.int32)
-
+            total_reward_by_episode += reward
+        
+        if next_states.shape[0] != 1:
+                break # finished df
         # Update user view
         reward_chain.append(total_reward_by_episode)    
-        loss_chain.append(loss) 
-        
-        # Correcting next states labels
-        env.true_labels -= np.sum(env.labels).values
+       # actor_loss_chain.append(t_actor_loss)
+        critic_loss_chain.append(t_critic_loss)
         
         end_time = time.time()
-        print("\r|Epoch {:03d}/{:03d} | Loss {:4.4f} |" 
+        print("\r|Epoch {:03d}/{:03d} | Actor Loss {:4.4f} |Critic Loss {:4.4f} |" 
                 "Tot reward in ep {:03d}| time: {:2.2f}|"
                 .format(epoch, num_episodes 
-                ,loss, total_reward_by_episode,(end_time-start_time)))
+                ,t_actor_loss,t_critic_loss, total_reward_by_episode,(end_time-start_time)))
         print("\r|Estimated: {}|Labels: {}".format(env.estimated_labels,env.true_labels))
         
     # Save trained model weights and architecture, used in test
@@ -683,23 +770,27 @@ if __name__ == "__main__":
     with open("models/type_model.json", "w") as outfile:
         json.dump(agent.model_network.model.to_json(), outfile)
         
+    # Save test dataset deleting the data used to train
+    print("Shape: ",env.data_shape)
+    print("Used: ",num_episodes*iterations_episode)
+    #env.save_test()
     
-    # Plot training results
-    plt.figure(1)
-    plt.subplot(211)
-    plt.plot(np.arange(len(reward_chain)),reward_chain)
-    plt.title('Total reward by episode')
-    plt.xlabel('n Episode')
-    plt.ylabel('Total reward')
-    
-    plt.subplot(212)
-    plt.plot(np.arange(len(loss_chain)),loss_chain)
-    plt.title('Loss by episode')
-    plt.xlabel('n Episode')
-    plt.ylabel('loss')
-    plt.tight_layout()
-    #plt.show()
-    plt.savefig('results/train_type.eps', format='eps', dpi=1000)
+#    # Plot training results
+#    plt.figure(1)
+#    plt.subplot(211)
+#    plt.plot(np.arange(len(reward_chain)),reward_chain)
+#    plt.title('Total reward by episode')
+#    plt.xlabel('n Episode')
+#    plt.ylabel('Total reward')
+#    
+#    plt.subplot(212)
+#    plt.plot(np.arange(len(loss_chain)),loss_chain)
+#    plt.title('Loss by episode')
+#    plt.xlabel('n Episode')
+#    plt.ylabel('loss')
+#    plt.tight_layout()
+#    #plt.show()
+#    plt.savefig('results/train_type.eps', format='eps', dpi=1000)
 
 
 

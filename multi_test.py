@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 from keras.models import model_from_json
 from multiAD import RLenv
+import matplotlib.pyplot as plt
 
 
 if __name__ == "__main__":
@@ -19,7 +20,7 @@ if __name__ == "__main__":
     
 
     total_reward = 0    
-    epochs = int(env.data_shape[0]/env.batch_size/10)
+    epochs = int(env.data_shape[0]/env.batch_size/1)
     
     
     true_labels = np.zeros(len(env.attack_names),dtype=int)
@@ -47,7 +48,7 @@ if __name__ == "__main__":
         print("\rEpoch {}/{} | Tot Rew -- > {}".format(e,epochs,total_reward), end="")
         
     Accuracy = np.nan_to_num(estimated_correct_labels / true_labels )
-    Mismatch = estimated_labels - true_labels
+    Mismatch = abs(estimated_correct_labels - true_labels)+abs(estimated_labels-estimated_correct_labels)
     print('\r\nTotal reward: {} | Number of samples: {} | Accuracy = {}%'.format(total_reward,
           int(epochs*env.batch_size),float(100*total_reward/(epochs*env.batch_size))))
     outputs_df = pd.DataFrame(index = env.attack_names,columns = ["Estimated","Correct","Total","Acuracy","Mismatch"])
@@ -61,7 +62,26 @@ if __name__ == "__main__":
         
     print(outputs_df)
     
-        #plt.imshow(input_t.reshape((grid_size,)*2),
-        #           interpolation='none', cmap='gray')
-        #plt.savefig("error.png")
+    #%%
+    
+    ind = np.arange(1,len(env.attack_names)+1)
+    fig, ax = plt.subplots()
+    width = 0.35
+    p1 = plt.bar(ind, estimated_correct_labels,width,color='g')
+    p2 = plt.bar(ind, 
+                 (np.abs(estimated_correct_labels-true_labels)\
+                  +np.abs(estimated_labels-estimated_correct_labels)),width,
+                 bottom=estimated_correct_labels,color='r')
+
+    
+    ax.set_xticks(ind)
+    ax.set_xticklabels(env.attack_names,rotation='vertical')
+    ax.set_yscale('log')
+
+    #ax.set_ylim([0, 100])
+    ax.set_title('Test set scores')
+    plt.legend((p1[0], p2[0]), ('Correct estimated', 'Incorrect estimated'))
+    plt.tight_layout()
+    #plt.show()
+    plt.savefig('results/test_multi_log.eps', format='eps', dpi=1000)
 
