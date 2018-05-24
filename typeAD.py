@@ -40,8 +40,8 @@ class data_cls:
 
         self.loaded = False
         self.train_test = train_test
-        self.train_path = kwargs.get('train_path', '../datasets/KDDTrain+.txt')
-        self.test_path = kwargs.get('test_path','../datasets/KDDTest+.txt')
+        self.train_path = kwargs.get('train_path', '../datasets/NSL/KDDTrain+.txt')
+        self.test_path = kwargs.get('test_path','../datasets/NSL/KDDTest+.txt')
         
         self.formated_train_path = kwargs.get('formated_train_path', 
                                               "../datasets/formated/formated_train_type.data")

@@ -5,7 +5,6 @@ Multiple anomaly detection file
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import keras
 from keras.models import Sequential
 from keras.layers.core import Dense
 from keras import optimizers
@@ -26,7 +25,7 @@ Data class processing
 class data_cls:
     def __init__(self,train_test,**kwargs):
         col_names = ["duration","protocol_type","service","flag","src_bytes",
-            "dst_bytes","land","wrong_fragment","urgent","hot","num_failed_logins",
+            "dst_bytes","land_f","wrong_fragment","urgent","hot","num_failed_logins",
             "logged_in","num_compromised","root_shell","su_attempted","num_root",
             "num_file_creations","num_shells","num_access_files","num_outbound_cmds",
             "is_host_login","is_guest_login","count","srv_count","serror_rate",
@@ -39,13 +38,13 @@ class data_cls:
         # Data formated path and test path. 
         self.loaded = False
         self.train_test = train_test
-        self.train_path = kwargs.get('train_path', '../datasets/KDDTrain+.txt')
-        self.test_path = kwargs.get('test_path','../datasets/KDDTest+.txt')
+        self.train_path = kwargs.get('train_path', '../datasets/NSL/KDDTrain+.txt')
+        self.test_path = kwargs.get('test_path','../datasets/NSL/KDDTest+.txt')
         
         self.formated_train_path = kwargs.get('formated_train_path', 
-                                              "../datasets/formated/formated_train_type.data")
+                                              "../datasets/formated/formated_train_adv.data")
         self.formated_test_path = kwargs.get('formated_test_path',
-                                             "../datasets/formated/formated_test_type.data")
+                                             "../datasets/formated/formated_test_adv.data")
         
         self.attack_types = ['normal','DoS','Probe','R2L','U2R']
         self.attack_names = []
@@ -168,8 +167,7 @@ class data_cls:
     ''' Get n-rows from loaded data 
         The dataset must be loaded in RAM
     '''
-    def get_batch(self):
-        batch_size = 1
+    def get_batch(self,batch_size=100):
         if self.loaded is False:
             self._load_df()
         
@@ -565,10 +563,7 @@ class RLenv(data_cls):
         
         self.state_numb = 0
         
-        self.states,self.labels = data_cls.get_batch(self)
-        
-        
-        
+        self.states,self.labels = data_cls.get_batch(self,self.batch_size)
         
         self.total_reward = 0
         self.steps_in_episode = 0
@@ -584,14 +579,14 @@ class RLenv(data_cls):
     '''    
     def act(self,defender_actions,attack_actions):
         # Clear previous rewards        
-        self.att_reward = np.zeros(len(attack_actions))       
-        self.def_reward = np.zeros(len(defender_actions))
+        self.att_reward = np.ones(len(attack_actions))       
+        self.def_reward = np.ones(len(defender_actions))
         
         
         attack = [self.attack_types.index(self.attack_map[self.attack_names[att]]) for att in attack_actions]
         
-        self.def_reward = (defender_actions!=attack)*-1
-        self.att_reward = (defender_actions==attack)*-1
+        self.def_reward = (np.asarray(defender_actions)!=np.asarray(attack))*-1
+        self.att_reward = (np.asarray(defender_actions)==np.asarray(attack))*-1
         #self.att_reward -= self.def_reward
 
 #        # Actualize new rewards == get_reward
@@ -617,6 +612,9 @@ class RLenv(data_cls):
          
        
         self.def_estimated_labels += np.bincount(defender_actions,minlength=len(self.attack_types))
+        # TODO
+        # list comprehension
+        
         for act in attack_actions:
             self.def_true_labels[self.attack_types.index(self.attack_map[self.attack_names[act]])] += 1
         
@@ -635,7 +633,7 @@ class RLenv(data_cls):
         self.states = env.get_states(attack_actions)
         
         # Done allways false in this continuous task       
-        self.done = False
+        self.done = np.zeros(len(attack_actions),dtype=bool)
             
         return self.states, self.def_reward,self.att_reward, attack_actions, self.done
     
@@ -676,18 +674,18 @@ if __name__ == "__main__":
     kdd_train = '../datasets/NSL/KDDTrain+.txt'
     kdd_test = '../datasets/NSL/KDDTest+.txt'
 
-    formated_train_path = "../datasets/formated/formated_train_type.data"
-    formated_test_path = "../datasets/formated/formated_test_type.data"
+    formated_train_path = "../datasets/formated/formated_train_adv.data"
+    formated_test_path = "../datasets/formated/formated_test_adv.data"
     
     
     
     # Train batch
-    batch_size = 1
+    batch_size = 10
     # batch of memory ExpRep
     minibatch_size = 100
-    ExpRep = True
+    ExpRep = False
     
-    iterations_episode = 100
+    iterations_episode = 10
 
         
   
@@ -700,7 +698,7 @@ if __name__ == "__main__":
     obs_size = env.data_shape[1]-len(env.all_attack_names)
     
     #num_episodes = int(env.data_shape[0]/(iterations_episode)/10)
-    num_episodes = 300
+    num_episodes = 100
     
     '''
     Definition for the defensor agent.
