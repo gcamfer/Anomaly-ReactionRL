@@ -16,7 +16,7 @@ import os
 import sys
 import time
 
-
+from type_testcopy import test
 
 
 '''
@@ -581,7 +581,7 @@ if __name__ == "__main__":
     minibatch_size = 100
     ExpRep = True
     
-    iterations_episode = 100
+    iterations_episode = 5
 
     #3max_memory = 100
     decay_rate = 0.99
@@ -591,116 +591,134 @@ if __name__ == "__main__":
     hidden_size = 100
     hidden_layers = 3
     
-
-    # Initialization of the enviroment
-    env = RLenv('train',train_path=kdd_train,test_path=kdd_test,
-                formated_train_path = formated_train_path,
-                formated_test_path = formated_test_path,batch_size=batch_size,
-                iterations_episode=iterations_episode)
-    
-
-    
- 
-#    num_episodes = int(env.data_shape[0]/(iterations_episode)/10)
-    num_episodes = 5
-    valid_actions = list(range(len(env.attack_types))) # only detect type of attack
-    num_actions = len(valid_actions)
-    
-    # Initialization of the Agent
-    obs_size = env.data_shape[1]-len(env.attack_types)
-    
-    agent = Agent(valid_actions,obs_size,"EpsilonGreedy",
-                          epoch_length = iterations_episode,
-                          epsilon = epsilon,
-                          decay_rate = decay_rate,
-                          gamma = gamma,
-                          hidden_size=hidden_size,
-                          hidden_layers=hidden_layers,
-                          minibatch_size=minibatch_size,
-                          mem_size = 10000,ExpRep=ExpRep)    
-    
-    
-    # Statistics
-    reward_chain = []
-    loss_chain = []
-    
-
-    
-    # Main loop
-    for epoch in range(num_episodes):
-        start_time = time.time()
-        loss = 0.
-        total_reward_by_episode = 0
-        # Reset enviromet, actualize the data batch
-        states = env.reset()
-        
-        done = False
-       
-
-        # Iteration in one episode
-        for i_iteration in range(iterations_episode):
-            
-
-            # Get actions for actual states following the policy
-            actions = agent.act(states)
-            #Enviroment actuation for this actions
-            next_states, reward, done = env.act(actions)
-            # If the epoch*batch_size*iterations_episode is largest than the df
-
-            agent.learn(states,actions,next_states,reward,done)
-            
-            # Train network, update loss after at least minibatch_learns
-            if ExpRep and epoch*iterations_episode + i_iteration >= minibatch_size:
-                loss += agent.update_model()
-            elif not ExpRep:
-                loss += agent.update_model()
-            
-            update_end_time = time.time()
-
-            # Update the state
-            states = next_states
-            
-            
-            # Update statistics
-            total_reward_by_episode += np.sum(reward,dtype=np.int32)
-
-        # Update user view
-        reward_chain.append(total_reward_by_episode)    
-        loss_chain.append(loss) 
-        
-        # Correcting next states labels
-        env.true_labels -= np.sum(env.labels).values
-        
-        end_time = time.time()
-        print("\r|Epoch {:03d}/{:03d} | Loss {:4.4f} |" 
-                "Tot reward in ep {:03d}| time: {:2.2f}|"
-                .format(epoch, num_episodes 
-                ,loss, total_reward_by_episode,(end_time-start_time)))
-        print("\r|Estimated: {}|Labels: {}".format(env.estimated_labels,env.true_labels))
-        
-    # Save trained model weights and architecture, used in test
-    agent.model_network.model.save_weights("models/type_model.h5", overwrite=True)
-    with open("models/type_model.json", "w") as outfile:
-        json.dump(agent.model_network.model.to_json(), outfile)
+    reward_chain = {1:[],2:[],3:[],4:[],5:[]}
+    loss_chain = {1:[],2:[],3:[],4:[],5:[]}  
+    lista = [0.01,0.05,0.1,0.2,0.5]
+    for iteracion,learning_rate in enumerate(lista):
+        # Initialization of the enviroment
+        env = RLenv('train',train_path=kdd_train,test_path=kdd_test,
+                    formated_train_path = formated_train_path,
+                    formated_test_path = formated_test_path,batch_size=batch_size,
+                    iterations_episode=iterations_episode)
         
     
-    # Plot training results
+        
+     
+    #    num_episodes = int(env.data_shape[0]/(iterations_episode)/10)
+        num_episodes = 100
+        valid_actions = list(range(len(env.attack_types))) # only detect type of attack
+        num_actions = len(valid_actions)
+        
+        # Initialization of the Agent
+        obs_size = env.data_shape[1]-len(env.attack_types)
+        
+        agent = Agent(valid_actions,obs_size,"EpsilonGreedy",
+                              epoch_length = iterations_episode,
+                              epsilon = epsilon,
+                              decay_rate = decay_rate,
+                              gamma = gamma,
+                              hidden_size=hidden_size,
+                              hidden_layers=hidden_layers,
+                              minibatch_size=minibatch_size,
+                              mem_size = 10000,ExpRep=ExpRep)    
+        
+        
+    
+        
+        # Main loop
+        for epoch in range(num_episodes):
+            start_time = time.time()
+            loss = 0.
+            total_reward_by_episode = 0
+            # Reset enviromet, actualize the data batch
+            states = env.reset()
+            
+            done = False
+           
+    
+            # Iteration in one episode
+            for i_iteration in range(iterations_episode):
+                
+    
+                # Get actions for actual states following the policy
+                actions = agent.act(states)
+                #Enviroment actuation for this actions
+                next_states, reward, done = env.act(actions)
+                # If the epoch*batch_size*iterations_episode is largest than the df
+    
+                agent.learn(states,actions,next_states,reward,done)
+                
+                # Train network, update loss after at least minibatch_learns
+                if ExpRep and epoch*iterations_episode + i_iteration >= minibatch_size:
+                    loss += agent.update_model()
+                elif not ExpRep:
+                    loss += agent.update_model()
+                
+                update_end_time = time.time()
+    
+                # Update the state
+                states = next_states
+                
+                
+                # Update statistics
+                total_reward_by_episode += np.sum(reward,dtype=np.int32)
+    
+            # Update user view
+            reward_chain[iteracion+1].append(total_reward_by_episode)    
+            loss_chain[iteracion+1].append(loss) 
+            
+            # Correcting next states labels
+            env.true_labels -= np.sum(env.labels).values
+            
+            end_time = time.time()
+            print("\r|Epoch {:03d}/{:03d} | Loss {:4.4f} |" 
+                    "Tot reward in ep {:03d}| time: {:2.2f}|"
+                    .format(epoch, num_episodes 
+                    ,loss, total_reward_by_episode,(end_time-start_time)))
+            print("\r|Estimated: {}|Labels: {}".format(env.estimated_labels,env.true_labels))
+            
+            
+            
+            
+        # Save trained model weights and architecture, used in test
+        agent.model_network.model.save_weights("models/type_model.h5", overwrite=True)
+        with open("models/type_model.json", "w") as outfile:
+            json.dump(agent.model_network.model.to_json(), outfile)
+        
+        test(label="lr = {}".format(lista[iteracion]))     
+    
     plt.figure(1)
-    plt.subplot(211)
-    plt.plot(np.arange(len(reward_chain)),reward_chain)
-    plt.title('Total reward by episode')
+    ax=plt.subplot(211)
+    p1=plt.plot(np.arange(len(reward_chain[1])),reward_chain[1],label='.01')
+    p2=plt.plot(np.arange(len(reward_chain[2])),reward_chain[2],label='.05')
+    p3=plt.plot(np.arange(len(reward_chain[3])),reward_chain[3],label='.1')
+    p4=plt.plot(np.arange(len(reward_chain[4])),reward_chain[4],label='.2')
+    p5=plt.plot(np.arange(len(reward_chain[5])),reward_chain[5],label='.5')
+
+
+    plt.title('Total reward by episode (lr)', y=1.35)
     plt.xlabel('n Episode')
     plt.ylabel('Total reward')
-    
-    plt.subplot(212)
-    plt.plot(np.arange(len(loss_chain)),loss_chain)
-    plt.title('Loss by episode')
+    plt.legend(bbox_to_anchor=(0., 1.2, 1., .15), loc=9,
+           ncol=5, mode="expand", borderaxespad=0.)
+    plt.tight_layout()
+        
+    ax=plt.subplot(212)
+    plt.plot(np.arange(len(loss_chain[1])),loss_chain[1],label='.01')
+    plt.plot(np.arange(len(loss_chain[2])),loss_chain[2],label='.05')
+    plt.plot(np.arange(len(loss_chain[3])),loss_chain[3],label='.1')
+    plt.plot(np.arange(len(loss_chain[4])),loss_chain[4],label='.2')
+    plt.plot(np.arange(len(loss_chain[5])),loss_chain[5],label='.5')
+
+
+    plt.legend()
+    plt.title('Loss by episode (lr)', y=1.35)
     plt.xlabel('n Episode')
     plt.ylabel('loss')
-    plt.tight_layout()
-    #plt.show()
-    plt.savefig('results/train_type_improved.eps', format='eps', dpi=1000)
-
+    plt.legend(bbox_to_anchor=(0., 1.2, 1., .15), loc=9,
+           ncol=5, mode="expand", borderaxespad=0.)
+    plt.tight_layout()    #plt.show()
+    plt.savefig('results/type/train_type_learning_rate.eps', format='eps', dpi=1000)
 
 
 

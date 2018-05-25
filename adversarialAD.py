@@ -685,7 +685,7 @@ if __name__ == "__main__":
     minibatch_size = 100
     ExpRep = True
     
-    iterations_episode = 10
+    iterations_episode = 100
 
         
   
@@ -698,7 +698,7 @@ if __name__ == "__main__":
     obs_size = env.data_shape[1]-len(env.all_attack_names)
     
     #num_episodes = int(env.data_shape[0]/(iterations_episode)/10)
-    num_episodes = 200
+    num_episodes = 100
     
     '''
     Definition for the defensor agent.
@@ -707,7 +707,7 @@ if __name__ == "__main__":
     defender_num_actions = len(defender_valid_actions)    
     
 	
-    def_epsilon = .1 # exploration
+    def_epsilon = 1 # exploration
     def_gamma = 0.001
     def_decay_rate = 0.99
     
@@ -728,7 +728,7 @@ if __name__ == "__main__":
                           learning_rate=def_learning_rate,
                           ExpRep=ExpRep)
     #Pretrained defender
-    defender_agent.model_network.model.load_weights("models/type_model.h5")    
+#    defender_agent.model_network.model.load_weights("models/type_model.h5")    
     
     '''
     Definition for the attacker agent.

@@ -91,5 +91,5 @@ if __name__ == "__main__":
     plt.legend((p1[0], p2[0]), ('Correct estimated', 'Incorrect estimated'))
     plt.tight_layout()
     #plt.show()
-    plt.savefig('results/test_type.eps', format='eps', dpi=1000)
+    plt.savefig('results/test_type_improved.eps', format='eps', dpi=1000)
 

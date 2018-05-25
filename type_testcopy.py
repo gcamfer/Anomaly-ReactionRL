@@ -2,19 +2,24 @@ import json
 import numpy as np
 import pandas as pd
 from keras.models import model_from_json
-from adversarialAD import RLenv
+from typeAD import RLenv
 import matplotlib.pyplot as plt
-from adversarialAD import huber_loss
+from typeAD import huber_loss
+import sys
+
+def test(**kwargs):
+    
+    etiqueta = kwargs.get('label','')
+    batch_size = 100
+    formated_test_path = "../datasets/formated/formated_test_type.data"
 
 
-
-if __name__ == "__main__":
-    batch_size = 10
-    formated_test_path = "../datasets/formated/formated_test_adv.data"
-
-    with open("models/defender_agent_model.json", "r") as jfile:
+    with open("models/type_model.json", "r") as jfile:
         model = model_from_json(json.load(jfile))
-    model.load_weights("models/defender_agent_model.h5")
+    model.load_weights("models/type_model.h5")
+#    with open("models/defender_agent_model.json", "r") as jfile:
+#        model = model_from_json(json.load(jfile))
+#    model.load_weights("models/defender_agent_model.h5")
     
     model.compile(loss=huber_loss,optimizer="sgd")
 
@@ -37,18 +42,12 @@ if __name__ == "__main__":
         actions = np.argmax(q,axis=1)        
         
         reward = np.zeros(env.batch_size)
-        maped=[]
-        for indx,label in labels.iterrows():
-            maped.append(env.attack_types.index(env.attack_map[label.idxmax()]))
         
-        labels,counts = np.unique(maped,return_counts=True)
-        true_labels[labels] += counts
-        
-
+        true_labels += np.sum(labels).values
 
         for indx,a in enumerate(actions):
             estimated_labels[a] +=1              
-            if a == maped[indx]:
+            if a == np.argmax(labels.iloc[indx].values):
                 reward[indx] = 1
                 estimated_correct_labels[a] += 1
         
@@ -70,8 +69,12 @@ if __name__ == "__main__":
        outputs_df.iloc[indx].Mismatch = abs(Mismatch[indx])
 
 
-        
+    orig_stdout = sys.stdout
+    f = open('results/type/test-{}.txt'.format(etiqueta), 'w')
+    sys.stdout = f 
     print(outputs_df)
+    sys.stdout = orig_stdout
+    f.close()
     
     #%%
     
@@ -90,8 +93,9 @@ if __name__ == "__main__":
     #ax.set_yscale('log')
 
     #ax.set_ylim([0, 100])
-    ax.set_title('Test set scores')
+    ax.set_title('Test set scores {}'.format(etiqueta))
     plt.legend((p1[0], p2[0]), ('Correct estimated', 'Incorrect estimated'))
     plt.tight_layout()
     #plt.show()
-    plt.savefig('results/test_adv.eps', format='eps', dpi=1000)
+    plt.savefig('results/type/test_type_improved{}.eps'.format(etiqueta), format='eps', dpi=1000)
+
