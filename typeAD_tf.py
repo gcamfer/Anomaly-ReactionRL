@@ -16,6 +16,9 @@ import os
 import sys
 import time
 
+import tensorflow as tf
+import tensorflow.contrib.layers as layer
+
 
 
 
@@ -311,8 +314,83 @@ class QNetwork():
         return keras.models.load_model('tmp_model')
 
 
+class DuelingQnetwork():
+    def __init__(self,h_size,scope="estimator",summaries_dir=None):    
+        self.scope = scope
+        # Writes Tensorboard summaries to disk
+        self.summary_writer = None
+        with tf.variable_scope(scope):
+            # Build the graph
+            self._build_model()
+            if summaries_dir:
+                summary_dir = os.path.join(summaries_dir, "summaries_{}".format(scope))
+                if not os.path.exists(summary_dir):
+                    os.makedirs(summary_dir)
+                self.summary_writer = tf.train.SummaryWriter(summary_dir)
+        
+     def _build_model(self):   
+        #The network recieves a frame from the game, flattened into an array.
+        #It then resizes it and processes it through four convolutional layers.
+        self.Input =  tf.placeholder(shape=[None,env.obs_size],dtype=tf.float32)
+        
+        
+        self.out1 = layer.fully_connected(inputs=self.Input,num_outputs=100)
+        self.out2 = layer.fully_connected(inputs=self.out1,num_outputs=100)
+        self.out3 = layer.fully_connected(inputs=self.out2,num_outputs=h_size)
+        
+        #We take the output from the final convolutional layer and split it into separate advantage and value streams.
+        self.streamAC,self.streamVC = tf.split(self.out3,2,1)
+        
+        xavier_init = tf.contrib.layers.xavier_initializer()
+        self.AW = tf.Variable(xavier_init([h_size//2,env.num_actions]))
+        self.VW = tf.Variable(xavier_init([h_size//2,1]))
+        self.Advantage = tf.matmul(self.streamAC,self.AW)
+        self.Value = tf.matmul(self.streamVC,self.VW)
 
+        
+        #Then combine them together to get our final Q-values.
+        self.Qout = self.Value + tf.subtract(self.Advantage,tf.reduce_mean(self.Advantage,axis=1,keep_dims=True))
+        self.predictions = tf.argmax(self.Qout,1)
+        
+        #Below we obtain the loss by taking the sum of squares difference between the target and prediction Q values.
+        self.targetQ = tf.placeholder(shape=[None],dtype=tf.float32)
+        self.actions = tf.placeholder(shape=[None],dtype=tf.int32)
+        self.actions_onehot = tf.one_hot(self.actions,env.num_actions,dtype=tf.float32)
+        
+        self.Q = tf.reduce_sum(tf.multiply(self.Qout, self.actions_onehot), axis=1)
+        
+        self.td_error = tf.square(self.targetQ - self.Q)
+        self.loss = tf.reduce_mean(self.td_error)
+        self.trainer = tf.train.AdamOptimizer(learning_rate=0.0001)
+        self.updateModel = self.trainer.minimize(self.loss)
 
+    def predict(self,sess,states):
+        """
+        Predicts action values.
+        """
+        return sess.run(self.Qout,
+                        feed_dict={self.Input:states})
+
+    def update(self,sess,states,actions,targets):
+        """
+        Updates the estimator with the targets.
+
+        Args:
+          states: Target states
+          q: Estimated values
+
+        Returns:
+          The calculated loss on the batch.
+        """
+        # TODO : finish update function
+#        feed_dict = { self.Input: states, self.y_pl: y, self.actions_pl: a }
+#        summaries, global_step, _, loss = sess.run(
+#            [self.summaries, tf.contrib.framework.get_global_step(), self.train_op, self.loss],
+#            feed_dict)
+#        if self.summary_writer:
+#            self.summary_writer.add_summary(summaries, global_step)        
+        
+        return loss
 
 #Policy interface
 class Policy:
@@ -341,12 +419,12 @@ class Epsilon_greedy(Policy):
         self.epsilon_decay = True
         
     
-    def get_actions(self,states):
+    def get_actions(self,sess,states):
         # get next action
         if np.random.rand() <= self.epsilon:
             actions = np.random.randint(0, self.num_actions,states.shape[0])
         else:
-            self.Q = self.estimator.predict(states,states.shape[0])
+            self.Q = self.estimator.predict(sess,states)
             # TODO: fix performance in this loop
             actions = []
             for row in range(self.Q.shape[0]):
@@ -386,25 +464,30 @@ class Agent(object):
         self.ddqn_update = self.ddqn_time
 
         
-        self.model_network = QNetwork(self.obs_size, self.num_actions,
-                                      kwargs.get('hidden_size', 100),
-                                      kwargs.get('hidden_layers',1),
-                                      kwargs.get('learning_rate',.2))
+#        self.model_network = QNetwork(self.obs_size, self.num_actions,
+#                                      kwargs.get('hidden_size', 100),
+#                                      kwargs.get('hidden_layers',1),
+#                                      kwargs.get('learning_rate',.2))
+#        
+#        self.target_model_network = QNetwork(self.obs_size, self.num_actions,
+#                                      kwargs.get('hidden_size', 100),
+#                                      kwargs.get('hidden_layers',1),
+#                                      kwargs.get('learning_rate',.2))
+#        self.target_model_network.model = QNetwork.copy_model(self.model_network.model)
         
-        self.target_model_network = QNetwork(self.obs_size, self.num_actions,
-                                      kwargs.get('hidden_size', 100),
-                                      kwargs.get('hidden_layers',1),
-                                      kwargs.get('learning_rate',.2))
-        self.target_model_network.model = QNetwork.copy_model(self.model_network.model)
+        h_size = 512
+        self.model_network = DuelingQnetwork(h_size)
+        self.target_model_network = DuelingQnetwork(h_size)
+        
         
         if policy == "EpsilonGreedy":
             self.policy = Epsilon_greedy(self.model_network,len(actions),
                                          self.epsilon,self.decay_rate,
                                          self.epoch_length)
         
-    def act(self,states):
+    def act(self,sess,states):
         # Get actions under the policy
-        actions = self.policy.get_actions(states)
+        actions = self.policy.get_actions(sess,states)
         return actions
     
     def learn(self, states, actions,next_states, rewards, done):
@@ -418,7 +501,7 @@ class Agent(object):
             self.done = done
 
 
-    def update_model(self):
+    def update_model(self,sess):
         if self.ExpRep:
             (states, actions, rewards, next_states, done) = self.memory.sample_minibatch(self.minibatch_size)
         else:
@@ -430,35 +513,50 @@ class Agent(object):
             
         next_actions = []
         # Compute Q targets
-        Q_prime = self.target_model_network.predict(next_states,self.minibatch_size)
+        Q_prime = self.model_network.predict(sess,next_states)
         # TODO: fix performance in this loop
         for row in range(Q_prime.shape[0]):
             best_next_actions = np.argwhere(Q_prime[row] == np.amax(Q_prime[row]))
             next_actions.append(best_next_actions[np.random.choice(len(best_next_actions))].item())
-        sx = np.arange(len(next_actions))
+        Q_prime_target = self.target_model_network.predict(sess,next_states)
+        
         # Compute Q(s,a)
-        Q = self.model_network.predict(states,self.minibatch_size)
         # Q-learning update
-        # target = reward + gamma * max_a'{Q(next_state,next_action))}
-        targets = rewards.reshape(Q[sx,actions].shape) + \
-                  self.gamma * Q[sx,next_actions] * \
-                  (1-done.reshape(Q[sx,actions].shape))   
-        Q[sx,actions] = targets  
+        doubleQ = Q_prime_target[range(self.minibatch_size),next_actions]
+        targetQ =  rewards + (self.gamma*doubleQ * (1-done))  
         
-        loss = self.model_network.model.train_on_batch(states,Q)#inputs,targets  
-        
+        feed_dict = {self.model_network.Input:states,self.model_network.targetQ:targetQ[0], self.model_network.actions:actions}
+        _,loss = sess.run([self.model_network.updateModel, self.model_network.loss],feed_dict)
         # timer to ddqn update
         self.ddqn_update -= 1
         if self.ddqn_update == 0:
-            self.ddqn_update = self.ddqn_time
-#            self.target_model_network.model = QNetwork.copy_model(self.model_network.model)
-            self.target_model_network.model.set_weights(self.model_network.model.get_weights()) 
-            
+            copy_model_parameters(sess,self.model_network,self.target_model_network)
         
         return loss    
         
-      
-        
+
+
+def copy_model_parameters(sess, estimator1, estimator2):
+    """
+    Copies the model parameters of one estimator to another.
+
+    Args:
+      sess: Tensorflow session instance
+      estimator1: Estimator to copy the paramters from
+      estimator2: Estimator to copy the parameters to
+    """
+    e1_params = [t for t in tf.trainable_variables() if t.name.startswith(estimator1.scope)]
+    e1_params = sorted(e1_params, key=lambda v: v.name)
+    e2_params = [t for t in tf.trainable_variables() if t.name.startswith(estimator2.scope)]
+    e2_params = sorted(e2_params, key=lambda v: v.name)
+
+    update_ops = []
+    for e1_v, e2_v in zip(e1_params, e2_params):
+        op = e2_v.assign(e1_v)
+        update_ops.append(op)
+
+    sess.run(update_ops)
+    
     
 class ReplayMemory(object):
     """Implements basic replay memory"""
@@ -510,6 +608,10 @@ class RLenv(data_cls):
         self.iterations_episode = kwargs.get('iterations_episode',10)
         if self.batch_size=='full':
             self.batch_size = int(self.data_shape[0]/iterations_episode)
+        
+        self.valid_actions = list(range(len(self.attack_types))) # only detect type of attack
+        self.num_actions = len(self.valid_actions)
+        self.obs_size = self.data_shape[1]-len(self.attack_types)
 
     def _update_state(self):
         self.states,self.labels = data_cls.get_batch(self,self.batch_size)
@@ -561,7 +663,16 @@ class RLenv(data_cls):
         return self.states, self.reward, self.done
     
 
+def updateTargetGraph(tfVars,tau):
+    total_vars = len(tfVars)
+    op_holder = []
+    for idx,var in enumerate(tfVars[0:total_vars//2]):
+        op_holder.append(tfVars[idx+total_vars//2].assign((var.value()*tau) + ((1-tau)*tfVars[idx+total_vars//2].value())))
+    return op_holder
 
+def updateTarget(op_holder,sess):
+    for op in op_holder:
+        sess.run(op)
 
 if __name__ == "__main__":
   
@@ -578,7 +689,7 @@ if __name__ == "__main__":
     # Train batch
     batch_size = 1
     # batch of memory ExpRep
-    minibatch_size = 100
+    minibatch_size = 10
     ExpRep = True
     
     iterations_episode = 100
@@ -602,14 +713,12 @@ if __name__ == "__main__":
     
  
 #    num_episodes = int(env.data_shape[0]/(iterations_episode)/10)
-    num_episodes = 50
-    valid_actions = list(range(len(env.attack_types))) # only detect type of attack
-    num_actions = len(valid_actions)
-    
+    num_episodes = 300
+
+
     # Initialization of the Agent
-    obs_size = env.data_shape[1]-len(env.attack_types)
     
-    agent = Agent(valid_actions,obs_size,"EpsilonGreedy",
+    agent = Agent(env.valid_actions,env.obs_size,"EpsilonGreedy",
                           epoch_length = iterations_episode,
                           epsilon = epsilon,
                           decay_rate = decay_rate,
@@ -624,65 +733,75 @@ if __name__ == "__main__":
     reward_chain = []
     loss_chain = []
     
-
+    init = tf.global_variables_initializer()
     
-    # Main loop
-    for epoch in range(num_episodes):
-        start_time = time.time()
-        loss = 0.
-        total_reward_by_episode = 0
-        # Reset enviromet, actualize the data batch
-        states = env.reset()
-        
-        done = False
-       
-
-        # Iteration in one episode
-        for i_iteration in range(iterations_episode):
+    saver = tf.train.Saver()
+    
+    trainables = tf.trainable_variables()
+    tau = 0.001
+#    targetOps = updateTargetGraph(trainables,tau)
+    with tf.Session() as sess:
+        sess.run(init)
+        # Main loop
+        for epoch in range(num_episodes):
+            start_time = time.time()
+            loss = 0.
+            total_reward_by_episode = 0
+            # Reset enviromet, actualize the data batch
+            states = env.reset()
             
-
-            # Get actions for actual states following the policy
-            actions = agent.act(states)
-            #Enviroment actuation for this actions
-            next_states, reward, done = env.act(actions)
-            # If the epoch*batch_size*iterations_episode is largest than the df
-
-            agent.learn(states,actions,next_states,reward,done)
+            done = False
+           
+    
+            # Iteration in one episode
+            for i_iteration in range(iterations_episode):
+                
+    
+                # Get actions for actual states following the policy
+#                actions = agent.act(states)
+                actions = agent.act(sess,states)
+                #Enviroment actuation for this actions
+                next_states, reward, done = env.act(actions)
+                # If the epoch*batch_size*iterations_episode is largest than the df
+    
+                agent.learn(states,actions,next_states,reward,done)
+                
+                # Train network, update loss after at least minibatch_learns
+                if ExpRep and epoch*iterations_episode + i_iteration >= minibatch_size:
+                    loss += agent.update_model(sess)
+#                    updateTarget(targetOps,sess) #Update the target network toward the primary network.
+                    
+                elif not ExpRep:
+                    loss += agent.update_model()
+                
+                update_end_time = time.time()
+    
+                # Update the state
+                states = next_states
+                
+                
+                # Update statistics
+                total_reward_by_episode += np.sum(reward,dtype=np.int32)
+    
+            # Update user view
+            reward_chain.append(total_reward_by_episode)    
+            loss_chain.append(loss) 
             
-            # Train network, update loss after at least minibatch_learns
-            if ExpRep and epoch*iterations_episode + i_iteration >= minibatch_size:
-                loss += agent.update_model()
-            elif not ExpRep:
-                loss += agent.update_model()
+            # Correcting next states labels
+            env.true_labels -= np.sum(env.labels).values
             
-            update_end_time = time.time()
-
-            # Update the state
-            states = next_states
+            end_time = time.time()
+            print("\r|Epoch {:03d}/{:03d} | Loss {:4.4f} |" 
+                    "Tot reward in ep {:03d}| time: {:2.2f}|"
+                    .format(epoch, num_episodes 
+                    ,loss, total_reward_by_episode,(end_time-start_time)))
+            print("\r|Estimated: {}|Labels: {}".format(env.estimated_labels,env.true_labels))
             
+        # Save trained model weights and architecture, used in test
+        agent.model_network.model.save_weights("models/type_model.h5", overwrite=True)
+        with open("models/type_model.json", "w") as outfile:
+            json.dump(agent.model_network.model.to_json(), outfile)
             
-            # Update statistics
-            total_reward_by_episode += np.sum(reward,dtype=np.int32)
-
-        # Update user view
-        reward_chain.append(total_reward_by_episode)    
-        loss_chain.append(loss) 
-        
-        # Correcting next states labels
-        env.true_labels -= np.sum(env.labels).values
-        
-        end_time = time.time()
-        print("\r|Epoch {:03d}/{:03d} | Loss {:4.4f} |" 
-                "Tot reward in ep {:03d}| time: {:2.2f}|"
-                .format(epoch, num_episodes 
-                ,loss, total_reward_by_episode,(end_time-start_time)))
-        print("\r|Estimated: {}|Labels: {}".format(env.estimated_labels,env.true_labels))
-        
-    # Save trained model weights and architecture, used in test
-    agent.model_network.model.save_weights("models/type_model.h5", overwrite=True)
-    with open("models/type_model.json", "w") as outfile:
-        json.dump(agent.model_network.model.to_json(), outfile)
-        
     
     # Plot training results
     plt.figure(1)
