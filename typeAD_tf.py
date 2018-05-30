@@ -315,8 +315,9 @@ class QNetwork():
 
 
 class DuelingQnetwork():
-    def __init__(self,h_size,scope="estimator",summaries_dir=None):    
+    def __init__(self,scope="estimator",h_size=100,summaries_dir=None):    
         self.scope = scope
+        self.h_size = h_size
         # Writes Tensorboard summaries to disk
         self.summary_writer = None
         with tf.variable_scope(scope):
@@ -326,9 +327,9 @@ class DuelingQnetwork():
                 summary_dir = os.path.join(summaries_dir, "summaries_{}".format(scope))
                 if not os.path.exists(summary_dir):
                     os.makedirs(summary_dir)
-                self.summary_writer = tf.train.SummaryWriter(summary_dir)
+                self.summary_writer = tf.summary.FileWriter(summary_dir)
         
-     def _build_model(self):   
+    def _build_model(self):   
         #The network recieves a frame from the game, flattened into an array.
         #It then resizes it and processes it through four convolutional layers.
         self.Input =  tf.placeholder(shape=[None,env.obs_size],dtype=tf.float32)
@@ -336,20 +337,20 @@ class DuelingQnetwork():
         
         self.out1 = layer.fully_connected(inputs=self.Input,num_outputs=100)
         self.out2 = layer.fully_connected(inputs=self.out1,num_outputs=100)
-        self.out3 = layer.fully_connected(inputs=self.out2,num_outputs=h_size)
+        self.out3 = layer.fully_connected(inputs=self.out2,num_outputs=self.h_size)
         
         #We take the output from the final convolutional layer and split it into separate advantage and value streams.
         self.streamAC,self.streamVC = tf.split(self.out3,2,1)
         
         xavier_init = tf.contrib.layers.xavier_initializer()
-        self.AW = tf.Variable(xavier_init([h_size//2,env.num_actions]))
-        self.VW = tf.Variable(xavier_init([h_size//2,1]))
+        self.AW = tf.Variable(xavier_init([self.h_size//2,env.num_actions]))
+        self.VW = tf.Variable(xavier_init([self.h_size//2,1]))
         self.Advantage = tf.matmul(self.streamAC,self.AW)
         self.Value = tf.matmul(self.streamVC,self.VW)
 
         
         #Then combine them together to get our final Q-values.
-        self.Qout = self.Value + tf.subtract(self.Advantage,tf.reduce_mean(self.Advantage,axis=1,keep_dims=True))
+        self.Qout = self.Value + tf.subtract(self.Advantage,tf.reduce_mean(self.Advantage,axis=1,keepdims=True))
         self.predictions = tf.argmax(self.Qout,1)
         
         #Below we obtain the loss by taking the sum of squares difference between the target and prediction Q values.
@@ -361,8 +362,17 @@ class DuelingQnetwork():
         
         self.td_error = tf.square(self.targetQ - self.Q)
         self.loss = tf.reduce_mean(self.td_error)
+#        self.loss=tf.losses.huber_loss(self.targetQ,self.Q)
         self.trainer = tf.train.AdamOptimizer(learning_rate=0.0001)
-        self.updateModel = self.trainer.minimize(self.loss)
+        self.updateModel = self.trainer.minimize(self.loss,global_step=tf.train.get_global_step())
+        
+        # Summaries for Tensorboard
+        self.summaries = tf.summary.merge([
+            tf.summary.scalar("loss", self.loss),
+            tf.summary.histogram("td_error", self.td_error),
+            tf.summary.histogram("q_values_hist", self.Qout),
+            tf.summary.scalar("max_q_value", tf.reduce_max(self.Qout))
+            ])
 
     def predict(self,sess,states):
         """
@@ -382,13 +392,12 @@ class DuelingQnetwork():
         Returns:
           The calculated loss on the batch.
         """
-        # TODO : finish update function
-#        feed_dict = { self.Input: states, self.y_pl: y, self.actions_pl: a }
-#        summaries, global_step, _, loss = sess.run(
-#            [self.summaries, tf.contrib.framework.get_global_step(), self.train_op, self.loss],
-#            feed_dict)
-#        if self.summary_writer:
-#            self.summary_writer.add_summary(summaries, global_step)        
+        feed_dict = { self.Input: states, self.actions: actions, self.targetQ: targets }
+        summaries,global_step, _, loss = sess.run(
+            [self.summaries, tf.contrib.framework.get_global_step(), self.updateModel, self.loss],
+            feed_dict)
+        if self.summary_writer:
+            self.summary_writer.add_summary(summaries, global_step)        
         
         return loss
 
@@ -476,8 +485,8 @@ class Agent(object):
 #        self.target_model_network.model = QNetwork.copy_model(self.model_network.model)
         
         h_size = 512
-        self.model_network = DuelingQnetwork(h_size)
-        self.target_model_network = DuelingQnetwork(h_size)
+        self.model_network = DuelingQnetwork(scope='q',h_size=h_size,summaries_dir='sumaries/ddqn')
+        self.target_model_network = DuelingQnetwork(scope='target_q',h_size=h_size)
         
         
         if policy == "EpsilonGreedy":
@@ -525,8 +534,7 @@ class Agent(object):
         doubleQ = Q_prime_target[range(self.minibatch_size),next_actions]
         targetQ =  rewards + (self.gamma*doubleQ * (1-done))  
         
-        feed_dict = {self.model_network.Input:states,self.model_network.targetQ:targetQ[0], self.model_network.actions:actions}
-        _,loss = sess.run([self.model_network.updateModel, self.model_network.loss],feed_dict)
+        loss = self.model_network.update(sess,states,actions,targetQ[0])
         # timer to ddqn update
         self.ddqn_update -= 1
         if self.ddqn_update == 0:
@@ -683,13 +691,19 @@ if __name__ == "__main__":
     formated_train_path = "../datasets/formated/formated_train_type.data"
     formated_test_path = "../datasets/formated/formated_test_type.data"
 
+    model_path = "models/typeAD_tf"
+
+    load_model = False
+    
+    tf.reset_default_graph()
+
     # Valid actions = '0' supose no attack, '1' supose attack
     epsilon = 1  # exploration
     
     # Train batch
     batch_size = 1
     # batch of memory ExpRep
-    minibatch_size = 10
+    minibatch_size = 50
     ExpRep = True
     
     iterations_episode = 100
@@ -733,15 +747,23 @@ if __name__ == "__main__":
     reward_chain = []
     loss_chain = []
     
-    init = tf.global_variables_initializer()
-    
-    saver = tf.train.Saver()
+        
+     
     
     trainables = tf.trainable_variables()
-    tau = 0.001
-#    targetOps = updateTargetGraph(trainables,tau)
+    # Create a glboal step variable
+    global_step = tf.Variable(0, name='global_step', trainable=False)
+    
+
     with tf.Session() as sess:
-        sess.run(init)
+        sess.run(tf.global_variables_initializer())
+        saver = tf.train.Saver()  
+        if load_model == True:
+            print('Loading Model...')
+            ckpt = tf.train.get_checkpoint_state(model_path)
+            saver.restore(sess,ckpt.model_checkpoint_path)
+        
+        
         # Main loop
         for epoch in range(num_episodes):
             start_time = time.time()
@@ -772,7 +794,7 @@ if __name__ == "__main__":
 #                    updateTarget(targetOps,sess) #Update the target network toward the primary network.
                     
                 elif not ExpRep:
-                    loss += agent.update_model()
+                    loss += agent.update_model(sess)
                 
                 update_end_time = time.time()
     
@@ -797,28 +819,119 @@ if __name__ == "__main__":
                     ,loss, total_reward_by_episode,(end_time-start_time)))
             print("\r|Estimated: {}|Labels: {}".format(env.estimated_labels,env.true_labels))
             
-        # Save trained model weights and architecture, used in test
-        agent.model_network.model.save_weights("models/type_model.h5", overwrite=True)
-        with open("models/type_model.json", "w") as outfile:
-            json.dump(agent.model_network.model.to_json(), outfile)
+        
+        save_path = saver.save(sess, model_path+'.ckpt')
+        print("Model saved in path: %s" % save_path)
+        
+#        # Save trained model weights and architecture, used in test
+#        agent.model_network.model.save_weights("models/type_model.h5", overwrite=True)
+#        with open("models/type_model.json", "w") as outfile:
+#            json.dump(agent.model_network.model.to_json(), outfile)
             
     
-    # Plot training results
-    plt.figure(1)
-    plt.subplot(211)
-    plt.plot(np.arange(len(reward_chain)),reward_chain)
-    plt.title('Total reward by episode')
-    plt.xlabel('n Episode')
-    plt.ylabel('Total reward')
+        # Plot training results
+        plt.figure(1)
+        plt.subplot(211)
+        plt.plot(np.arange(len(reward_chain)),reward_chain)
+        plt.title('Total reward by episode')
+        plt.xlabel('n Episode')
+        plt.ylabel('Total reward')
+        
+        plt.subplot(212)
+        plt.plot(np.arange(len(loss_chain)),loss_chain)
+        plt.title('Loss by episode')
+        plt.xlabel('n Episode')
+        plt.ylabel('loss')
+        plt.tight_layout()
+        #plt.show()
+        plt.savefig('results/train_type_improved.eps', format='eps', dpi=1000)
+
+
+
+
+
+
+
+        #TEST
+        batch_size = 100
+        env = RLenv('test',formated_test_path = formated_test_path,batch_size=batch_size) 
+        total_reward = 0    
+        epochs = int(env.data_shape[0]/env.batch_size/1)
     
-    plt.subplot(212)
-    plt.plot(np.arange(len(loss_chain)),loss_chain)
-    plt.title('Loss by episode')
-    plt.xlabel('n Episode')
-    plt.ylabel('loss')
+        true_labels = np.zeros(len(env.attack_types),dtype=int)
+        estimated_labels = np.zeros(len(env.attack_types),dtype=int)
+        estimated_correct_labels = np.zeros(len(env.attack_types),dtype=int)
+        
+        for e in range(epochs):
+            #states , labels = env.get_sequential_batch(test_path,batch_size = env.batch_size)
+            states , labels = env.get_batch(batch_size = env.batch_size)
+            
+            Q = agent.model_network.predict(sess,states)
+            # TODO: fix performance in this loop
+            actions = []
+            for row in range(Q.shape[0]):
+                best_actions = np.argwhere(Q[row] == np.amax(Q[row]))
+                actions.append(best_actions[np.random.choice(len(best_actions))].item())
+            
+            reward = np.zeros(env.batch_size)
+            
+            true_labels += np.sum(labels).values
+    
+            for indx,a in enumerate(actions):
+                estimated_labels[a] +=1              
+                if a == np.argmax(labels.iloc[indx].values):
+                    reward[indx] = 1
+                    estimated_correct_labels[a] += 1
+            
+            
+            total_reward += int(sum(reward))
+            print("\rEpoch {}/{} | Tot Rew -- > {}".format(e,epochs,total_reward), end="")
+            
+        Accuracy = estimated_correct_labels / true_labels
+        Mismatch = estimated_labels - true_labels
+    
+        print('\r\nTotal reward: {} | Number of samples: {} | Accuracy = {}%'.format(total_reward,
+              int(epochs*env.batch_size),float(100*total_reward/(epochs*env.batch_size))))
+        outputs_df = pd.DataFrame(index = env.attack_types,columns = ["Estimated","Correct","Total","Acuracy"])
+        for indx,att in enumerate(env.attack_types):
+           outputs_df.iloc[indx].Estimated = estimated_labels[indx]
+           outputs_df.iloc[indx].Correct = estimated_correct_labels[indx]
+           outputs_df.iloc[indx].Total = true_labels[indx]
+           outputs_df.iloc[indx].Acuracy = Accuracy[indx]*100
+           outputs_df.iloc[indx].Mismatch = abs(Mismatch[indx])
+    
+
+    
+    print(outputs_df)
+    
+    #%%
+    
+    ind = np.arange(1,len(env.attack_types)+1)
+    fig, ax = plt.subplots()
+    width = 0.35
+    p1 = plt.bar(ind, estimated_correct_labels,width,color='g')
+    p2 = plt.bar(ind, 
+                 (np.abs(estimated_correct_labels-true_labels)\
+                  +np.abs(estimated_labels-estimated_correct_labels)),width,
+                 bottom=estimated_correct_labels,color='r')
+
+    
+    ax.set_xticks(ind)
+    ax.set_xticklabels(env.attack_types,rotation='vertical')
+    #ax.set_yscale('log')
+
+    #ax.set_ylim([0, 100])
+    ax.set_title('Test set scores')
+    plt.legend((p1[0], p2[0]), ('Correct estimated', 'Incorrect estimated'))
     plt.tight_layout()
     #plt.show()
-    plt.savefig('results/train_type_improved.eps', format='eps', dpi=1000)
+    plt.savefig('results/test_type_improved.eps', format='eps', dpi=1000)
+
+
+
+
+
+
 
 
 
