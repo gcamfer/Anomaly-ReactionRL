@@ -328,7 +328,7 @@ class Policy:
         self.estimator = estimator
     
 class Epsilon_greedy(Policy):
-    def __init__(self,estimator ,num_actions ,epsilon,decay_rate, epoch_length):
+    def __init__(self,estimator ,num_actions ,epsilon,min_epsilon,decay_rate, epoch_length):
         Policy.__init__(self, num_actions, estimator)
         self.name = "Epsilon Greedy"
         
@@ -336,6 +336,7 @@ class Epsilon_greedy(Policy):
             print("EpsilonGreedy: Invalid value of epsilon", flush = True)
             sys.exit(0)
         self.epsilon = epsilon
+        self.min_epsilon = min_epsilon
         self.actions = list(range(num_actions))
         self.step_counter = 0
         self.epoch_length = epoch_length
@@ -362,7 +363,7 @@ class Epsilon_greedy(Policy):
         # decay epsilon after each epoch
         if self.epsilon_decay:
             if self.step_counter % self.epoch_length == 0:
-                self.epsilon = max(.01, self.epsilon * self.decay_rate**self.step_counter)
+                self.epsilon = max(self.min_epsilon, self.epsilon * self.decay_rate**self.step_counter)
             
         return actions
     
@@ -424,6 +425,7 @@ class Agent(object):
         self.obs_size = obs_size
         
         self.epsilon = kwargs.get('epsilon', 1)
+        self.min_epsilon = kwargs.get('min_epsilon', .1)
         self.gamma = kwargs.get('gamma', .001)
         self.minibatch_size = kwargs.get('minibatch_size', 2)
         self.epoch_length = kwargs.get('epoch_length', 100)
@@ -448,7 +450,7 @@ class Agent(object):
         
         if policy == "EpsilonGreedy":
             self.policy = Epsilon_greedy(self.model_network,len(actions),
-                                         self.epsilon,
+                                         self.epsilon,self.min_epsilon,
                                          self.decay_rate,self.epoch_length)
         
         
@@ -685,7 +687,7 @@ if __name__ == "__main__":
     minibatch_size = 100
     ExpRep = True
     
-    iterations_episode = 10
+    iterations_episode = 100
 
         
   
@@ -698,7 +700,7 @@ if __name__ == "__main__":
     obs_size = env.data_shape[1]-len(env.all_attack_names)
     
     #num_episodes = int(env.data_shape[0]/(iterations_episode)/10)
-    num_episodes = 200
+    num_episodes = 10
     
     '''
     Definition for the defensor agent.
@@ -707,7 +709,8 @@ if __name__ == "__main__":
     defender_num_actions = len(defender_valid_actions)    
     
 	
-    def_epsilon = .1 # exploration
+    def_epsilon = 1 # exploration
+    min_epsilon = 0.1 # min value for exploration
     def_gamma = 0.001
     def_decay_rate = 0.99
     
@@ -719,6 +722,7 @@ if __name__ == "__main__":
     defender_agent = DefenderAgent(defender_valid_actions,obs_size,"EpsilonGreedy",
                           epoch_length = iterations_episode,
                           epsilon = def_epsilon,
+                          min_epsilon = min_epsilon,
                           decay_rate = def_decay_rate,
                           gamma = def_gamma,
                           hidden_size=def_hidden_size,
@@ -738,7 +742,9 @@ if __name__ == "__main__":
     attack_valid_actions = list(range(len(env.attack_names)))
     attack_num_actions = len(attack_valid_actions)
 	
-    att_epsilon = 0.1
+    att_epsilon = 1
+    min_epsilon = 0.5 # min value for exploration
+
     att_gamma = 0.001
     att_decay_rate = 0.99
     
@@ -750,6 +756,7 @@ if __name__ == "__main__":
     attacker_agent = AttackAgent(attack_valid_actions,obs_size,"EpsilonGreedy",
                           epoch_length = iterations_episode,
                           epsilon = att_epsilon,
+                          min_epsilon = min_epsilon,
                           decay_rate = att_decay_rate,
                           gamma = att_gamma,
                           hidden_size=att_hidden_size,
