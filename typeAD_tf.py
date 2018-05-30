@@ -1,16 +1,11 @@
 '''
-Multiple anomaly detection file
+Type anomaly detection file
 '''
 
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import keras
-from keras.models import Sequential
-from keras.layers.core import Dense
-from keras import optimizers
-import keras.backend as K
-import json
+
 from sklearn.utils import shuffle
 import os
 import sys
@@ -225,93 +220,6 @@ class data_cls:
         self.index=0
         self.loaded = True
 
-
-def huber_loss(y_true, y_pred, clip_value=1):
-    # Huber loss, see https://en.wikipedia.org/wiki/Huber_loss and
-    # https://medium.com/@karpathy/yes-you-should-understand-backprop-e2f06eab496b
-    # for details.
-    assert clip_value > 0.
-
-    x = y_true - y_pred
-    if np.isinf(clip_value):
-        # Spacial case for infinity since Tensorflow does have problems
-        # if we compare `K.abs(x) < np.inf`.
-        return .5 * K.square(x)
-
-    condition = K.abs(x) < clip_value
-    squared_loss = .5 * K.square(x)
-    linear_loss = clip_value * (K.abs(x) - .5 * clip_value)
-    if K.backend() == 'tensorflow':
-        import tensorflow as tf
-        if hasattr(tf, 'select'):
-            return tf.select(condition, squared_loss, linear_loss)  # condition, true, false
-        else:
-            return tf.where(condition, squared_loss, linear_loss)  # condition, true, false
-    elif K.backend() == 'theano':
-        from theano import tensor as T
-        return T.switch(condition, squared_loss, linear_loss)
-    else:
-        raise RuntimeError('Unknown backend "{}".'.format(K.backend()))
-
-import keras.losses
-keras.losses.huber_loss = huber_loss
-
-class QNetwork():
-    """
-    Q-Network Estimator
-    Represents the global model for the table
-    """
-    
-
-
-    def __init__(self,obs_size,num_actions,hidden_size = 100,
-                 hidden_layers = 1,learning_rate=.2):
-        """
-        Initialize the network with the provided shape
-        """
-        # Network arquitecture
-        self.model = Sequential()
-        # Add imput layer
-        self.model.add(Dense(hidden_size, input_shape=(obs_size,),
-                             activation='relu'))
-        # Add hidden layers
-        for layers in range(hidden_layers):
-            self.model.add(Dense(hidden_size, activation='relu'))
-        # Add output layer    
-        self.model.add(Dense(num_actions))
-        
-        optimizer = optimizers.SGD(learning_rate)
-        # optimizer = optimizers.Adam(alpha=learning_rate)
-        # optimizer = optimizers.AdaGrad(learning_rate)
-        # optimizer = optimizers.RMSpropGraves(learning_rate, 0.95, self.momentum, 1e-2)
-        
-        # Compilation of the model with optimizer and loss
-        self.model.compile(loss=huber_loss,optimizer=optimizer)
-
-    def predict(self,state,batch_size=1):
-        """
-        Predicts action values.
-        """
-        return self.model.predict(state,batch_size=batch_size)
-
-    def update(self, states, q):
-        """
-        Updates the estimator with the targets.
-
-        Args:
-          states: Target states
-          q: Estimated values
-
-        Returns:
-          The calculated loss on the batch.
-        """
-        loss = self.model.train_on_batch(states, q)
-        return loss
-
-    def copy_model(model):
-        """Returns a copy of a keras model."""
-        model.save('tmp_model')
-        return keras.models.load_model('tmp_model')
 
 
 class DuelingQnetwork():

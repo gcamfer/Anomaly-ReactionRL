@@ -1,5 +1,5 @@
 '''
-Multiple anomaly detection file
+Type anomaly detection file
 '''
 
 import numpy as np
