@@ -1,6 +1,13 @@
 '''
 Data class processing
 '''
+import os
+import sys
+import pandas as pd
+import numpy as np
+from sklearn.utils import shuffle
+
+
 
 class data_cls:
     def __init__(self, path,train_test,**kwargs):
@@ -15,12 +22,18 @@ class data_cls:
             "dst_host_srv_diff_host_rate","dst_host_serror_rate","dst_host_srv_serror_rate",
             "dst_host_rerror_rate","dst_host_srv_rerror_rate","labels"]
         self.index = 0
-        # Data formated path and test path. 
-        self.formated_path = "../../datasets/formated/formated_data_type.data"
-        self.test_path = "../../datasets/formated/test_data_type.data"
         self.loaded = False
+
+        # Data formated path and test path.
         self.train_test = train_test
-        self.second_path = kwargs.get('join_path', '../../datasets/corrected')
+        self.train_path = kwargs.get('train_path', '../../datasets/NSL/KDDTrain+.txt')
+        self.test_path = kwargs.get('test_path','../../datasets/NSL/KDDTest+.txt')
+        
+        self.formated_train_path = kwargs.get('formated_train_path', 
+                                              "../../datasets/formated/formated_train_type.data")
+        self.formated_test_path = kwargs.get('formated_test_path',
+                                             "../../datasets/formated/formated_test_type.data")
+
 
         
         self.attack_types = ['normal','DoS','Probe','R2L','U2R']
@@ -70,54 +83,46 @@ class data_cls:
                         'xterm.': 'U2R'
                     }
         
-        # If path is not provided system out error
-        if (not path):
-            print("Path: not path name provided", flush = True)
-            sys.exit(0)
         formated = False     
         
-        
-        if os.path.exists(self.formated_path) and train_test=="train":
+        # Test formated data exists
+        if os.path.exists(self.formated_train_path) and os.path.exists(self.formated_test_path):
             formated = True
-        elif os.path.exists(self.test_path) and train_test=="test":
-            formated = True
-        elif os.path.exists(self.test_path) and os.path.exists(self.formated_path) and (train_test == 'full' or train_test=='join'):
-            formated = True
-            
-       
-        # If the formatted data path exists, is not needed to process it again
-        if os.path.exists(self.formated_path):
-            formated = True
-            
+               
 
         # If it does not exist, it's needed to format the data
         if not formated:
             ''' Formating the dataset for ready-2-use data'''
-            self.df = pd.read_csv(path,sep=',',names=col_names)
+            self.df = pd.read_csv(self.train_path,sep=',',names=col_names,index_col=False)
             if 'dificulty' in self.df.columns:
                 self.df.drop('dificulty', axis=1, inplace=True) #in case of difficulty     
                 
-            if train_test == 'join':
-                data2 = pd.read_csv(self.second_path,sep=',',names=col_names)
-                if 'dificulty' in data2:
-                    del(data2['dificulty'])
-                train_indx = self.df.shape[0]
-                frames = [self.df,data2]
-                self.df = pd.concat(frames)
-            # Data now is in RAM
-            self.loaded = True
+            data2 = pd.read_csv(self.test_path,sep=',',names=col_names,index_col=False)
+            if 'dificulty' in data2:
+                del(data2['dificulty'])
+            train_indx = self.df.shape[0]
+            frames = [self.df,data2]
+            self.df = pd.concat(frames)
+            
             
             # Dataframe processing
             self.df = pd.concat([self.df.drop('protocol_type', axis=1), pd.get_dummies(self.df['protocol_type'])], axis=1)
             self.df = pd.concat([self.df.drop('service', axis=1), pd.get_dummies(self.df['service'])], axis=1)
             self.df = pd.concat([self.df.drop('flag', axis=1), pd.get_dummies(self.df['flag'])], axis=1)
               
-            
             # 1 if ``su root'' command attempted; 0 otherwise 
             self.df['su_attempted'] = self.df['su_attempted'].replace(2.0, 0.0)
             
+            
+            # One-hot-Encoding for reaction.  
+            all_labels = self.df['labels'] # Get all labels in df
+            mapped_labels = np.vectorize(self.attack_map.get)(all_labels) # Map attacks
+            self.df = self.df.reset_index(drop=True)
+            self.df = pd.concat([self.df.drop('labels', axis=1),pd.get_dummies(mapped_labels)], axis=1)
+            
+            
             # Normalization of the df
-            #normalized_df=(df-df.mean())/df.std()
+            #self.df = (self.df-self.df.mean())/(self.df.max()-self.df.min())
             for indx,dtype in self.df.dtypes.iteritems():
                 if dtype == 'float64' or dtype == 'int64':
                     if self.df[indx].max() == 0 and self.df[indx].min()== 0:
@@ -126,37 +131,14 @@ class data_cls:
                         self.df[indx] = (self.df[indx]-self.df[indx].min())/(self.df[indx].max()-self.df[indx].min())
                     
                       
-            # One-hot-Encoding for reaction.  
-            all_labels = self.df['labels'] # Get all labels in df
-            mapped_labels = np.vectorize(self.attack_map.get)(all_labels) # Map attacks
-            self.df = self.df.reset_index(drop=True)
-            self.df = pd.concat([self.df.drop('labels', axis=1),pd.get_dummies(mapped_labels)], axis=1)
             
              # Save data
-            # suffle data: if join shuffled before in order to save train/test
-            if train_test != 'join':
-                self.df = shuffle(self.df,random_state=np.random.randint(0,100))            
-            
-           
-            if train_test == 'train':
-                self.df.to_csv(self.formated_path,sep=',',index=False)
-            elif train_test == 'test':
-                self.df.to_csv(self.test_path,sep=',',index=False)
-            elif train_test == 'full':
-            # 70% train 30% test
-                train_indx = np.int32(self.df.shape[0]*0.7)
-                test_df = self.df.iloc[train_indx:self.df.shape[0]]
-                self.df = self.df[:train_indx]
-                test_df.to_csv(self.test_path,sep=',',index=False)
-                self.df.to_csv(self.formated_path,sep=',',index=False)
-            else: #join: index calculated before
-                test_df = self.df.iloc[train_indx:self.df.shape[0]]
-                test_df = shuffle(test_df,random_state=np.random.randint(0,100))
-                self.df = self.df[:train_indx]
-                self.df = shuffle(self.df,random_state=np.random.randint(0,100))
-                test_df.to_csv(self.test_path,sep=',',index=False)
-                self.df.to_csv(self.formated_path,sep=',',index=False)
-            
+            test_df = self.df.iloc[train_indx:self.df.shape[0]]
+            test_df = shuffle(test_df,random_state=np.random.randint(0,100))
+            self.df = self.df[:train_indx]
+            self.df = shuffle(self.df,random_state=np.random.randint(0,100))
+            test_df.to_csv(self.formated_test_path,sep=',',index=False)
+            self.df.to_csv(self.formated_train_path,sep=',',index=False)
             
         
     ''' Get n-row batch from the dataset
@@ -179,19 +161,25 @@ class data_cls:
             del(self.df[att])
         return self.df,labels
     
-    
     ''' Get n-rows from loaded data 
         The dataset must be loaded in RAM
     '''
     def get_batch(self, batch_size=100):
         
         if self.loaded is False:
-            self.df = pd.read_csv(self.formated_path,sep=',') # Read again the csv
-            self.loaded = True
-            #self.headers = list(self.df)
-        
-        batch = self.df.iloc[self.index:self.index+batch_size]
-        self.index += batch_size
+            self._load_df()
+            
+        indexes = list(range(self.index,self.index+batch_size))    
+        if max(indexes)>self.data_shape[0]-1:
+            dif = max(indexes)-self.data_shape[0]
+            indexes[len(indexes)-dif-1:len(indexes)] = list(range(dif+1))
+            self.index=batch_size-dif
+            batch = self.df.iloc[indexes]
+        else: 
+            batch = self.df.iloc[indexes]
+            self.index += batch_size    
+            
+
         labels = batch[self.attack_types]
         
         for att in self.attack_types:
@@ -209,10 +197,11 @@ class data_cls:
         return self.data_shape
     
     def _load_df(self):
-        if self.train_test == 'train' or self.train_test == 'full':
-            self.df = pd.read_csv(self.formated_path,sep=',') # Read again the csv
+        if self.train_test == 'train':
+            self.df = pd.read_csv(self.formated_train_path,sep=',') # Read again the csv
         else:
-            self.df = pd.read_csv(self.test_path,sep=',')
+            self.df = pd.read_csv(self.formated_test_path,sep=',')
+        self.index=0
         self.loaded = True
 
 

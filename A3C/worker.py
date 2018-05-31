@@ -1,4 +1,3 @@
-import gym
 import sys
 import os
 import itertools
@@ -13,9 +12,7 @@ import_path = os.path.abspath(os.path.join(current_path, "../.."))
 if import_path not in sys.path:
   sys.path.append(import_path)
 
-# from lib import plotting
-from lib.atari.state_processor import StateProcessor
-from lib.atari import helpers as atari_helpers
+
 from estimators import ValueEstimator, PolicyEstimator
 
 Transition = collections.namedtuple("Transition", ["state", "action", "reward", "next_state", "done"])
@@ -73,14 +70,14 @@ class Worker(object):
     self.global_value_net = value_net
     self.global_counter = global_counter
     self.local_counter = itertools.count()
-    self.sp = StateProcessor()
+#    self.sp = StateProcessor()
     self.summary_writer = summary_writer
     self.env = env
 
     # Create local policy/value nets that are not updated asynchronously
     with tf.variable_scope(name):
-      self.policy_net = PolicyEstimator(policy_net.num_outputs)
-      self.value_net = ValueEstimator(reuse=True)
+      self.policy_net = PolicyEstimator(policy_net.num_outputs,policy_net.observation_sapce)
+      self.value_net = ValueEstimator(value_net.observation_sapce,reuse=True)
 
     # Op to copy params from global policy/valuenets
     self.copy_params_op = make_copy_params_op(
@@ -95,7 +92,7 @@ class Worker(object):
   def run(self, sess, coord, t_max):
     with sess.as_default(), sess.graph.as_default():
       # Initial state
-      self.state = atari_helpers.atari_make_initial_state(self.sp.process(self.env.reset()))
+      self.state = self.env.reset()
       try:
         while not coord.should_stop():
           # Copy Parameters from the global networks
@@ -116,7 +113,7 @@ class Worker(object):
         return
 
   def _policy_net_predict(self, state, sess):
-    feed_dict = { self.policy_net.states: [state] }
+    feed_dict = { self.policy_net.states: [state]}
     preds = sess.run(self.policy_net.predictions, feed_dict)
     return preds["probs"][0]
 
@@ -131,8 +128,7 @@ class Worker(object):
       # Take a step
       action_probs = self._policy_net_predict(self.state, sess)
       action = np.random.choice(np.arange(len(action_probs)), p=action_probs)
-      next_state, reward, done, _ = self.env.step(action)
-      next_state = atari_helpers.atari_make_next_state(self.state, self.sp.process(next_state))
+      next_state, reward, done = self.env.step(action)
 
       # Store transition
       transitions.append(Transition(
@@ -146,7 +142,7 @@ class Worker(object):
         tf.logging.info("{}: local Step {}, global step {}".format(self.name, local_t, global_t))
 
       if done:
-        self.state = atari_helpers.atari_make_initial_state(self.sp.process(self.env.reset()))
+        self.state = self.env.reset()
         break
       else:
         self.state = next_state
