@@ -10,7 +10,7 @@ from sklearn.utils import shuffle
 
 
 class data_cls:
-    def __init__(self, path,train_test,**kwargs):
+    def __init__(self,train_test,**kwargs):
         col_names = ["duration","protocol_type","service","flag","src_bytes",
             "dst_bytes","land","wrong_fragment","urgent","hot","num_failed_logins",
             "logged_in","num_compromised","root_shell","su_attempted","num_root",

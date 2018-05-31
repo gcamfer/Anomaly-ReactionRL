@@ -9,14 +9,14 @@ from data_preprocessing import data_cls
 class my_env(data_cls):
     def __init__(self,train_test,**kwargs):
         data_cls.__init__(self,train_test,**kwargs)
-        self.data_shape = data_cls.get_shape(self)
+        self.data_shape = self.get_shape()
         self.batch_size = kwargs.get('batch_size',1) # experience replay -> batch = 1
         self.iterations_episode = kwargs.get('iterations_episode',10)
-        self.action_space = len(data_cls.attack_types) # Number of posible actions
-        self.observation_space = data_cls.get_shape[1]-self.action_space
+        self.action_space = len(self.attack_types) # Number of posible actions
+        self.observation_space = self.data_shape[1]-self.action_space
 
     def _update_state(self):
-        self.states,self.labels = data_cls.get_batch(self,self.batch_size)
+        self.states,self.labels = self.get_batch(self.batch_size)
         
     '''
     Returns:

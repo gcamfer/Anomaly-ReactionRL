@@ -44,11 +44,11 @@ FLAGS = tf.flags.FLAGS
 
 # Initialization of the enviroment
 def make_env():
-    kdd_train = '../datasets/NSL/KDDTrain+.txt'
-    kdd_test = '../datasets/NSL/KDDTest+.txt'
+    kdd_train = '../../datasets/NSL/KDDTrain+.txt'
+    kdd_test = '../../datasets/NSL/KDDTest+.txt'
     
-    formated_train_path = "../datasets/formated/formated_train_type.data"
-    formated_test_path = "../datasets/formated/formated_test_type.data"
+    formated_train_path = "../../datasets/formated/formated_train_type.data"
+    formated_test_path = "../../datasets/formated/formated_test_type.data"
     batch_size = 1
     iterations_episode = 100
     

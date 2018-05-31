@@ -57,7 +57,7 @@ class PolicyEstimator():
 
     def __init__(self, num_outputs,observation_space, reuse=False, trainable=True):
         self.num_outputs = num_outputs
-        self.observation_sapce = observation_space
+        self.observation_space = observation_space
     
         # Placeholders for our input
         self.states = tf.placeholder(shape=[None, self.observation_space], 
@@ -130,7 +130,7 @@ class ValueEstimator():
 
     def __init__(self,observation_space, reuse=False, trainable=True):
         
-        self.observation_sapce = observation_space
+        self.observation_space = observation_space
 
         # Placeholders for our input
         self.states = tf.placeholder(shape=[None, observation_space], dtype=tf.float32, name="X")
