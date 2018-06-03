@@ -76,8 +76,8 @@ class Worker(object):
 
     # Create local policy/value nets that are not updated asynchronously
     with tf.variable_scope(name):
-      self.policy_net = PolicyEstimator(policy_net.num_outputs,policy_net.observation_sapce)
-      self.value_net = ValueEstimator(value_net.observation_sapce,reuse=True)
+      self.policy_net = PolicyEstimator(policy_net.num_outputs,policy_net.observation_space)
+      self.value_net = ValueEstimator(value_net.observation_space,reuse=True)
 
     # Op to copy params from global policy/valuenets
     self.copy_params_op = make_copy_params_op(

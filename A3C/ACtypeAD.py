@@ -13,7 +13,7 @@ import itertools
 from my_enviroment import my_env
 
 from estimators import ValueEstimator, PolicyEstimator
-#from policy_monitor import PolicyMonitor
+from policy_monitor import PolicyMonitor
 from worker import Worker
 
 
@@ -30,11 +30,11 @@ del_all_flags(tf.flags.FLAGS)
 
 
 
-tf.flags.DEFINE_string("model_dir", "/tmp/a3c", "Directory to write Tensorboard summaries and videos to.")
+tf.flags.DEFINE_string("model_dir", "/RL/TFM/AnomalyDetectionRL/A3C/tmp/a3c", "Directory to write Tensorboard summaries and videos to.")
 tf.flags.DEFINE_integer("t_max", 5, "Number of steps before performing an update")
-tf.flags.DEFINE_integer("max_global_steps", None, "Stop training after this many steps in the environment. Defaults to running indefinitely.")
+tf.flags.DEFINE_integer("max_global_steps", 5000, "Stop training after this many steps in the environment. Defaults to running indefinitely.")
 tf.flags.DEFINE_integer("eval_every", 300, "Evaluate the policy every N seconds")
-tf.flags.DEFINE_boolean("reset", False, "If set, delete the existing model directory and start training from scratch.")
+tf.flags.DEFINE_boolean("reset", True, "If set, delete the existing model directory and start training from scratch.")
 tf.flags.DEFINE_integer("parallelism", None, "Number of threads to run. If not set we run [num_cpu_cores] threads.")
 
 
@@ -119,13 +119,13 @@ with tf.device("/cpu:0"):
 
     saver = tf.train.Saver(keep_checkpoint_every_n_hours=2.0, max_to_keep=10)
 
-#    # Used to occasionally save videos for our policy net
-#    # and write episode rewards to Tensorboard
-#    pe = PolicyMonitor(
-#            env=make_env(wrap=False),
-#            policy_net=policy_net,
-#            summary_writer=summary_writer,
-#            saver=saver)
+    # Used to occasionally save videos for our policy net
+    # and write episode rewards to Tensorboard
+    pe = PolicyMonitor(
+            env=make_env(),
+            policy_net=policy_net,
+            summary_writer=summary_writer,
+            saver=saver)
 
 
 
@@ -149,9 +149,9 @@ with tf.Session() as sess:
         t.start()
         worker_threads.append(t)
 
-#    # Start a thread for policy eval task
-#    monitor_thread = threading.Thread(target=lambda: pe.continuous_eval(FLAGS.eval_every, sess, coord))
-#    monitor_thread.start()
+    # Start a thread for policy eval task
+    monitor_thread = threading.Thread(target=lambda: pe.continuous_eval(FLAGS.eval_every, sess, coord))
+    monitor_thread.start()
 
     # Wait for all workers to finish
     coord.join(worker_threads)

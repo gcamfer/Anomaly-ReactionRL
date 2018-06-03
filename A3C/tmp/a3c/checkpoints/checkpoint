@@ -1,0 +1,2 @@
+model_checkpoint_path: "D:\\RL\\TFM\\AnomalyDetectionRL\\A3C\\tmp\\a3c\\checkpoints\\model"
+all_model_checkpoint_paths: "D:\\RL\\TFM\\AnomalyDetectionRL\\A3C\\tmp\\a3c\\checkpoints\\model"

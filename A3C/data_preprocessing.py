@@ -182,8 +182,12 @@ class data_cls:
 
         labels = batch[self.attack_types]
         
+        
         for att in self.attack_types:
             del(batch[att])
+            
+        batch = batch.as_matrix(columns=None)[0]
+        
         return batch,labels
     
     

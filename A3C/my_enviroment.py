@@ -14,6 +14,7 @@ class my_env(data_cls):
         self.iterations_episode = kwargs.get('iterations_episode',10)
         self.action_space = len(self.attack_types) # Number of posible actions
         self.observation_space = self.data_shape[1]-self.action_space
+        self.counter = 0
 
     def _update_state(self):
         self.states,self.labels = self.get_batch(self.batch_size)
@@ -29,7 +30,7 @@ class my_env(data_cls):
         self.states,self.labels = data_cls.get_batch(self,self.batch_size)
         
         
-        return self.states.values 
+        return self.states
    
     '''
     Returns:
@@ -44,12 +45,16 @@ class my_env(data_cls):
         # Actualize new rewards == get_reward
         if actions == np.argmax(self.labels.values):
             self.reward = 1
-        self.estimated_labels[actions] +=1
         # Get new state and new true values
         self._update_state()
         
-        # Done allways false in this continuous task       
-        self.done = False
+#        self.done = False
+        if self.counter >= 100:
+            self.done = True
+            
+        else:
+            self.done = False
+        self.counter += 1
             
         return self.states, self.reward, self.done
     

@@ -1,7 +1,6 @@
 import sys
 import os
-import itertools
-import collections
+
 import numpy as np
 import tensorflow as tf
 import time
@@ -13,11 +12,7 @@ import_path = os.path.abspath(os.path.join(current_path, "../.."))
 if import_path not in sys.path:
   sys.path.append(import_path)
 
-from gym.wrappers import Monitor
-import gym
 
-from lib.atari.state_processor import StateProcessor
-from lib.atari import helpers as atari_helpers
 from estimators import ValueEstimator, PolicyEstimator
 from worker import make_copy_params_op
 
@@ -34,25 +29,18 @@ class PolicyMonitor(object):
   """
   def __init__(self, env, policy_net, summary_writer, saver=None):
 
-    self.video_dir = os.path.join(summary_writer.get_logdir(), "../videos")
-    self.video_dir = os.path.abspath(self.video_dir)
 
-    self.env = Monitor(env, directory=self.video_dir, video_callable=lambda x: True, resume=True)
+    self.env = env
     self.global_policy_net = policy_net
     self.summary_writer = summary_writer
     self.saver = saver
-    self.sp = StateProcessor()
 
     self.checkpoint_path = os.path.abspath(os.path.join(summary_writer.get_logdir(), "../checkpoints/model"))
 
-    try:
-      os.makedirs(self.video_dir)
-    except FileExistsError:
-      pass
 
     # Local policy net
     with tf.variable_scope("policy_eval"):
-      self.policy_net = PolicyEstimator(policy_net.num_outputs)
+      self.policy_net = PolicyEstimator(policy_net.num_outputs,policy_net.observation_space)
 
     # Op to copy params from global policy/value net parameters
     self.copy_params_op = make_copy_params_op(
@@ -71,14 +59,16 @@ class PolicyMonitor(object):
 
       # Run an episode
       done = False
-      state = atari_helpers.atari_make_initial_state(self.sp.process(self.env.reset()))
+      state = self.env.reset()
       total_reward = 0.0
       episode_length = 0
       while not done:
         action_probs = self._policy_net_predict(state, sess)
         action = np.random.choice(np.arange(len(action_probs)), p=action_probs)
-        next_state, reward, done, _ = self.env.step(action)
-        next_state = atari_helpers.atari_make_next_state(state, self.sp.process(next_state))
+        next_state, reward, done = self.env.step(action)
+
+        # # # # # #
+
         total_reward += reward
         episode_length += 1
         state = next_state
