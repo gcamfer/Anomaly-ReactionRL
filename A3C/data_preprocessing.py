@@ -205,7 +205,7 @@ class data_cls:
             self.df = pd.read_csv(self.formated_train_path,sep=',') # Read again the csv
         else:
             self.df = pd.read_csv(self.formated_test_path,sep=',')
-        self.index=0
+        self.index=np.random.randint(0,self.df.shape[0]-1,dtype=np.int32)
         self.loaded = True
 
 

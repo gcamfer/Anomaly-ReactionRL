@@ -11,7 +11,7 @@ class my_env(data_cls):
         data_cls.__init__(self,train_test,**kwargs)
         self.data_shape = self.get_shape()
         self.batch_size = kwargs.get('batch_size',1) # experience replay -> batch = 1
-        self.iterations_episode = kwargs.get('iterations_episode',10)
+        self.iterations_episode = kwargs.get('iterations_episode',100)
         self.action_space = len(self.attack_types) # Number of posible actions
         self.observation_space = self.data_shape[1]-self.action_space
         self.counter = 0
@@ -24,8 +24,6 @@ class my_env(data_cls):
         + Observation of the enviroment
     '''
     def reset(self):
-        self.state_numb = 0
-        
         #self.states,self.labels = data_cls.get_sequential_batch(self,self.batch_size)
         self.states,self.labels = data_cls.get_batch(self,self.batch_size)
         
@@ -49,7 +47,7 @@ class my_env(data_cls):
         self._update_state()
         
 #        self.done = False
-        if self.counter >= 100:
+        if self.counter >= self.iterations_episode:
             self.done = True
             
         else:
