@@ -206,6 +206,17 @@ class data_cls:
             del(batch[att])
         return batch,labels
     
+    def get_full(self):
+        if self.loaded is False:
+            self._load_df()
+            
+        batch = self.df        
+        labels = batch[self.attack_types]
+        
+        for att in self.attack_types:
+            del(batch[att])
+        return batch,labels
+    
     def get_shape(self):
         if self.loaded is False:
             self._load_df()
@@ -220,6 +231,8 @@ class data_cls:
         else:
             self.df = pd.read_csv(self.formated_test_path,sep=',')
         self.index=0
+        # Shuffle again:
+        self.df = shuffle(self.df,random_state=np.random.randint(0,100))
         self.loaded = True
 
 
@@ -262,7 +275,7 @@ class QNetwork():
 
 
     def __init__(self,obs_size,num_actions,hidden_size = 100,
-                 hidden_layers = 1,learning_rate=.2):
+                 hidden_layers = 1,learning_rate=.02):
         """
         Initialize the network with the provided shape
         """
@@ -357,7 +370,7 @@ class Epsilon_greedy(Policy):
         # decay epsilon after each epoch
         if self.epsilon_decay:
             if self.step_counter % self.epoch_length == 0:
-                self.epsilon = max(.05, self.epsilon * self.decay_rate**self.step_counter)
+                self.epsilon = max(.001, self.epsilon * self.decay_rate**self.step_counter)
             
         return actions
     
@@ -389,12 +402,12 @@ class Agent(object):
         self.model_network = QNetwork(self.obs_size, self.num_actions,
                                       kwargs.get('hidden_size', 100),
                                       kwargs.get('hidden_layers',1),
-                                      kwargs.get('learning_rate',.2))
+                                      kwargs.get('learning_rate',.1))
         
         self.target_model_network = QNetwork(self.obs_size, self.num_actions,
                                       kwargs.get('hidden_size', 100),
                                       kwargs.get('hidden_layers',1),
-                                      kwargs.get('learning_rate',.2))
+                                      kwargs.get('learning_rate',.1))
         self.target_model_network.model = QNetwork.copy_model(self.model_network.model)
         
         if policy == "EpsilonGreedy":
@@ -602,7 +615,7 @@ if __name__ == "__main__":
     
  
 #    num_episodes = int(env.data_shape[0]/(iterations_episode)/10)
-    num_episodes = 50
+    num_episodes = 200
     valid_actions = list(range(len(env.attack_types))) # only detect type of attack
     num_actions = len(valid_actions)
     

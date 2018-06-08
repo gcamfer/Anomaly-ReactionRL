@@ -99,7 +99,7 @@ class data_cls:
         
 
 
-        formated = False     
+        formated = False
         
         # Test formated data exists
         if os.path.exists(self.formated_train_path) and os.path.exists(self.formated_test_path):
@@ -203,6 +203,18 @@ class data_cls:
         for att in self.attack_types:
             del(batch[att])
         return batch,labels
+    
+    def get_full(self):
+        if self.loaded is False:
+            self._load_df()
+            
+        batch = self.df        
+        labels = batch[self.attack_types]
+        
+        for att in self.attack_types:
+            del(batch[att])
+        return batch,labels
+    
     
     def get_shape(self):
         if self.loaded is False:
@@ -352,7 +364,7 @@ class Epsilon_greedy(Policy):
         # decay epsilon after each epoch
         if self.epsilon_decay:
             if self.step_counter % self.epoch_length == 0:
-                self.epsilon = max(.05, self.epsilon * self.decay_rate**self.step_counter)
+                self.epsilon = max(.01, self.epsilon * self.decay_rate**self.step_counter)
             
         return actions
     
@@ -611,13 +623,13 @@ if __name__ == "__main__":
     # Train batch
     batch_size = 1
     # batch of memory ExpRep
-    minibatch_size = 50
+    minibatch_size = 20
     ExpRep = True
     
     iterations_episode = 100
 
     #3max_memory = 100
-    decay_rate = 0.99
+    decay_rate = 0.999
     gamma = 0.001
     
     
@@ -635,7 +647,7 @@ if __name__ == "__main__":
     
  
 #    num_episodes = int(env.data_shape[0]/(iterations_episode)/10)
-    num_episodes = 300
+    num_episodes = 200
 
 
     # Initialization of the Agent
@@ -752,7 +764,7 @@ if __name__ == "__main__":
         plt.ylabel('loss')
         plt.tight_layout()
         #plt.show()
-        plt.savefig('results/train_type_improved.eps', format='eps', dpi=1000)
+        plt.savefig('results/train_dueling_network.eps', format='eps', dpi=1000)
 
 
 
@@ -761,8 +773,7 @@ if __name__ == "__main__":
 
 
         #TEST
-        batch_size = 100
-        env = RLenv('test',formated_test_path = formated_test_path,batch_size=batch_size) 
+        env = RLenv('test',formated_test_path = formated_test_path) 
         total_reward = 0    
         epochs = int(env.data_shape[0]/env.batch_size/1)
     
@@ -770,36 +781,35 @@ if __name__ == "__main__":
         estimated_labels = np.zeros(len(env.attack_types),dtype=int)
         estimated_correct_labels = np.zeros(len(env.attack_types),dtype=int)
         
-        for e in range(epochs):
-            #states , labels = env.get_sequential_batch(test_path,batch_size = env.batch_size)
-            states , labels = env.get_batch(batch_size = env.batch_size)
-            
-            Q = agent.model_network.predict(sess,states)
-            # TODO: fix performance in this loop
-            actions = []
-            for row in range(Q.shape[0]):
-                best_actions = np.argwhere(Q[row] == np.amax(Q[row]))
-                actions.append(best_actions[np.random.choice(len(best_actions))].item())
-            
-            reward = np.zeros(env.batch_size)
-            
-            true_labels += np.sum(labels).values
-    
-            for indx,a in enumerate(actions):
-                estimated_labels[a] +=1              
-                if a == np.argmax(labels.iloc[indx].values):
-                    reward[indx] = 1
-                    estimated_correct_labels[a] += 1
-            
-            
-            total_reward += int(sum(reward))
-            print("\rEpoch {}/{} | Tot Rew -- > {}".format(e,epochs,total_reward), end="")
+        
+        #states , labels = env.get_sequential_batch(test_path,batch_size = env.batch_size)
+        states , labels = env.get_full()
+        
+        Q = agent.model_network.predict(sess,states)
+        # TODO: fix performance in this loop
+        actions = []
+        for row in range(Q.shape[0]):
+            best_actions = np.argwhere(Q[row] == np.amax(Q[row]))
+            actions.append(best_actions[np.random.choice(len(best_actions))].item())
+        
+        
+        
+        true_labels += np.sum(labels).values
+
+        for indx,a in enumerate(actions):
+            estimated_labels[a] +=1              
+            if a == np.argmax(labels.iloc[indx].values):
+                total_reward += 1
+                estimated_correct_labels[a] += 1
+        
+        
+
             
         Accuracy = estimated_correct_labels / true_labels
         Mismatch = estimated_labels - true_labels
     
         print('\r\nTotal reward: {} | Number of samples: {} | Accuracy = {}%'.format(total_reward,
-              int(epochs*env.batch_size),float(100*total_reward/(epochs*env.batch_size))))
+              len(states),float(100*total_reward/len(states))))
         outputs_df = pd.DataFrame(index = env.attack_types,columns = ["Estimated","Correct","Total","Acuracy"])
         for indx,att in enumerate(env.attack_types):
            outputs_df.iloc[indx].Estimated = estimated_labels[indx]
@@ -833,7 +843,7 @@ if __name__ == "__main__":
     plt.legend((p1[0], p2[0]), ('Correct estimated', 'Incorrect estimated'))
     plt.tight_layout()
     #plt.show()
-    plt.savefig('results/test_type_improved.eps', format='eps', dpi=1000)
+    plt.savefig('results/test_dueling_network.eps', format='eps', dpi=1000)
 
 
 

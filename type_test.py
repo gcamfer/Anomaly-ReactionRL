@@ -8,7 +8,6 @@ from typeAD import huber_loss
 
 
 if __name__ == "__main__":
-    batch_size = 100
     formated_test_path = "../datasets/formated/formated_test_type.data"
 
 
@@ -22,43 +21,34 @@ if __name__ == "__main__":
     model.compile(loss=huber_loss,optimizer="sgd")
 
     # Define environment, game, make sure the batch_size is the same in train
-    env = RLenv('test',formated_test_path = formated_test_path,batch_size=batch_size)
+    env = RLenv('test',formated_test_path = formated_test_path)
     
-
-    total_reward = 0    
-    epochs = int(env.data_shape[0]/env.batch_size/1)
-    
+    total_reward = 0
     
     true_labels = np.zeros(len(env.attack_types),dtype=int)
     estimated_labels = np.zeros(len(env.attack_types),dtype=int)
     estimated_correct_labels = np.zeros(len(env.attack_types),dtype=int)
     
-    for e in range(epochs):
-        #states , labels = env.get_sequential_batch(test_path,batch_size = env.batch_size)
-        states , labels = env.get_batch(batch_size = env.batch_size)
-        q = model.predict(states)
-        actions = np.argmax(q,axis=1)        
-        
-        reward = np.zeros(env.batch_size)
-        
-        true_labels += np.sum(labels).values
+    states , labels = env.get_full()
+    q = model.predict(states)
+    actions = np.argmax(q,axis=1)        
+    
+    true_labels += np.sum(labels).values
 
-        for indx,a in enumerate(actions):
-            estimated_labels[a] +=1              
-            if a == np.argmax(labels.iloc[indx].values):
-                reward[indx] = 1
-                estimated_correct_labels[a] += 1
-        
-        
-        total_reward += int(sum(reward))
-        print("\rEpoch {}/{} | Tot Rew -- > {}".format(e,epochs,total_reward), end="")
+    for indx,a in enumerate(actions):
+        estimated_labels[a] +=1              
+        if a == np.argmax(labels.iloc[indx].values):
+            total_reward += 1
+            estimated_correct_labels[a] += 1
+    
+    
         
     Accuracy = estimated_correct_labels / true_labels
-    Mismatch = estimated_labels - true_labels
+    Mismatch = abs(estimated_correct_labels - true_labels)+abs(estimated_labels-estimated_correct_labels)
 
     print('\r\nTotal reward: {} | Number of samples: {} | Accuracy = {}%'.format(total_reward,
-          int(epochs*env.batch_size),float(100*total_reward/(epochs*env.batch_size))))
-    outputs_df = pd.DataFrame(index = env.attack_types,columns = ["Estimated","Correct","Total","Acuracy"])
+          len(states),float(100*total_reward/len(states))))
+    outputs_df = pd.DataFrame(index = env.attack_types,columns = ["Estimated","Correct","Total","Acuracy","Mismatch"])
     for indx,att in enumerate(env.attack_types):
        outputs_df.iloc[indx].Estimated = estimated_labels[indx]
        outputs_df.iloc[indx].Correct = estimated_correct_labels[indx]

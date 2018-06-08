@@ -187,6 +187,19 @@ class data_cls:
         batch = batch.drop(self.all_attack_names,axis=1)
             
         return batch,labels
+    
+    def get_full(self):
+        if self.loaded is False:
+            self._load_df()
+            
+        
+        labels = self.df[self.attack_names]
+        
+        batch = self.df.drop(self.all_attack_names,axis=1)
+        
+
+        return batch,labels
+    
 
             
     ''' Get n-row batch from the dataset
@@ -215,7 +228,7 @@ class data_cls:
             self.df = pd.read_csv(self.formated_train_path,sep=',') # Read again the csv
         else:
             self.df = pd.read_csv(self.formated_test_path,sep=',')
-        self.index=0
+        self.index=np.random.randint(0,self.df.shape[0]-1,dtype=np.int32)
         self.loaded = True
          # Create a list with the existent attacks in the df
         for att in self.attack_map:
@@ -565,6 +578,7 @@ class RLenv(data_cls):
         
         self.state_numb = 0
         
+        data_cls._load_df(self) # Reload and random index
         self.states,self.labels = data_cls.get_batch(self,self.batch_size)
         
         self.total_reward = 0
@@ -681,230 +695,300 @@ if __name__ == "__main__":
     
     
     
-    # Train batch
-    batch_size = 1
-    # batch of memory ExpRep
-    minibatch_size = 100
-    ExpRep = True
     
-    iterations_episode = 100
 
+    variations = np.linspace(0.1,1,10) # min_epsilon for attack
+    accuracy_test = []
+    for variation in variations:
         
+        
+        # Train batch
+        batch_size = 1
+        # batch of memory ExpRep
+        minibatch_size = 100
+        ExpRep = True
+        
+        iterations_episode = 100
   
-    # Initialization of the enviroment
-    env = RLenv('train',train_path=kdd_train,test_path=kdd_test,
-                formated_train_path = formated_train_path,
-                formated_test_path = formated_test_path,batch_size=batch_size,
-                iterations_episode=iterations_episode)    
-    # obs_size = size of the state
-    obs_size = env.data_shape[1]-len(env.all_attack_names)
-    
-    #num_episodes = int(env.data_shape[0]/(iterations_episode)/10)
-    num_episodes = 10
-    
-    '''
-    Definition for the defensor agent.
-    '''
-    defender_valid_actions = list(range(len(env.attack_types))) # only detect type of attack
-    defender_num_actions = len(defender_valid_actions)    
-    
-	
-    def_epsilon = 1 # exploration
-    min_epsilon = 0.1 # min value for exploration
-    def_gamma = 0.001
-    def_decay_rate = 0.99
-    
-    def_hidden_size = 100
-    def_hidden_layers = 3
-    
-    def_learning_rate = .02
-    
-    defender_agent = DefenderAgent(defender_valid_actions,obs_size,"EpsilonGreedy",
-                          epoch_length = iterations_episode,
-                          epsilon = def_epsilon,
-                          min_epsilon = min_epsilon,
-                          decay_rate = def_decay_rate,
-                          gamma = def_gamma,
-                          hidden_size=def_hidden_size,
-                          hidden_layers=def_hidden_layers,
-                          minibatch_size = minibatch_size,
-                          mem_size = 1000,
-                          learning_rate=def_learning_rate,
-                          ExpRep=ExpRep)
-    #Pretrained defender
-    defender_agent.model_network.model.load_weights("models/type_model.h5")    
-    
-    '''
-    Definition for the attacker agent.
-    In this case the exploration is better to be greater
-    The correlation sould be greater too so gamma bigger
-    '''
-    attack_valid_actions = list(range(len(env.attack_names)))
-    attack_num_actions = len(attack_valid_actions)
-	
-    att_epsilon = 1
-    min_epsilon = 0.5 # min value for exploration
-
-    att_gamma = 0.001
-    att_decay_rate = 0.99
-    
-    att_hidden_layers = 100
-    att_hidden_size = 3
-    
-    att_learning_rate = 0.02
-    
-    attacker_agent = AttackAgent(attack_valid_actions,obs_size,"EpsilonGreedy",
-                          epoch_length = iterations_episode,
-                          epsilon = att_epsilon,
-                          min_epsilon = min_epsilon,
-                          decay_rate = att_decay_rate,
-                          gamma = att_gamma,
-                          hidden_size=att_hidden_size,
-                          hidden_layers=att_hidden_layers,
-                          minibatch_size = minibatch_size,
-                          mem_size = 1000,
-                          learning_rate=att_learning_rate,
-                          ExpRep=ExpRep)
-    
-    
-    
-    
-    # Statistics
-    att_reward_chain = []
-    def_reward_chain = []
-    att_loss_chain = []
-    def_loss_chain = []
-    def_total_reward_chain = []
-    att_total_reward_chain = []
-    
-	# Print parameters
-    print("-------------------------------------------------------------------------------")
-    print("Total epoch: {} | Iterations in epoch: {}"
-          "| Minibatch from mem size: {} | Total Samples: {}|".format(num_episodes,
-                         iterations_episode,minibatch_size,
-                         num_episodes*iterations_episode))
-    print("-------------------------------------------------------------------------------")
-    print("Dataset shape: {}".format(env.data_shape))
-    print("-------------------------------------------------------------------------------")
-    print("Attacker parameters: Num_actions={} | gamma={} |" 
-          " epsilon={} | ANN hidden size={} | "
-          "ANN hidden layers={}|".format(attack_num_actions,
-                             att_gamma,att_epsilon, att_hidden_size,
-                             att_hidden_layers))
-    print("-------------------------------------------------------------------------------")
-    print("Defense parameters: Num_actions={} | gamma={} | "
-          "epsilon={} | ANN hidden size={} |"
-          " ANN hidden layers={}|".format(defender_num_actions,
-                              def_gamma,def_epsilon,def_hidden_size,
-                              def_hidden_layers))
-    print("-------------------------------------------------------------------------------")
-
-    # Main loop
-    for epoch in range(num_episodes):
-        start_time = time.time()
-        att_loss = 0.
-        def_loss = 0.
-        def_total_reward_by_episode = 0
-        att_total_reward_by_episode = 0
-        # Reset enviromet, actualize the data batch with random state/attacks
-        states = env.reset()
+        # Initialization of the enviroment
+        env = RLenv('train',train_path=kdd_train,test_path=kdd_test,
+                    formated_train_path = formated_train_path,
+                    formated_test_path = formated_test_path,batch_size=batch_size,
+                    iterations_episode=iterations_episode)    
+        # obs_size = size of the state
+        obs_size = env.data_shape[1]-len(env.all_attack_names)
         
-        # Get actions for actual states following the policy
-        attack_actions = attacker_agent.act(states)
-        states = env.get_states(attack_actions)    
-
+        #num_episodes = int(env.data_shape[0]/(iterations_episode)/10)
+        num_episodes = 80
+        
+        '''
+        Definition for the defensor agent.
+        '''
+        defender_valid_actions = list(range(len(env.attack_types))) # only detect type of attack
+        defender_num_actions = len(defender_valid_actions)    
+        
+    	
+        def_epsilon = 1 # exploration
+        min_epsilon = 0.01 # min value for exploration
+        def_gamma = 0.001
+        def_decay_rate = 0.99
+        
+        def_hidden_size = 100
+        def_hidden_layers = 3
+        
+        def_learning_rate = .2
+        
+        defender_agent = DefenderAgent(defender_valid_actions,obs_size,"EpsilonGreedy",
+                              epoch_length = iterations_episode,
+                              epsilon = def_epsilon,
+                              min_epsilon = min_epsilon,
+                              decay_rate = def_decay_rate,
+                              gamma = def_gamma,
+                              hidden_size=def_hidden_size,
+                              hidden_layers=def_hidden_layers,
+                              minibatch_size = minibatch_size,
+                              mem_size = 1000,
+                              learning_rate=def_learning_rate,
+                              ExpRep=ExpRep)
+        #Pretrained defender
+    #    defender_agent.model_network.model.load_weights("models/type_model.h5")    
+        
+        '''
+        Definition for the attacker agent.
+        In this case the exploration is better to be greater
+        The correlation sould be greater too so gamma bigger
+        '''
+        attack_valid_actions = list(range(len(env.attack_names)))
+        attack_num_actions = len(attack_valid_actions)
+    	
+        att_epsilon = 1
+        min_epsilon = variation # min value for exploration
+    
+        att_gamma = 0.001
+        att_decay_rate = 0.99
+        
+        att_hidden_layers = 100
+        att_hidden_size = 3
+        
+        att_learning_rate = 0.2
+        
+        attacker_agent = AttackAgent(attack_valid_actions,obs_size,"EpsilonGreedy",
+                              epoch_length = iterations_episode,
+                              epsilon = att_epsilon,
+                              min_epsilon = min_epsilon,
+                              decay_rate = att_decay_rate,
+                              gamma = att_gamma,
+                              hidden_size=att_hidden_size,
+                              hidden_layers=att_hidden_layers,
+                              minibatch_size = minibatch_size,
+                              mem_size = 1000,
+                              learning_rate=att_learning_rate,
+                              ExpRep=ExpRep)
         
         
         
         
-        done = False
-       
-
-        # Iteration in one episode
-        for i_iteration in range(iterations_episode):
+        # Statistics
+        att_reward_chain = []
+        def_reward_chain = []
+        att_loss_chain = []
+        def_loss_chain = []
+        def_total_reward_chain = []
+        att_total_reward_chain = []
+        
+    	# Print parameters
+        print("-------------------------------------------------------------------------------")
+        print("Total epoch: {} | Iterations in epoch: {}"
+              "| Minibatch from mem size: {} | Total Samples: {}|".format(num_episodes,
+                             iterations_episode,minibatch_size,
+                             num_episodes*iterations_episode))
+        print("-------------------------------------------------------------------------------")
+        print("Dataset shape: {}".format(env.data_shape))
+        print("-------------------------------------------------------------------------------")
+        print("Attacker parameters: Num_actions={} | gamma={} |" 
+              " epsilon={} | ANN hidden size={} | "
+              "ANN hidden layers={}|".format(attack_num_actions,
+                                 att_gamma,att_epsilon, att_hidden_size,
+                                 att_hidden_layers))
+        print("-------------------------------------------------------------------------------")
+        print("Defense parameters: Num_actions={} | gamma={} | "
+              "epsilon={} | ANN hidden size={} |"
+              " ANN hidden layers={}|".format(defender_num_actions,
+                                  def_gamma,def_epsilon,def_hidden_size,
+                                  def_hidden_layers))
+        print("-------------------------------------------------------------------------------")
+    
+        # Main loop
+        for epoch in range(num_episodes):
+            start_time = time.time()
+            att_loss = 0.
+            def_loss = 0.
+            def_total_reward_by_episode = 0
+            att_total_reward_by_episode = 0
+            # Reset enviromet, actualize the data batch with random state/attacks
+            states = env.reset()
+            
+            # Get actions for actual states following the policy
+            attack_actions = attacker_agent.act(states)
+            states = env.get_states(attack_actions)    
+    
             
             
-            # apply actions, get rewards and new state
-            act_time = time.time()  
-            defender_actions = defender_agent.act(states)
-            #Enviroment actuation for this actions
-            next_states,def_reward, att_reward,next_attack_actions, done = env.act(defender_actions,attack_actions)
-            # If the epoch*batch_size*iterations_episode is largest than the df
-
             
-            attacker_agent.learn(states,attack_actions,next_states,att_reward,done)
-            defender_agent.learn(states,defender_actions,next_states,def_reward,done)
             
-            act_end_time = time.time()
-            
-            # Train network, update loss after at least minibatch_learns
-            if ExpRep and epoch*iterations_episode + i_iteration >= minibatch_size:
-                def_loss += defender_agent.update_model()
-                att_loss += attacker_agent.update_model()
-            elif not ExpRep:
-                def_loss += defender_agent.update_model()
-                att_loss += attacker_agent.update_model()
+            done = False
+           
+    
+            # Iteration in one episode
+            for i_iteration in range(iterations_episode):
                 
-
-            update_end_time = time.time()
-
-            # Update the state
-            states = next_states
-            attack_actions = next_attack_actions
+                
+                # apply actions, get rewards and new state
+                act_time = time.time()  
+                defender_actions = defender_agent.act(states)
+                #Enviroment actuation for this actions
+                next_states,def_reward, att_reward,next_attack_actions, done = env.act(defender_actions,attack_actions)
+                # If the epoch*batch_size*iterations_episode is largest than the df
+    
+                
+                attacker_agent.learn(states,attack_actions,next_states,att_reward,done)
+                defender_agent.learn(states,defender_actions,next_states,def_reward,done)
+                
+                act_end_time = time.time()
+                
+                # Train network, update loss after at least minibatch_learns
+                if ExpRep and epoch*iterations_episode + i_iteration >= minibatch_size:
+                    def_loss += defender_agent.update_model()
+                    att_loss += attacker_agent.update_model()
+                elif not ExpRep:
+                    def_loss += defender_agent.update_model()
+                    att_loss += attacker_agent.update_model()
+                    
+    
+                update_end_time = time.time()
+    
+                # Update the state
+                states = next_states
+                attack_actions = next_attack_actions
+                
+                
+                # Update statistics
+                def_total_reward_by_episode += np.sum(def_reward,dtype=np.int32)
+                att_total_reward_by_episode += np.sum(att_reward,dtype=np.int32)
+            
+    
+            # Update user view
+            def_reward_chain.append(def_total_reward_by_episode) 
+            att_reward_chain.append(att_total_reward_by_episode) 
+            def_loss_chain.append(def_loss)
+            att_loss_chain.append(att_loss) 
+    
+            
+            end_time = time.time()
+            print("\r\n|Epoch {:03d}/{:03d}| time: {:2.2f}|\r\n"
+                    "|Def Loss {:4.4f} | Def Reward in ep {:03d}|\r\n"
+                    "|Att Loss {:4.4f} | Att Reward in ep {:03d}|"
+                    .format(epoch, num_episodes,(end_time-start_time), 
+                    def_loss, def_total_reward_by_episode,
+                    att_loss, att_total_reward_by_episode))
             
             
-            # Update statistics
-            def_total_reward_by_episode += np.sum(def_reward,dtype=np.int32)
-            att_total_reward_by_episode += np.sum(att_reward,dtype=np.int32)
+            print("|Def Estimated: {}| Att Labels: {}".format(env.def_estimated_labels,
+                  env.def_true_labels))
+            
+        # Save trained model weights and architecture, used in test
+        defender_agent.model_network.model.save_weights("models/defender_agent_model.h5", overwrite=True)
+        with open("models/defender_agent_model.json", "w") as outfile:
+            json.dump(defender_agent.model_network.model.to_json(), outfile)
+            
         
+        # Plot training results
+        plt.figure(1)
+        plt.subplot(211)
+        plt.plot(np.arange(len(def_reward_chain)),def_reward_chain,label='Defense')
+        plt.plot(np.arange(len(att_reward_chain)),att_reward_chain,label='Attack')
+        plt.title('Total reward by episode')
+        plt.xlabel('n Episode')
+        plt.ylabel('Total reward')
+        plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+               ncol=2, mode="expand", borderaxespad=0.)
+        
+        plt.subplot(212)
+        plt.plot(np.arange(len(def_loss_chain)),def_loss_chain,label='Defense')
+        plt.plot(np.arange(len(att_loss_chain)),att_loss_chain,label='Attack')
+        plt.title('Loss by episode')
+        plt.xlabel('n Episode')
+        plt.ylabel('loss')
+        plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+               ncol=2, mode="expand", borderaxespad=0.)
+        plt.tight_layout()
+        #plt.show()
+        plt.savefig('results/train_adv.eps', format='eps', dpi=1000)
 
-        # Update user view
-        def_reward_chain.append(def_total_reward_by_episode) 
-        att_reward_chain.append(att_total_reward_by_episode) 
-        def_loss_chain.append(def_loss)
-        att_loss_chain.append(att_loss) 
-
+        ###########################################################
+        ############################################################
         
-        end_time = time.time()
-        print("\r\n|Epoch {:03d}/{:03d}| time: {:2.2f}|\r\n"
-                "|Def Loss {:4.4f} | Def Reward in ep {:03d}|\r\n"
-                "|Att Loss {:4.4f} | Att Reward in ep {:03d}|"
-                .format(epoch, num_episodes,(end_time-start_time), 
-                def_loss, def_total_reward_by_episode,
-                att_loss, att_total_reward_by_episode))
+        batch_size = 10
+        formated_test_path = "../datasets/formated/formated_test_adv.data"
+        
+        with open("models/defender_agent_model.json", "r") as jfile:
+            model = keras.models.model_from_json(json.load(jfile))
+        model.load_weights("models/defender_agent_model.h5")
+        
+        model.compile(loss=huber_loss,optimizer="sgd")
+        
+        # Define environment, game, make sure the batch_size is the same in train
+        env = RLenv('test',formated_test_path = formated_test_path,batch_size=batch_size)
         
         
-        print("|Def Estimated: {}| Att Labels: {}".format(env.def_estimated_labels,
-              env.def_true_labels))
+        total_reward = 0    
+        epochs = int(env.data_shape[0]/env.batch_size/1)
         
-    # Save trained model weights and architecture, used in test
-    defender_agent.model_network.model.save_weights("models/defender_agent_model.h5", overwrite=True)
-    with open("models/defender_agent_model.json", "w") as outfile:
-        json.dump(defender_agent.model_network.model.to_json(), outfile)
         
-    
-    # Plot training results
-    plt.figure(1)
-    plt.subplot(211)
-    plt.plot(np.arange(len(def_reward_chain)),def_reward_chain,label='Defense')
-    plt.plot(np.arange(len(att_reward_chain)),att_reward_chain,label='Attack')
-    plt.title('Total reward by episode')
-    plt.xlabel('n Episode')
-    plt.ylabel('Total reward')
-    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-           ncol=2, mode="expand", borderaxespad=0.)
-    
-    plt.subplot(212)
-    plt.plot(np.arange(len(def_loss_chain)),def_loss_chain,label='Defense')
-    plt.plot(np.arange(len(att_loss_chain)),att_loss_chain,label='Attack')
-    plt.title('Loss by episode')
-    plt.xlabel('n Episode')
-    plt.ylabel('loss')
-    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-           ncol=2, mode="expand", borderaxespad=0.)
+        true_labels = np.zeros(len(env.attack_types),dtype=int)
+        estimated_labels = np.zeros(len(env.attack_types),dtype=int)
+        estimated_correct_labels = np.zeros(len(env.attack_types),dtype=int)
+        
+        for e in range(epochs):
+            #states , labels = env.get_sequential_batch(test_path,batch_size = env.batch_size)
+            states , labels = env.get_batch(batch_size = env.batch_size)
+            q = model.predict(states)
+            actions = np.argmax(q,axis=1)        
+            
+            reward = np.zeros(env.batch_size)
+            maped=[]
+            for indx,label in labels.iterrows():
+                maped.append(env.attack_types.index(env.attack_map[label.idxmax()]))
+            
+            labels,counts = np.unique(maped,return_counts=True)
+            true_labels[labels] += counts
+            
+        
+        
+            for indx,a in enumerate(actions):
+                estimated_labels[a] +=1              
+                if a == maped[indx]:
+                    reward[indx] = 1
+                    estimated_correct_labels[a] += 1
+            
+            
+            total_reward += int(sum(reward))
+            print("\rEpoch {}/{} | Tot Rew -- > {}".format(e,epochs,total_reward), end="")
+            
+        Accuracy = estimated_correct_labels / true_labels
+        Mismatch = estimated_labels - true_labels
+        
+        acc = float(100*total_reward/(epochs*env.batch_size))
+        
+        accuracy_test.append(acc)
+        
+    plt.figure(2)
+    plt.plot(np.arange(len(accuracy_test)),accuracy_test)
+    plt.title('Attack min exploration parameter')
+    plt.xlabel('min epsilon')
+    plt.ylabel('Accuracy')
     plt.tight_layout()
-    #plt.show()
-    plt.savefig('results/train_adv.eps', format='eps', dpi=1000)
+    plt.savefig('results/min_exp_adv.eps', format='eps', dpi=1000)
 
 
 
