@@ -23,11 +23,11 @@ Using deep Q-Learning with keras/tensorflow to generate the network
 
 - Train Dueling DDQN (tensorflow) in [typeAD_tf.py](https://github.com/gcamfer/Anomaly-ReactionRL/blob/master/Type/typeAD_tf.py)
 
-## Adversarial/Multi Agent RL
+### Adversarial/Multi Agent RL
 - Try to improve the inequality of attacks to produce better training
 - Train set in: [adversarialAD.py](https://github.com/gcamfer/Anomaly-ReactionRL/blob/master/Multi-agent/adversarialAD.py)
 - Test set in: [adversarial_test.py](https://github.com/gcamfer/Anomaly-ReactionRL/blob/master/Multi-agent/adversarial_test.py)
 
-## A3C
+### A3C
 - Train-Test in: [A3CtypeAD.py](https://github.com/gcamfer/Anomaly-ReactionRL/blob/master/A3C/A3CtypeAD.py)
 - Summary: `tensorboard --logdir=/tmp/a3c`
