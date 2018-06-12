@@ -53,7 +53,7 @@ class Worker(object):
 
   Args:
     name: A unique name for this worker
-    env: The Gym environment used by this worker
+    env: The environment used by this worker
     policy_net: Instance of the globally shared policy net
     value_net: Instance of the globally shared value net
     global_counter: Iterator that holds the global step

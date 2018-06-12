@@ -13,7 +13,7 @@ if import_path not in sys.path:
   sys.path.append(import_path)
 
 
-from estimators import ValueEstimator, PolicyEstimator
+from estimators import PolicyEstimator
 from worker import make_copy_params_op
 
 

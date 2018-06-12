@@ -1,4 +1,3 @@
-import numpy as np
 import tensorflow as tf
 
 def build_shared_network(X, add_summaries=False):

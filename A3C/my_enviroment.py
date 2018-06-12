@@ -3,7 +3,6 @@ Reinforcement learning Enviroment Definition
 '''
 
 import numpy as np
-import tensorflow as tf
 from data_preprocessing import data_cls
 
 class my_env(data_cls):
