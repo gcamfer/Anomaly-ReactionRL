@@ -25,7 +25,7 @@ class my_env(data_cls):
     def reset(self):
         #self.states,self.labels = data_cls.get_sequential_batch(self,self.batch_size)
         self.states,self.labels = data_cls.get_batch(self,self.batch_size)
-        
+        self.counter = 0
         
         return self.states
    

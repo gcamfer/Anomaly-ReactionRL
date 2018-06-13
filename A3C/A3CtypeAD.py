@@ -30,9 +30,9 @@ del_all_flags(tf.flags.FLAGS)
 
 
 
-tf.flags.DEFINE_string("model_dir", "/RL/TFM/AnomalyDetectionRL/A3C/tmp/a3c", "Directory to write Tensorboard summaries and videos to.")
+tf.flags.DEFINE_string("model_dir", "/RL/TFM/Anomaly-ReactionRL/A3C/tmp/a3c", "Directory to write Tensorboard summaries and videos to.")
 tf.flags.DEFINE_integer("t_max", 5, "Number of steps before performing an update")
-tf.flags.DEFINE_integer("max_global_steps", 10000, "Stop training after this many steps in the environment. Defaults to running indefinitely.")
+tf.flags.DEFINE_integer("max_global_steps", None, "Stop training after this many steps in the environment. Defaults to running indefinitely.")
 tf.flags.DEFINE_integer("eval_every", 300, "Evaluate the policy every N seconds")
 tf.flags.DEFINE_boolean("reset", True, "If set, delete the existing model directory and start training from scratch.")
 tf.flags.DEFINE_integer("parallelism", None, "Number of threads to run. If not set we run [num_cpu_cores] threads.")
@@ -113,7 +113,7 @@ with tf.device("/cpu:0"):
                       policy_net=policy_net,
                       value_net=value_net,
                       global_counter=global_counter,
-                      discount_factor = 0.99,
+                      discount_factor = 0.01,
                       summary_writer=worker_summary_writer,
                       max_global_steps=FLAGS.max_global_steps)
         workers.append(worker)
@@ -159,89 +159,7 @@ with tf.Session() as sess:
     
     
     
-    import matplotlib.pyplot as plt
-    import numpy as np
-    import pandas as pd
     
-    kdd_train = '../../datasets/NSL/KDDTrain+.txt'
-    kdd_test = '../../datasets/NSL/KDDTest+.txt'
-    
-    formated_train_path = "../../datasets/formated/formated_train_type.data"
-    formated_test_path = "../../datasets/formated/formated_test_type.data"
-    
-    #TEST
-    batch_size = 1
-    env = my_env('test',formated_test_path = formated_test_path,batch_size=batch_size) 
-    total_reward = 0    
-    epochs = int(env.data_shape[0]/env.batch_size/1)
-
-    true_labels = np.zeros(len(env.attack_types),dtype=int)
-    estimated_labels = np.zeros(len(env.attack_types),dtype=int)
-    estimated_correct_labels = np.zeros(len(env.attack_types),dtype=int)
-    
-    for e in range(epochs):
-        #states , labels = env.get_sequential_batch(test_path,batch_size = env.batch_size)
-        states , labels = env.get_batch(batch_size)
-        
-        # TODO: fix performance in this loop
-        action_probs = worker._policy_net_predict(states, sess)
-        action = np.random.choice(np.arange(len(action_probs)), p=action_probs)
-        
-        
-        reward = np.zeros(env.batch_size)
-        
-        true_labels += np.sum(labels).values
-
-        estimated_labels[action] +=1              
-        if action == np.argmax(labels.values):
-            reward = 1
-            estimated_correct_labels[action] += 1
-        
-        
-        total_reward += reward
-        print("\rEpoch {}/{} | Tot Rew -- > {}".format(e,epochs,total_reward), end="")
-        
-    Accuracy = estimated_correct_labels / true_labels
-    Mismatch = estimated_labels - true_labels
-
-    print('\r\nTotal reward: {} | Number of samples: {} | Accuracy = {}%'.format(total_reward,
-          int(epochs*env.batch_size),float(100*total_reward/(epochs*env.batch_size))))
-    outputs_df = pd.DataFrame(index = env.attack_types,columns = ["Estimated","Correct","Total","Acuracy"])
-    for indx,att in enumerate(env.attack_types):
-       outputs_df.iloc[indx].Estimated = estimated_labels[indx]
-       outputs_df.iloc[indx].Correct = estimated_correct_labels[indx]
-       outputs_df.iloc[indx].Total = true_labels[indx]
-       outputs_df.iloc[indx].Acuracy = Accuracy[indx]*100
-       outputs_df.iloc[indx].Mismatch = abs(Mismatch[indx])
-
-
-    
-print(outputs_df)
-
-#%%
-
-
-
-ind = np.arange(1,len(env.attack_types)+1)
-fig, ax = plt.subplots()
-width = 0.35
-p1 = plt.bar(ind, estimated_correct_labels,width,color='g')
-p2 = plt.bar(ind, 
-             (np.abs(estimated_correct_labels-true_labels)\
-              +np.abs(estimated_labels-estimated_correct_labels)),width,
-             bottom=estimated_correct_labels,color='r')
-
-    
-ax.set_xticks(ind)
-ax.set_xticklabels(env.attack_types,rotation='vertical')
-#ax.set_yscale('log')
-
-#ax.set_ylim([0, 100])
-ax.set_title('Test set scores')
-plt.legend((p1[0], p2[0]), ('Correct estimated', 'Incorrect estimated'))
-plt.tight_layout()
-#plt.show()
-plt.savefig('../results/A3C_test_type.eps', format='eps', dpi=1000)
 
 
 
