@@ -189,7 +189,16 @@ class data_cls:
         
         return batch,labels
     
-    
+    def get_full(self):
+
+        self._load_df()
+        
+        batch = self.df
+        labels = batch[self.attack_types]
+        for att in self.attack_types:
+            del(batch[att])
+        
+        return np.array(batch),np.array(labels)
     
     def get_shape(self):
         if self.loaded is False:

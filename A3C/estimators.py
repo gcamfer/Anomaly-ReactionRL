@@ -101,12 +101,12 @@ class PolicyEstimator():
             tf.summary.histogram(self.entropy.op.name, self.entropy)
     
             if trainable:
-                # self.optimizer = tf.train.AdamOptimizer(1e-4)
+                #self.optimizer = tf.train.AdamOptimizer(1e-4)
                 self.optimizer = tf.train.RMSPropOptimizer(0.00025, 0.99, 0.0, 1e-6)
                 self.grads_and_vars = self.optimizer.compute_gradients(self.loss)
                 self.grads_and_vars = [[grad, var] for grad, var in self.grads_and_vars if grad is not None]
                 self.train_op = self.optimizer.apply_gradients(self.grads_and_vars,
-                global_step=tf.contrib.framework.get_global_step())
+                global_step=tf.train.get_global_step())
 
         # Merge summaries from this network and the shared network (but not the value net)
         var_scope_name = tf.get_variable_scope().name
@@ -173,7 +173,7 @@ class ValueEstimator():
                 self.grads_and_vars = [[grad, var] for grad, var in self.grads_and_vars if grad is not None]
                 self.train_op = self.optimizer.apply_gradients(
                         self.grads_and_vars,
-                        global_step=tf.contrib.framework.get_global_step())
+                        global_step=tf.train.get_global_step())
     
         var_scope_name = tf.get_variable_scope().name
         summary_ops = tf.get_collection(tf.GraphKeys.SUMMARIES)

@@ -44,7 +44,7 @@ def make_train_op(local_estimator, global_estimator):
   _, global_vars = zip(*global_estimator.grads_and_vars)
   local_global_grads_and_vars = list(zip(local_grads, global_vars))
   return global_estimator.optimizer.apply_gradients(local_global_grads_and_vars,
-          global_step=tf.contrib.framework.get_global_step())
+          global_step=tf.train.get_global_step())
 
 
 class Worker(object):
@@ -65,7 +65,7 @@ class Worker(object):
     self.name = name
     self.discount_factor = discount_factor
     self.max_global_steps = max_global_steps
-    self.global_step = tf.contrib.framework.get_global_step()
+    self.global_step = tf.train.get_global_step()
     self.global_policy_net = policy_net
     self.global_value_net = value_net
     self.global_counter = global_counter
@@ -129,7 +129,6 @@ class Worker(object):
       action_probs = self._policy_net_predict(self.state, sess)
       action = np.random.choice(np.arange(len(action_probs)), p=action_probs)
       next_state, reward, done = self.env.step(action)
-
       # Store transition
       transitions.append(Transition(
         state=self.state, action=action, reward=reward, next_state=next_state, done=done))
@@ -138,8 +137,8 @@ class Worker(object):
       local_t = next(self.local_counter)
       global_t = next(self.global_counter)
 
-      if local_t % 100 == 0:
-        tf.logging.info("{}: local Step {}, global step {}".format(self.name, local_t, global_t))
+      if local_t % 1000 == 0:
+        tf.logging.info("{}: local Step {}, global step {}".format(self.name, local_t,global_t))
 
       if done:
         self.state = self.env.reset()
