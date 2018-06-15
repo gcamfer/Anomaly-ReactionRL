@@ -33,7 +33,7 @@ del_all_flags(tf.flags.FLAGS)
 tf.flags.DEFINE_string("model_dir", "/RL/TFM/Anomaly-ReactionRL/A3C/tmp/a3c", "Directory to write Tensorboard summaries and videos to.")
 tf.flags.DEFINE_integer("t_max", 5, "Number of steps before performing an update")
 tf.flags.DEFINE_integer("max_global_steps", None, "Stop training after this many steps in the environment. Defaults to running indefinitely.")
-tf.flags.DEFINE_integer("eval_every", 300, "Evaluate the policy every N seconds")
+tf.flags.DEFINE_integer("eval_every", 120, "Evaluate the policy every N seconds")
 tf.flags.DEFINE_boolean("reset", True, "If set, delete the existing model directory and start training from scratch.")
 tf.flags.DEFINE_integer("parallelism", None, "Number of threads to run. If not set we run [num_cpu_cores] threads.")
 
@@ -50,13 +50,13 @@ def make_env():
     formated_train_path = "../../datasets/formated/formated_train_type.data"
     formated_test_path = "../../datasets/formated/formated_test_type.data"
     batch_size = 1
-    iterations_episode = 100
+    fails_episode = 10 # number of fails in a episode
     
     env = my_env('train',train_path=kdd_train,test_path=kdd_test,
                 formated_train_path = formated_train_path,
                 formated_test_path = formated_test_path,
                 batch_size=batch_size,
-                iterations_episode=iterations_episode)
+                fails_episode=fails_episode)
     return env
 
 env_ = make_env()
@@ -113,7 +113,7 @@ with tf.device("/cpu:0"):
                       policy_net=policy_net,
                       value_net=value_net,
                       global_counter=global_counter,
-                      discount_factor = 0.01,
+                      discount_factor = 0.99,
                       summary_writer=worker_summary_writer,
                       max_global_steps=FLAGS.max_global_steps)
         workers.append(worker)
@@ -134,7 +134,6 @@ with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
     coord = tf.train.Coordinator()
 
-    
     # Load a previous checkpoint if it exists
     latest_checkpoint = tf.train.latest_checkpoint(CHECKPOINT_DIR)
     if latest_checkpoint:

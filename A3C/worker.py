@@ -137,7 +137,7 @@ class Worker(object):
       local_t = next(self.local_counter)
       global_t = next(self.global_counter)
 
-      if local_t % 100 == 0:
+      if local_t % 1000 == 0:
         tf.logging.info("{}: local Step {}, global step {}".format(self.name, local_t,global_t))
 
       if done:

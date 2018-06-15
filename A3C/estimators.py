@@ -101,7 +101,7 @@ class PolicyEstimator():
             tf.summary.histogram(self.entropy.op.name, self.entropy)
     
             if trainable:
-                # self.optimizer = tf.train.AdamOptimizer(1e-4)
+                #self.optimizer = tf.train.AdamOptimizer(1e-4)
                 self.optimizer = tf.train.RMSPropOptimizer(0.00025, 0.99, 0.0, 1e-6)
                 self.grads_and_vars = self.optimizer.compute_gradients(self.loss)
                 self.grads_and_vars = [[grad, var] for grad, var in self.grads_and_vars if grad is not None]
