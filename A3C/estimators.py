@@ -93,7 +93,7 @@ class PolicyEstimator():
             gather_indices = tf.range(batch_size) * tf.shape(self.probs)[1] + self.actions
             self.picked_action_probs = tf.gather(tf.reshape(self.probs, [-1]), gather_indices)
     
-            self.losses = - (tf.log(self.picked_action_probs) * self.targets + 0.01 * self.entropy)
+            self.losses = - (tf.log(self.picked_action_probs) * self.targets + 0.1 * self.entropy)
             self.loss = tf.reduce_sum(self.losses, name="loss")
     
             tf.summary.scalar(self.loss.op.name, self.loss)
@@ -102,7 +102,7 @@ class PolicyEstimator():
     
             if trainable:
                 #self.optimizer = tf.train.AdamOptimizer(1e-4)
-                self.optimizer = tf.train.RMSPropOptimizer(0.00025, 0.99, 0.0, 1e-6)
+                self.optimizer = tf.train.RMSPropOptimizer(0.0005, 0.99, 0.0, 1e-6)
                 self.grads_and_vars = self.optimizer.compute_gradients(self.loss)
                 self.grads_and_vars = [[grad, var] for grad, var in self.grads_and_vars if grad is not None]
                 self.train_op = self.optimizer.apply_gradients(self.grads_and_vars,
@@ -168,7 +168,7 @@ class ValueEstimator():
     
             if trainable:
             # self.optimizer = tf.train.AdamOptimizer(1e-4)
-                self.optimizer = tf.train.RMSPropOptimizer(0.00025, 0.99, 0.0, 1e-6)
+                self.optimizer = tf.train.RMSPropOptimizer(0.0005, 0.99, 0.0, 1e-6)
                 self.grads_and_vars = self.optimizer.compute_gradients(self.loss)
                 self.grads_and_vars = [[grad, var] for grad, var in self.grads_and_vars if grad is not None]
                 self.train_op = self.optimizer.apply_gradients(
