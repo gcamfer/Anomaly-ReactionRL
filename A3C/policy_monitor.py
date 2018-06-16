@@ -124,23 +124,23 @@ class PolicyMonitor(object):
             
         print(outputs_df)
     
-        ind = np.arange(1,len(env.attack_types)+1)
         fig, ax = plt.subplots()
         width = 0.35
-        p1 = plt.bar(ind, estimated_correct_labels,width,color='g')
-        p2 = plt.bar(ind, 
+        pos = np.arange(len(true_labels))
+        plt.bar(pos, estimated_correct_labels,width,color='g')
+        plt.bar(pos+width,
                      (np.abs(estimated_correct_labels-true_labels)\
                       +np.abs(estimated_labels-estimated_correct_labels)),width,
-                     bottom=estimated_correct_labels,color='r')
+                     color='r')
+    
         
-            
-        ax.set_xticks(ind)
+        ax.set_xticks(pos+width/2)
         ax.set_xticklabels(env.attack_types,rotation='vertical')
         #ax.set_yscale('log')
-        
+    
         #ax.set_ylim([0, 100])
         ax.set_title('Test set scores')
-        plt.legend((p1[0], p2[0]), ('Correct estimated', 'Incorrect estimated'))
+        plt.legend(('Correct estimated', 'Incorrect estimated'))
         plt.tight_layout()
         #plt.show()
         plt.savefig('results/A3C_test_type_{}.eps'.format(self.counter), format='eps', dpi=1000)
