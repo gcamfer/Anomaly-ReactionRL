@@ -51,6 +51,10 @@ for indx,a in enumerate(actions):
 
 
 action_dummies = pd.get_dummies(actions)
+posible_actions = np.arange(len(env.attack_types))
+for non_existing_action in posible_actions:
+    if non_existing_action not in action_dummies.columns:
+        action_dummies[non_existing_action] = np.uint8(0)
 labels_dummies = pd.get_dummies(maped)
 
 normal_f1_score = f1_score(labels_dummies[0].values,action_dummies[0].values)

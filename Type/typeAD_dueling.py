@@ -239,7 +239,7 @@ class DuelingQnetwork():
         self.scope = scope
         self.h_size = h_size
         # Writes Tensorboard summaries to disk
-        self.summary_writer = None
+        self.summary_writer = False
         with tf.variable_scope(scope):
             # Build the graph
             self._build_model()
@@ -283,7 +283,7 @@ class DuelingQnetwork():
         self.td_error = tf.square(self.targetQ - self.Q)
         self.loss = tf.reduce_mean(self.td_error)
 #        self.loss=tf.losses.huber_loss(self.targetQ,self.Q)
-        self.trainer = tf.train.AdamOptimizer(learning_rate=0.0001)
+        self.trainer = tf.train.AdamOptimizer(learning_rate=0.0002)
         self.updateModel = self.trainer.minimize(self.loss,global_step=tf.train.get_global_step())
         
         # Summaries for Tensorboard
@@ -714,7 +714,7 @@ if __name__ == "__main__":
 #                    updateTarget(targetOps,sess) #Update the target network toward the primary network.
                     
                 elif not ExpRep:
-                    loss += agent.update_model(sess)
+                    loss += np.sqrt(agent.update_model(sess))
                 
                 update_end_time = time.time()
     
@@ -824,24 +824,23 @@ if __name__ == "__main__":
     
     #%%
     
-    ind = np.arange(1,len(env.attack_types)+1)
     fig, ax = plt.subplots()
     width = 0.35
-    p1 = plt.bar(ind, estimated_correct_labels,width,color='g')
-    p2 = plt.bar(ind, 
+    pos = np.arange(len(true_labels))
+    p1 = plt.bar(pos, estimated_correct_labels,width,color='g')
+    p1 = plt.bar(pos+width,
                  (np.abs(estimated_correct_labels-true_labels)\
                   +np.abs(estimated_labels-estimated_correct_labels)),width,
-                 bottom=estimated_correct_labels,color='r')
+                 color='r')
 
     
-    ax.set_xticks(ind)
+    ax.set_xticks(pos+width/2)
     ax.set_xticklabels(env.attack_types,rotation='vertical')
     #ax.set_yscale('log')
 
     #ax.set_ylim([0, 100])
-    ax.set_title('Test set scores')
-    plt.legend((p1[0], p2[0]), ('Correct estimated', 'Incorrect estimated'))
-    plt.tight_layout()
+    ax.set_title('Test set scores ')
+    plt.legend(('Correct estimated', 'Incorrect estimated'))
     #plt.show()
     plt.savefig('results/test_dueling_network.eps', format='eps', dpi=1000)
 

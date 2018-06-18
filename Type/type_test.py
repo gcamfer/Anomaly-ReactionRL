@@ -43,17 +43,19 @@ if __name__ == "__main__":
             total_reward += 1
             estimated_correct_labels[a] += 1
     
+    
     action_dummies = pd.get_dummies(actions)
+    posible_actions = np.arange(len(env.attack_types))
+    for non_existing_action in posible_actions:
+        if non_existing_action not in action_dummies.columns:
+            action_dummies[non_existing_action] = np.uint8(0)
     
-    # TODO
-    # Fix the problem when not all actions are taken
-    #
-    
-    normal_f1_score = f1_score(labels[0].values,action_dummies[0].values)
-    dos_f1_score = f1_score(labels[1].values,action_dummies[1].values)
-    probe_f1_score = f1_score(labels[2].values,action_dummies[2].values)
-    r2l_f1_score = f1_score(labels[3].values,action_dummies[3].values)
-    u2r_f1_score = f1_score(labels[4].values,action_dummies[4].values)
+
+    normal_f1_score = f1_score(labels['normal'].values,action_dummies[0].values)
+    dos_f1_score = f1_score(labels['DoS'].values,action_dummies[1].values)
+    probe_f1_score = f1_score(labels['Probe'].values,action_dummies[2].values)
+    r2l_f1_score = f1_score(labels['R2L'].values,action_dummies[3].values)
+    u2r_f1_score = f1_score(labels['U2R'].values,action_dummies[4].values)
         
     Accuracy = [normal_f1_score,dos_f1_score,probe_f1_score,r2l_f1_score,u2r_f1_score]
     Mismatch = abs(estimated_correct_labels - true_labels)+abs(estimated_labels-estimated_correct_labels)
@@ -89,7 +91,7 @@ if __name__ == "__main__":
     #ax.set_yscale('log')
 
     #ax.set_ylim([0, 100])
-    ax.set_title('Test set scores')
+    ax.set_title('Test set scores ')
     plt.legend(('Correct estimated', 'Incorrect estimated'))
     plt.tight_layout()
     #plt.show()
