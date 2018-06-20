@@ -235,7 +235,7 @@ class data_cls:
 
 
 class DuelingQnetwork():
-    def __init__(self,scope="estimator",h_size=100,summaries_dir=None):    
+    def __init__(self,scope="estimator",h_size=512,summaries_dir=None):    
         self.scope = scope
         self.h_size = h_size
         # Writes Tensorboard summaries to disk
@@ -281,9 +281,10 @@ class DuelingQnetwork():
         self.Q = tf.reduce_sum(tf.multiply(self.Qout, self.actions_onehot), axis=1)
         
         self.td_error = tf.square(self.targetQ - self.Q)
-        self.loss = tf.reduce_mean(self.td_error)
-#        self.loss=tf.losses.huber_loss(self.targetQ,self.Q)
-        self.trainer = tf.train.AdamOptimizer(learning_rate=0.0002)
+#        self.loss = tf.reduce_mean(self.td_error)
+        self.loss=tf.losses.huber_loss(self.targetQ,self.Q,delta=1.0)
+        self.trainer = tf.train.AdamOptimizer(learning_rate=0.00025)
+#        self.trainer = tf.train.RMSPropOptimizer(0.0001, 0.999, 0.0, 1e-6)
         self.updateModel = self.trainer.minimize(self.loss,global_step=tf.train.get_global_step())
         
         # Summaries for Tensorboard

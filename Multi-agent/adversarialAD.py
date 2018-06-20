@@ -759,7 +759,7 @@ if __name__ == "__main__":
     attack_num_actions = len(attack_valid_actions)
 	
     att_epsilon = 1
-    min_epsilon = 0.72 # min value for exploration
+    min_epsilon = 0.75 # min value for exploration
 
     att_gamma = 0.001
     att_decay_rate = 0.99
