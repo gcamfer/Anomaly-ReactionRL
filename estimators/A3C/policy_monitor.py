@@ -101,41 +101,35 @@ class PolicyMonitor(object):
         
             
         action_probs = self._policy_net_predict(states, sess)
-        action_chain = []
         
+        estimated_actions = np.zeros([len(labels),len(env.attack_types)])
+        estimated_actions = np.zeros([len(labels),len(env.attack_types)])
         for indx in range(len(action_probs)):
             action = np.random.choice(np.arange(len(action_probs[indx])), p=action_probs[indx])
-            action_chain.append(action)
             estimated_labels[action] +=1
-            if action == np.argmax(labels[indx]):
+            estimated_actions[indx,action] = 1
+            if action == np.argmax(labels.iloc[indx].values):
                 total_reward += 1
                 estimated_correct_labels[action] += 1
         
-#        action_dummies = pd.get_dummies(action_chain)
-#        posible_actions = np.arange(len(env.attack_types))
-#        for non_existing_action in posible_actions:
-#            if non_existing_action not in action_dummies.columns:
-#                action_dummies[non_existing_action] = np.uint8(0)
-#                
-#        normal_f1_score = f1_score(labels[0].values,action_dummies[0].values)
-#        dos_f1_score = f1_score(labels[1].values,action_dummies[1].values)
-#        probe_f1_score = f1_score(labels[2].values,action_dummies[2].values)
-#        r2l_f1_score = f1_score(labels[3].values,action_dummies[3].values)
-#        u2r_f1_score = f1_score(labels[4].values,action_dummies[4].values)
-#            
-#        Accuracy = [normal_f1_score,dos_f1_score,probe_f1_score,r2l_f1_score,u2r_f1_score]
-#        
-        Accuracy = estimated_correct_labels / true_labels
+        normal_f1_score = f1_score(labels['normal'],estimated_actions[:,0])
+        dos_f1_score = f1_score(labels['DoS'],estimated_actions[:,1])
+        probe_f1_score = f1_score(labels['Probe'],estimated_actions[:,2])
+        r2l_f1_score = f1_score(labels['R2L'],estimated_actions[:,3])
+        u2r_f1_score = f1_score(labels['U2R'],estimated_actions[:,4])
+            
+        Accuracy = [normal_f1_score,dos_f1_score,probe_f1_score,r2l_f1_score,u2r_f1_score]
+        
         Mismatch = abs(estimated_correct_labels - true_labels)+abs(estimated_labels-estimated_correct_labels)
     
         print('\r\nTotal reward: {} | Number of samples: {} | Accuracy = {}%'.format(total_reward,
               len(states),float(100*total_reward/len(states))))
-        outputs_df = pd.DataFrame(index = env.attack_types,columns = ["Estimated","Correct","Total","Acuracy"])
+        outputs_df = pd.DataFrame(index = env.attack_types,columns = ["Estimated","Correct","Total","F1_Score"])
         for indx,att in enumerate(env.attack_types):
            outputs_df.iloc[indx].Estimated = estimated_labels[indx]
            outputs_df.iloc[indx].Correct = estimated_correct_labels[indx]
            outputs_df.iloc[indx].Total = true_labels[indx]
-           outputs_df.iloc[indx].Acuracy = Accuracy[indx]*100
+           outputs_df.iloc[indx].F1_Score = Accuracy[indx]*100
            outputs_df.iloc[indx].Mismatch = abs(Mismatch[indx])
     
     

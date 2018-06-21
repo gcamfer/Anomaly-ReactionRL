@@ -201,7 +201,7 @@ class data_cls:
         for att in self.attack_types:
             del(batch[att])
         
-        return np.array(batch),np.array(labels)
+        return np.array(batch),labels
     
     def get_shape(self):
         if self.loaded is False:
