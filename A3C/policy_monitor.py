@@ -6,6 +6,8 @@ import tensorflow as tf
 import time
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn.metrics import f1_score
+
 
 from inspect import getsourcefile
 current_path = os.path.dirname(os.path.abspath(getsourcefile(lambda:0)))
@@ -99,14 +101,30 @@ class PolicyMonitor(object):
         
             
         action_probs = self._policy_net_predict(states, sess)
+        action_chain = []
         
         for indx in range(len(action_probs)):
             action = np.random.choice(np.arange(len(action_probs[indx])), p=action_probs[indx])
+            action_chain.append(action)
             estimated_labels[action] +=1
             if action == np.argmax(labels[indx]):
                 total_reward += 1
                 estimated_correct_labels[action] += 1
-            
+        
+#        action_dummies = pd.get_dummies(action_chain)
+#        posible_actions = np.arange(len(env.attack_types))
+#        for non_existing_action in posible_actions:
+#            if non_existing_action not in action_dummies.columns:
+#                action_dummies[non_existing_action] = np.uint8(0)
+#                
+#        normal_f1_score = f1_score(labels[0].values,action_dummies[0].values)
+#        dos_f1_score = f1_score(labels[1].values,action_dummies[1].values)
+#        probe_f1_score = f1_score(labels[2].values,action_dummies[2].values)
+#        r2l_f1_score = f1_score(labels[3].values,action_dummies[3].values)
+#        u2r_f1_score = f1_score(labels[4].values,action_dummies[4].values)
+#            
+#        Accuracy = [normal_f1_score,dos_f1_score,probe_f1_score,r2l_f1_score,u2r_f1_score]
+#        
         Accuracy = estimated_correct_labels / true_labels
         Mismatch = abs(estimated_correct_labels - true_labels)+abs(estimated_labels-estimated_correct_labels)
     

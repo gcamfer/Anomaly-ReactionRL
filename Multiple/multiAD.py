@@ -29,14 +29,14 @@ class data_cls:
             "diff_srv_rate","srv_diff_host_rate","dst_host_count","dst_host_srv_count",
             "dst_host_same_srv_rate","dst_host_diff_srv_rate","dst_host_same_src_port_rate",
             "dst_host_srv_diff_host_rate","dst_host_serror_rate","dst_host_srv_serror_rate",
-            "dst_host_rerror_rate","dst_host_srv_rerror_rate","labels"]
+            "dst_host_rerror_rate","dst_host_srv_rerror_rate","labels","dificulty"]
         self.index = 0
         self.headers = None
-        self.formated_path = "../../datasets/formated/formated_data_multi.data"
-        self.test_path = "../../datasets/formated/test_data_multi.data"
+        self.formated_path = "../../datasets/formated/formated_train_multi.data"
+        self.test_path = "../../datasets/formated/formated_test_multi.data"
         self.loaded = False
         self.train_test = train_test
-        self.second_path = kwargs.get('join_path', '../../datasets/corrected')
+        self.second_path = kwargs.get('join_path', '../../datasets/NSL/KDDTest+.txt')
 
         
         if (not path):
@@ -67,12 +67,12 @@ class data_cls:
         # If it does not exist, it's needed to format the data
         if not formated:
             ''' Formating the dataset for ready-2-use data'''
-            self.df = pd.read_csv(path,sep=',',names=col_names)
+            self.df = pd.read_csv(path,sep=',',names=col_names,index_col=False)
             if 'dificulty' in self.df.columns:
                 self.df.drop('dificulty', axis=1, inplace=True) #in case of difficulty
             
             if train_test == 'join':
-                data2 = pd.read_csv(self.second_path,sep=',',names=col_names)
+                data2 = pd.read_csv(self.second_path,sep=',',names=col_names,index_col=False)
                 if 'dificulty' in data2:
                     del(data2['dificulty'])
                 train_indx = self.df.shape[0]
@@ -187,6 +187,7 @@ Definition
 class RLenv(data_cls):
     def __init__(self,path,train_test,batch_size = 10,**kwargs):
         data_cls.__init__(self,path,train_test,**kwargs)
+        data_cls._load_df(self)
         self.batch_size = batch_size
         self.state_shape = data_cls.get_shape(self)
 
@@ -230,9 +231,8 @@ class RLenv(data_cls):
 
 if __name__ == "__main__":
   
-    kdd_path = '../../datasets/kddcup.data'
-    kdd_10_path = '../../datasets/kddcup.data_10_percent_corrected'
-    micro_kdd = '../../datasets/micro_kddcup.data'
+    kdd_path = '../../datasets/NSL/KDDTrain+.txt'
+
     # Valid actions = '0' supose no attack, '1' supose attack
     epsilon = .1  # exploration
     
@@ -246,7 +246,7 @@ if __name__ == "__main__":
     batch_size = 10
 
     # Initialization of the enviroment
-    env = RLenv(kdd_path,'join',batch_size,join_path='../../datasets/corrected')
+    env = RLenv(kdd_path,'join',batch_size,join_path='../../datasets/NSL/KDDTest+.txt')
     
     iterations_episode = 100
 #    num_episodes = int(env.state_shape[0]/(iterations_episode*batch_size)/10)

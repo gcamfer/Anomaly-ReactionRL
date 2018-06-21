@@ -1,5 +1,5 @@
 '''
-Multiple anomaly detection file
+Multiple agent for anomaly detection file
 '''
 
 import numpy as np
@@ -33,7 +33,7 @@ class data_cls:
             "diff_srv_rate","srv_diff_host_rate","dst_host_count","dst_host_srv_count",
             "dst_host_same_srv_rate","dst_host_diff_srv_rate","dst_host_same_src_port_rate",
             "dst_host_srv_diff_host_rate","dst_host_serror_rate","dst_host_srv_serror_rate",
-            "dst_host_rerror_rate","dst_host_srv_rerror_rate","labels"]
+            "dst_host_rerror_rate","dst_host_srv_rerror_rate","labels","dificulty"]
         self.index = 0
         # Data formated path and test path. 
         self.loaded = False
@@ -101,7 +101,10 @@ class data_cls:
         if os.path.exists(self.formated_train_path) and os.path.exists(self.formated_test_path):
             formated = True
        
-       
+        self.formated_dir = "../../datasets/formated/"
+        if not os.path.exists(self.formated_dir):
+            os.makedirs(self.formated_dir)
+               
 
         # If it does not exist, it's needed to format the data
         if not formated:
@@ -138,14 +141,7 @@ class data_cls:
                     else:
                         self.df[indx] = (self.df[indx]-self.df[indx].min())/(self.df[indx].max()-self.df[indx].min())
             
-           
-            
-            # Create a list with the existent attacks in the df
-            for att in self.attack_map:
-                if att in self.df.columns:
-                # Add only if there is exist at least 1
-                    if np.sum(self.df[att].values) > 1:
-                        self.attack_names.append(att)
+          
             
             # Save data
             test_df = self.df.iloc[train_indx:self.df.shape[0]]
@@ -154,6 +150,13 @@ class data_cls:
             self.df = shuffle(self.df,random_state=np.random.randint(0,100))
             test_df.to_csv(self.formated_test_path,sep=',',index=False)
             self.df.to_csv(self.formated_train_path,sep=',',index=False)
+            
+            # Create a list with the existent attacks in the df
+            for att in self.attack_map:
+                if att in self.df.columns:
+                # Add only if there is exist at least 1
+                    if np.sum(self.df[att].values) > 1:
+                        self.attack_names.append(att)
 
 
     def get_shape(self):
@@ -545,6 +548,7 @@ Reinforcement learning Enviroment Definition
 class RLenv(data_cls):
     def __init__(self,train_test,**kwargs):
         data_cls.__init__(self,train_test,**kwargs)
+        data_cls._load_df(self)
         self.data_shape = data_cls.get_shape(self)
         self.batch_size = kwargs.get('batch_size',1) # experience replay -> batch = 1
         self.iterations_episode = kwargs.get('iterations_episode',10)

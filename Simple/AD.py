@@ -29,11 +29,11 @@ class data_cls:
         self.index = 0
         self.headers = None
         self.loaded = False
-        self.formated_path = "../../datasets/formated/formated_data.data"
-        self.test_path = "../../datasets/formated/test_data.data"
+        self.formated_path = "../../datasets/formated/formated_train_simple.data"
+        self.test_path = "../../datasets/formated/formated_test_simple.data"
         self.train_test = train_test
         
-        self.second_path = kwargs.get('join_path', '../../datasets/corrected')
+        self.second_path = kwargs.get('join_path', '../../datasets/NSL/KDDTest+.txt')
         
         if (not path):
             print("Path: not path name provided", flush = True)
@@ -94,9 +94,9 @@ class data_cls:
             # '0' if the data is normal '1' if atack
             
             self.df = pd.concat([self.df.drop('labels', axis=1),
-                            1 - pd.get_dummies(self.df['labels'])['normal.']], axis=1)
+                            1 - pd.get_dummies(self.df['labels'])['normal']], axis=1)
             #Only detectign label as normal = 0 atack = 1 -> reanaming column
-            self.df.rename(columns={'normal.': 'labels'},inplace=True)
+            self.df.rename(columns={'normal': 'labels'},inplace=True)
             
 #            self.df = pd.concat([self.df.drop('labels', axis=1),
 #                            1 - pd.get_dummies(self.df['labels'])['normal']], axis=1)
@@ -229,11 +229,8 @@ class RLenv(data_cls):
 
 if __name__ == "__main__":
 
-    kdd_path = '../../datasets/kddcup.data'
-    kdd_10_path = '../../datasets/kddcup.data_10_percent_corrected'
-    micro_kdd = '../../datasets/micro_kddcup.data'
+    kdd_path = '../../datasets/NSL/KDDTrain+.txt'
     
-    new_kdd = '../../datasets/KDDTrain+.txt'
     # Valid actions = '0' supose no atack, '1' supose atack
     valid_actions = [0, 1]
     num_actions = len(valid_actions)
@@ -250,8 +247,7 @@ if __name__ == "__main__":
     batch_size = 10
 
     # Initialization of the enviroment
-    # '../../datasets/KDDTest+.txt'
-    env = RLenv(kdd_path,'join',batch_size,join_path='../../datasets/corrected')
+    env = RLenv(kdd_path,'join',batch_size,join_path='../../datasets/NSL/KDDTest+.txt')
 
     
     # Network arquitecture

@@ -7,3 +7,7 @@ Type/models/checkpoint
 Multi-agent/tmp_model
 *.pyc
 *.pyc
+A3C/results/A3C_test_type_0.eps
+A3C/tmp/a3c/checkpoints/checkpoint
+A3C/tmp/a3c/checkpoints/model.data-00000-of-00001
+Type/tmp_model
