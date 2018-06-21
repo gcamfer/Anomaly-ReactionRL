@@ -5,3 +5,5 @@
 Type/models/typeAD_tf.ckpt.data-00000-of-00001
 Type/models/checkpoint
 Multi-agent/tmp_model
+*.pyc
+*.pyc

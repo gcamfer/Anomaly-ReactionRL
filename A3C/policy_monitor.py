@@ -143,6 +143,11 @@ class PolicyMonitor(object):
         plt.legend(('Correct estimated', 'Incorrect estimated'))
         plt.tight_layout()
         #plt.show()
+        
+        RESULTS_DIR = "results/"
+        if not os.path.exists(RESULTS_DIR):
+            os.makedirs(RESULTS_DIR)
+        
         plt.savefig('results/A3C_test_type_{}.eps'.format(self.counter), format='eps', dpi=1000)
         self.counter += 1
         

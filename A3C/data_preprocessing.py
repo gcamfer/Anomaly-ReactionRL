@@ -33,7 +33,7 @@ class data_cls:
         self.formated_test_path = kwargs.get('formated_test_path',
                                              "../../datasets/formated/formated_test_type.data")
 
-
+        self.formated_dir = "../../datasets/formated/"
         
         self.attack_types = ['normal','DoS','Probe','R2L','U2R']
         self.attack_map =   { 'normal.': 'normal',
@@ -87,6 +87,9 @@ class data_cls:
         # Test formated data exists
         if os.path.exists(self.formated_train_path) and os.path.exists(self.formated_test_path):
             formated = True
+            
+        if not os.path.exists(self.formated_dir):
+            os.makedirs(self.formated_dir)
                
 
         # If it does not exist, it's needed to format the data
