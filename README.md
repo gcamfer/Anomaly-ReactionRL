@@ -30,4 +30,4 @@ Using deep Q-Learning with keras/tensorflow to generate the network
 
 ### A3C
 - Train-Test in: [A3CtypeAD.py](https://github.com/gcamfer/Anomaly-ReactionRL/blob/master/estimators/A3C/A3CtypeAD.py)
-- Summary: `tensorboard --logdir=/tmp/a3c`
+- Summary: `tensorboard --logdir=tmp`
