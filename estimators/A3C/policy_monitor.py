@@ -141,9 +141,11 @@ class PolicyMonitor(object):
         pos = np.arange(len(true_labels))
         plt.bar(pos, estimated_correct_labels,width,color='g')
         plt.bar(pos+width,
-                     (np.abs(estimated_correct_labels-true_labels)\
-                      +np.abs(estimated_labels-estimated_correct_labels)),width,
-                     color='r')
+                 (np.abs(estimated_correct_labels-true_labels)),width,
+                 color='r')
+        plt.bar(pos+width,np.abs(estimated_labels-estimated_correct_labels),width,
+                 bottom=(np.abs(estimated_correct_labels-true_labels)),
+                 color='b')
     
         
         ax.set_xticks(pos+width/2)
@@ -151,8 +153,8 @@ class PolicyMonitor(object):
         #ax.set_yscale('log')
     
         #ax.set_ylim([0, 100])
-        ax.set_title('Test set scores')
-        plt.legend(('Correct estimated', 'Incorrect estimated'))
+        ax.set_title('Test set scores: Acc = {:.2f}'.format(100*total_reward/len(states)))
+        plt.legend(('Correct estimated','False negative','False positive'))
         plt.tight_layout()
         #plt.show()
         

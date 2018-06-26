@@ -282,8 +282,9 @@ class DuelingQnetwork():
         
         self.td_error = tf.square(self.targetQ - self.Q)
 #        self.loss = tf.reduce_mean(self.td_error)
-        self.loss=tf.losses.huber_loss(self.targetQ,self.Q,delta=1.0)
+        self.loss=tf.losses.huber_loss(self.targetQ,self.Q)
         self.trainer = tf.train.AdamOptimizer(learning_rate=0.00025)
+#        self.trainer = tf.train.GradientDescentOptimizer(learning_rate=0.1)
 #        self.trainer = tf.train.RMSPropOptimizer(0.0001, 0.999, 0.0, 1e-6)
         self.updateModel = self.trainer.minimize(self.loss,global_step=tf.train.get_global_step())
         
@@ -452,14 +453,24 @@ class Agent(object):
         
         # Compute Q(s,a)
         # Q-learning update
-        doubleQ = Q_prime_target[range(self.minibatch_size),next_actions]
-        targetQ =  rewards + (self.gamma*doubleQ * (1-done))  
+#        doubleQ = Q_prime_target[range(self.minibatch_size),next_actions]
+#        targetQ =  rewards + (self.gamma*doubleQ * (1-done))  
+#        
+        sx = np.arange(len(next_actions))
+        targets = rewards.reshape(Q_prime_target[sx,next_actions].shape) + \
+                  self.gamma * Q_prime_target[sx,next_actions] * \
+                  (1-done.reshape(Q_prime_target[sx,next_actions].shape))   
+        Q_prime_target[sx,actions] = targets  
         
-        loss = self.model_network.update(sess,states,actions,targetQ[0])
+        loss = self.model_network.update(sess,states,actions,targets)
+
+        
+        
         # timer to ddqn update
         self.ddqn_update -= 1
         if self.ddqn_update == 0:
             copy_model_parameters(sess,self.model_network,self.target_model_network)
+            self.ddqn_update = self.ddqn_time
         
         return loss    
         
@@ -624,19 +635,18 @@ if __name__ == "__main__":
     # Train batch
     batch_size = 1
     # batch of memory ExpRep
-    minibatch_size = 20
+    minibatch_size = 100
     ExpRep = True
     
     iterations_episode = 100
 
     #3max_memory = 100
-    decay_rate = 0.999
+    decay_rate = 0.99
     gamma = 0.001
     
     
     hidden_size = 100
     hidden_layers = 3
-    
 
     # Initialization of the enviroment
     env = RLenv('train',train_path=kdd_train,test_path=kdd_test,
@@ -649,7 +659,6 @@ if __name__ == "__main__":
  
 #    num_episodes = int(env.data_shape[0]/(iterations_episode)/10)
     num_episodes = 200
-
 
     # Initialization of the Agent
     
@@ -805,7 +814,7 @@ if __name__ == "__main__":
         
         
 
-            
+
         Accuracy = estimated_correct_labels / true_labels
         Mismatch = estimated_labels - true_labels
     
@@ -830,9 +839,11 @@ if __name__ == "__main__":
     pos = np.arange(len(true_labels))
     p1 = plt.bar(pos, estimated_correct_labels,width,color='g')
     p1 = plt.bar(pos+width,
-                 (np.abs(estimated_correct_labels-true_labels)\
-                  +np.abs(estimated_labels-estimated_correct_labels)),width,
+                 (np.abs(estimated_correct_labels-true_labels)),width,
                  color='r')
+    p2 = plt.bar(pos+width,np.abs(estimated_labels-estimated_correct_labels),width,
+                 bottom=(np.abs(estimated_correct_labels-true_labels)),
+                 color='b')
 
     
     ax.set_xticks(pos+width/2)
@@ -840,8 +851,8 @@ if __name__ == "__main__":
     #ax.set_yscale('log')
 
     #ax.set_ylim([0, 100])
-    ax.set_title('Test set scores ')
-    plt.legend(('Correct estimated', 'Incorrect estimated'))
+    ax.set_title('Test set scores, Acc = {:.2f}'.format(100*total_reward/len(states)))
+    plt.legend(('Correct estimated','False negative','False positive'))
     #plt.show()
     plt.savefig('results/test_dueling_network.eps', format='eps', dpi=1000)
 

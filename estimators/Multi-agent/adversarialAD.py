@@ -706,7 +706,7 @@ if __name__ == "__main__":
     # Train batch
     batch_size = 1
     # batch of memory ExpRep
-    minibatch_size = 50
+    minibatch_size = 100
     ExpRep = True
     
     iterations_episode = 100

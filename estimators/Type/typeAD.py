@@ -237,9 +237,6 @@ class data_cls:
 
 
 def huber_loss(y_true, y_pred, clip_value=1):
-    # Huber loss, see https://en.wikipedia.org/wiki/Huber_loss and
-    # https://medium.com/@karpathy/yes-you-should-understand-backprop-e2f06eab496b
-    # for details.
     assert clip_value > 0.
 
     x = y_true - y_pred
@@ -254,9 +251,9 @@ def huber_loss(y_true, y_pred, clip_value=1):
     if K.backend() == 'tensorflow':
         import tensorflow as tf
         if hasattr(tf, 'select'):
-            return tf.select(condition, squared_loss, linear_loss)  # condition, true, false
+            return tf.select(condition, squared_loss, linear_loss)
         else:
-            return tf.where(condition, squared_loss, linear_loss)  # condition, true, false
+            return tf.where(condition, squared_loss, linear_loss)
     elif K.backend() == 'theano':
         from theano import tensor as T
         return T.switch(condition, squared_loss, linear_loss)
@@ -291,7 +288,7 @@ class QNetwork():
         self.model.add(Dense(num_actions))
         
         optimizer = optimizers.SGD(learning_rate)
-        # optimizer = optimizers.Adam(alpha=learning_rate)
+#        optimizer = optimizers.Adam(0.00025)
         # optimizer = optimizers.AdaGrad(learning_rate)
         # optimizer = optimizers.RMSpropGraves(learning_rate, 0.95, self.momentum, 1e-2)
         
@@ -443,14 +440,14 @@ class Agent(object):
             
         next_actions = []
         # Compute Q targets
-        Q_prime = self.target_model_network.predict(next_states,self.minibatch_size)
+        Q_prime = self.model_network.predict(next_states,self.minibatch_size)
         # TODO: fix performance in this loop
         for row in range(Q_prime.shape[0]):
             best_next_actions = np.argwhere(Q_prime[row] == np.amax(Q_prime[row]))
             next_actions.append(best_next_actions[np.random.choice(len(best_next_actions))].item())
         sx = np.arange(len(next_actions))
         # Compute Q(s,a)
-        Q = self.model_network.predict(states,self.minibatch_size)
+        Q = self.target_model_network.predict(states,self.minibatch_size)
         # Q-learning update
         # target = reward + gamma * max_a'{Q(next_state,next_action))}
         targets = rewards.reshape(Q[sx,actions].shape) + \

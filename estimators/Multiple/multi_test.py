@@ -20,10 +20,10 @@ if __name__ == "__main__":
     
 
     total_reward = 0    
-    epochs = int(env.data_shape[0]/env.batch_size/1)
+    epochs = int(env.data_shape[0]/env.batch_size)
     
     
-    true_labels = np.zeros(len(env.attack_names),dtype=int)
+    true_labels = np.zeros(len(env.attack_names))
     estimated_labels = np.zeros(len(env.attack_names),dtype=int)
     estimated_correct_labels = np.zeros(len(env.attack_names),dtype=int)
     

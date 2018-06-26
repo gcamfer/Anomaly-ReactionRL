@@ -113,7 +113,7 @@ with tf.device("/cpu:0"):
                       policy_net=policy_net,
                       value_net=value_net,
                       global_counter=global_counter,
-                      discount_factor = 0.001,
+                      discount_factor = 0.005,
                       summary_writer=worker_summary_writer,
                       max_global_steps=FLAGS.max_global_steps)
         workers.append(worker)
