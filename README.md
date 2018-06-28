@@ -11,7 +11,7 @@ Using deep Q-Learning with keras/tensorflow to generate the network
 - Train set in: [AD.py](https://github.com/gcamfer/Anomaly-ReactionRL/blob/master/estimators/Simple/AD.py)
 - Test set in: [test.py](https://github.com/gcamfer/Anomaly-ReactionRL/blob/master/estimators/Simple/test.py)
 
-## Multiple anomaly detection (39+1 labels)
+## Multiple anomaly detection (37+1 labels)
 - Detects each attack in the dataset
 - Train set in: [multiAD.py](https://github.com/gcamfer/Anomaly-ReactionRL/blob/master/estimators/Multiple/multiAD.py)
 - Test set in: [multi_test.py](https://github.com/gcamfer/Anomaly-ReactionRL/blob/master/estimators/Multiple/multi_test.py)
