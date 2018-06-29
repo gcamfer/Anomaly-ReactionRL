@@ -44,3 +44,6 @@ estimators/A3C/results/A3C_test_type_7.eps
 estimators/A3C/results/A3C_test_type_8.eps
 estimators/A3C/results/A3C_test_type_9.eps
 estimators/Type/models/typeAD_tf.ckpt.data-00000-of-00001
+*.svg
+*.eps
+*.eps

@@ -588,7 +588,7 @@ if __name__ == "__main__":
     # Train batch
     batch_size = 1
     # batch of memory ExpRep
-    minibatch_size = 100
+    minibatch_size = 500
     ExpRep = True
     
     iterations_episode = 100
@@ -612,7 +612,7 @@ if __name__ == "__main__":
     
  
 #    num_episodes = int(env.data_shape[0]/(iterations_episode)/10)
-    num_episodes = 200
+    num_episodes = 100
     valid_actions = list(range(len(env.attack_types))) # only detect type of attack
     num_actions = len(valid_actions)
     

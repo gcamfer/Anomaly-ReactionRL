@@ -14,6 +14,47 @@ import time
 import tensorflow as tf
 import tensorflow.contrib.layers as layer
 
+import itertools
+from sklearn.metrics import f1_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score
+from sklearn.metrics import  confusion_matrix
+
+
+
+
+def plot_confusion_matrix(cm, classes,
+                          normalize=False,
+                          title='Confusion matrix',
+                          cmap=plt.cm.Blues):
+    """
+    This function prints and plots the confusion matrix.
+    Normalization can be applied by setting `normalize=True`.
+    """
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+        print("Normalized confusion matrix")
+    else:
+        print('Confusion matrix, without normalization')
+
+    print(cm)
+
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=45)
+    plt.yticks(tick_marks, classes)
+
+    fmt = '.2f' if normalize else 'd'
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        plt.text(j, i, format(cm[i, j], fmt),
+                 horizontalalignment="center",
+                 color="white" if cm[i, j] > thresh else "black")
+
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
 
 
 
@@ -635,13 +676,13 @@ if __name__ == "__main__":
     # Train batch
     batch_size = 1
     # batch of memory ExpRep
-    minibatch_size = 100
+    minibatch_size = 500
     ExpRep = True
     
     iterations_episode = 100
 
     #3max_memory = 100
-    decay_rate = 0.99
+    decay_rate = 0.999
     gamma = 0.001
     
     
@@ -854,8 +895,25 @@ if __name__ == "__main__":
     ax.set_title('Test set scores, Acc = {:.2f}'.format(100*total_reward/len(states)))
     plt.legend(('Correct estimated','False negative','False positive'))
     #plt.show()
-    plt.savefig('results/test_dueling_network.eps', format='eps', dpi=1000)
+    plt.savefig('results/test_dueling_network.svg', format='svg', dpi=1000)
 
+    #%% Agregated precision
+
+    aggregated_data_test = np.argmax(labels.values,axis=1)
+    
+    print('Performance measures on Test data')
+    print('Accuracy =  {}'.format(accuracy_score( aggregated_data_test,actions)))
+    print('F1 =  {}'.format(f1_score(aggregated_data_test,actions, average='weighted')))
+    print('Precision_score =  {}'.format(precision_score(aggregated_data_test,actions, average='weighted')))
+    print('recall_score =  {}'.format(recall_score(aggregated_data_test,actions, average='weighted')))
+    
+    cnf_matrix = confusion_matrix(aggregated_data_test,actions)
+    np.set_printoptions(precision=2)
+    plt.figure()
+    plt.figure()
+    plot_confusion_matrix(cnf_matrix, classes=env.attack_types, normalize=True,
+                          title='Normalized confusion matrix')
+    plt.savefig('results/confusion_matrix_type_dueling.svg', format='svg', dpi=1000)
 
 
 

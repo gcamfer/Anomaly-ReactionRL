@@ -139,11 +139,18 @@ class data_cls:
         if self.loaded is False:
             self._load_df()
         
-        # Read the df rows
-        batch = self.df.iloc[self.index:self.index+batch_size]
         
-        self.index += batch_size
-        
+        indexes = list(range(self.index,self.index+batch_size))    
+        if max(indexes)>self.data_shape[0]-1:
+            dif = max(indexes)-self.data_shape[0]
+            indexes[len(indexes)-dif-1:len(indexes)] = list(range(dif+1))
+            self.index=batch_size-dif
+            batch = self.df.iloc[indexes]
+        else: 
+            batch = self.df.iloc[indexes]
+            self.index += batch_size    
+
+
         labels = batch['labels'].values
         
         del(batch['labels'])
