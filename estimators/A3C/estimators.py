@@ -92,8 +92,11 @@ class PolicyEstimator():
             # Get the predictions for the chosen actions only
             gather_indices = tf.range(batch_size) * tf.shape(self.probs)[1] + self.actions
             self.picked_action_probs = tf.gather(tf.reshape(self.probs, [-1]), gather_indices)
-    
-            self.losses = - (tf.log(self.picked_action_probs) * self.targets + 0.01 * self.entropy)
+            
+            # Exploratory parameter beta
+            beta = 0.1
+            
+            self.losses = - (tf.log(self.picked_action_probs) * self.targets + beta * self.entropy)
             self.loss = tf.reduce_sum(self.losses, name="loss")
     
             tf.summary.scalar(self.loss.op.name, self.loss)

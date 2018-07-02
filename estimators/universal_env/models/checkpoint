@@ -1,2 +1,0 @@
-model_checkpoint_path: "typeAD_tf.ckpt"
-all_model_checkpoint_paths: "typeAD_tf.ckpt"
