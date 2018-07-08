@@ -66,16 +66,11 @@ class data_cls:
         # If it does not exist, it's needed to format the data
         if not formated:
             ''' Formating the dataset for ready-2-use data'''
-            self.df = pd.read_csv(self.train_path,sep=',',names=self.column_names,index_col=False)
-            
-            if 'dificulty' in self.df.columns:
-                self.df.drop('dificulty', axis=1, inplace=True) #in case of difficulty     
-                
-            data2 = pd.read_csv(self.test_path,sep=',',names=self.column_names,index_col=False)
-            if 'dificulty' in data2:
-                del(data2['dificulty'])
+            self.df = pd.read_csv(self.train_path,sep=',',names=self.column_names,index_col=False,header=0)
+            test = pd.read_csv(self.test_path,sep=',',names=self.column_names,index_col=False,header=0)
+
             train_indx = self.df.shape[0]
-            frames = [self.df,data2]
+            frames = [self.df,test]
             self.df = pd.concat(frames)
             
             
@@ -83,6 +78,11 @@ class data_cls:
             labels = self.df['labels']
             self.df = self.df.drop('labels',axis=1)
             
+            # Remove all solicided columns
+            drop_names = self.df.filter(like='drop').columns
+            self.df = self.df.drop(drop_names,axis=1)
+
+            # Processing categorical and numerical columns
             num_cols = list(self.df._get_numeric_data().columns)
             cat_cols = list(set(self.df.columns)-set(num_cols))
             
@@ -93,8 +93,13 @@ class data_cls:
            
             
             # Normalization of the df
+            log_cols = self.df.filter(like='logarithm').columns
+            nat_cols =  list(set(self.df.columns)-set(log_cols))
 #            aux_df = (self.df-self.df.mean())/(self.df.max()-self.df.min())
-            self.df = (self.df)/(self.df.max()-self.df.min())
+#            self.df = (self.df)/(self.df.max()-self.df.min())
+            self.df[nat_cols] = self.df[nat_cols]/(self.df[nat_cols].max()-self.df[nat_cols].min())
+            self.df[log_cols] = np.log(self.df[log_cols])
+            self.df[log_cols] = self.df[log_cols]/(self.df[log_cols].max()-self.df[log_cols].min())
 
             # If na max and min = 0 so delete column
             self.df = self.df.dropna(axis=1)
@@ -132,8 +137,7 @@ class data_cls:
         labels = batch['labels'].map(self.attack_map).map(map_type).values
         del(batch['labels'])
             
-       
-        return batch,labels
+        return np.array(batch),labels
     
     def get_full(self):
 

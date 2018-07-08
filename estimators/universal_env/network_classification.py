@@ -4,7 +4,6 @@ Reinforcement learning Enviroment Definition for Network anomaly detection
 import logging.config
 from gym import  spaces
 import gym
-import numpy as np
 from helpers_data_preprocessing import data_cls
 
 class NetworkClassificationEnv(gym.Env,data_cls):
@@ -55,7 +54,7 @@ class NetworkClassificationEnv(gym.Env,data_cls):
         Reset the environment and send first observation
             states: array like of the new observation
         '''
-        self.states,self.labels = data_cls.get_batch(self,self.batch_size)
+        self.states,self.labels = self.get_batch(self.batch_size)
         self.counter = 0
         
         return self.states
@@ -76,7 +75,7 @@ class NetworkClassificationEnv(gym.Env,data_cls):
 #            ######################3
         # Update fails counter
         else: #fails ++
-            self.counter += 0
+            self.counter += 1
 
     def step(self,actions):
         '''

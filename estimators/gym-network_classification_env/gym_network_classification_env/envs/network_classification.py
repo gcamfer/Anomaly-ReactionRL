@@ -2,11 +2,11 @@
 Reinforcement learning Enviroment Definition for Network anomaly detection
 '''
 import logging.config
-from gym import  spaces
 import gym
-import numpy as np
-from helpers_data_preprocessing import data_cls
-
+from gym import error, spaces, utils
+from gym.utils import seeding
+#from helpers_data_preprocessing import data_cls
+from gym_network_classification_env.envs.helpers_data_preprocessing import data_cls
 class NetworkClassificationEnv(gym.Env,data_cls):
     '''
         Environment class definition. It represents the dynamics of the AD
@@ -24,9 +24,26 @@ class NetworkClassificationEnv(gym.Env,data_cls):
             batch_size: It represents the size of states and labels to be returned
             fails_episode: Number of fails allowed in an episode before it's done
     '''
-    def __init__(self,train_test,attack_map,**kwargs):
+    def __init__(self):
         self.__version__ = "0.0.1"
         logging.info("NetworkClassificationEnv - Version {}".format(self.__version__))
+        
+
+    def _update_state(self):
+        '''
+        Next enviroment observation
+        Returns:
+            states: array like of the new observation
+            labels: category of the new attacks
+        '''
+        self.states,self.labels = self.get_batch(self.batch_size)
+        
+
+    def reset(self,train_test,attack_map,**kwargs):
+        '''
+        Reset the environment and send first observation
+            states: array like of the new observation
+        '''
         data_cls.__init__(self,train_test,attack_map,**kwargs)
         self.data_shape = self.get_shape()
         self.batch_size = kwargs.get('batch_size',1) # experience replay -> batch = 1
@@ -39,24 +56,8 @@ class NetworkClassificationEnv(gym.Env,data_cls):
         self.observation_len = self.data_shape[1]-1
         
         self.counter = 0
-
-    def _update_state(self):
-        '''
-        Next enviroment observation
-        Returns:
-            states: array like of the new observation
-            labels: category of the new attacks
-        '''
-        self.states,self.labels = self.get_batch(self.batch_size)
         
-
-    def reset(self):
-        '''
-        Reset the environment and send first observation
-            states: array like of the new observation
-        '''
-        self.states,self.labels = data_cls.get_batch(self,self.batch_size)
-        self.counter = 0
+        self.states,self.labels = self.get_batch(self.batch_size)
         
         return self.states
     
@@ -76,7 +77,7 @@ class NetworkClassificationEnv(gym.Env,data_cls):
 #            ######################3
         # Update fails counter
         else: #fails ++
-            self.counter += 0
+            self.counter += 1
 
     def step(self,actions):
         '''
