@@ -85,9 +85,9 @@ class DuelingQnetwork():
         self.Input =  tf.placeholder(shape=[None,env.observation_len],dtype=tf.float32)
         
         
-        self.out1 = layer.fully_connected(inputs=self.Input,num_outputs=100)
-        self.out2 = layer.fully_connected(inputs=self.out1,num_outputs=100)
-        
+        self.out1 = layer.fully_connected(inputs=self.Input,num_outputs=50)
+        self.out2 = layer.fully_connected(inputs=self.out1,num_outputs=50)
+
         self.out3 = layer.fully_connected(inputs=self.out2,num_outputs=self.h_size)
         
         #We take the output from the final convolutional layer and split it into separate advantage and value streams.
@@ -268,7 +268,7 @@ class Agent(object):
         for row in range(Q_prime.shape[0]):
             best_next_actions = np.argwhere(Q_prime[row] == np.amax(Q_prime[row]))
             next_actions.append(best_next_actions[np.random.choice(len(best_next_actions))].item())
-        Q_prime_target = self.target_model_network.predict(sess,next_states)
+        Q_prime_target = self.target_model_network.predict(sess,states)
         
         # Compute Q(s,a)
         # Q-learning update
