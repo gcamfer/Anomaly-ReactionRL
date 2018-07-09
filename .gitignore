@@ -47,3 +47,7 @@ estimators/Type/models/typeAD_tf.ckpt.data-00000-of-00001
 *.svg
 *.eps
 *.eps
+*.data
+estimators/Type/results/train_type_improved.eps
+*.eps
+*.eps

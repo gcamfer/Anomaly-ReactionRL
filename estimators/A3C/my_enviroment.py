@@ -42,8 +42,18 @@ class my_env(data_cls):
         # Actualize new rewards == get_reward
         if actions == np.argmax(self.labels.values):
             self.reward = 1
+
+            
+            
+            
         else: #fails ++
             self.counter += 1
+            
+            
+            #Not equals: best fail between attaks but no normal
+            if (np.argmax(self.labels.values)!=0)&(actions!=0): #must be attack
+                self.reward = 0.5
+                
 
         # Get new state and new true values
         self._update_state()

@@ -22,21 +22,22 @@ def build_shared_network(X, add_summaries=False):
         num_outputs=256,
         activation_fn=tf.nn.relu, 
         scope="hidden1")
-    hidd_layer2 = tf.contrib.layers.fully_connected(
-        inputs=hidd_layer1,
-        num_outputs=256,
-        activation_fn=tf.nn.relu, 
-        scope="hidden2")
-    
+#    hidd_layer2 = tf.contrib.layers.fully_connected(
+#        inputs=hidd_layer1,
+#        num_outputs=256,
+#        activation_fn=tf.nn.relu, 
+#        scope="hidden2")
+#    
+#    
     out = tf.contrib.layers.fully_connected(
-        inputs=hidd_layer2,
+        inputs=hidd_layer1,
         num_outputs=256,
         scope="out")
     
     if add_summaries:
         tf.contrib.layers.summarize_activation(in_layer)
         tf.contrib.layers.summarize_activation(hidd_layer1)
-        tf.contrib.layers.summarize_activation(hidd_layer2)
+#        tf.contrib.layers.summarize_activation(hidd_layer2)
         tf.contrib.layers.summarize_activation(out)
     
     return out
@@ -104,7 +105,7 @@ class PolicyEstimator():
             tf.summary.histogram(self.entropy.op.name, self.entropy)
     
             if trainable:
-                self.optimizer = tf.train.AdamOptimizer(0.0002)
+                self.optimizer = tf.train.AdamOptimizer(0.0005)
 #                self.optimizer = tf.train.RMSPropOptimizer(0.00025, 0.99, 0.0, 1e-6)
                 self.grads_and_vars = self.optimizer.compute_gradients(self.loss)
                 self.grads_and_vars = [[grad, var] for grad, var in self.grads_and_vars if grad is not None]
@@ -170,7 +171,7 @@ class ValueEstimator():
             tf.summary.histogram("{}/values".format(prefix), self.logits)
     
             if trainable:
-                self.optimizer = tf.train.AdamOptimizer(0.0002)
+                self.optimizer = tf.train.AdamOptimizer(0.0005)
 #                self.optimizer = tf.train.RMSPropOptimizer(0.00025, 0.99, 0.0, 1e-6)
                 self.grads_and_vars = self.optimizer.compute_gradients(self.loss)
                 self.grads_and_vars = [[grad, var] for grad, var in self.grads_and_vars if grad is not None]
