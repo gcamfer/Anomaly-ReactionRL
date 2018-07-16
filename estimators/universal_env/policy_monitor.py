@@ -238,10 +238,10 @@ class PolicyMonitor(object):
         aggregated_data_test = labels
         
         print('Performance measures on Test data')
-        print('Accuracy =  {:.2f}'.format(accuracy_score( aggregated_data_test,all_actions)))
-        print('F1 =  {:.2f}'.format(f1_score(aggregated_data_test,all_actions, average='weighted')))
-        print('Precision_score =  {:.2f}'.format(precision_score(aggregated_data_test,all_actions, average='weighted')))
-        print('recall_score =  {:.2f}'.format(recall_score(aggregated_data_test,all_actions, average='weighted')))
+        print('Accuracy =  {:.4f}'.format(accuracy_score( aggregated_data_test,all_actions)))
+        print('F1 =  {:.4f}'.format(f1_score(aggregated_data_test,all_actions, average='weighted')))
+        print('Precision_score =  {:.4f}'.format(precision_score(aggregated_data_test,all_actions, average='weighted')))
+        print('recall_score =  {:.4f}'.format(recall_score(aggregated_data_test,all_actions, average='weighted')))
         
         cnf_matrix = confusion_matrix(aggregated_data_test,all_actions)
         np.set_printoptions(precision=2)

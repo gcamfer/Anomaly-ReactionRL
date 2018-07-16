@@ -10,14 +10,15 @@ class NetworkClassificationEnv(gym.Env,data_cls):
     '''
         Environment class definition. It represents the dynamics of the AD
         Args needed by data_cls:
+            train_test: If train it'll load formated train, if test it load formated test
+            attack_map: Maps the labels to each class
             col_names: list of all parameters in the dataset. Must contain 'label'
             train_path: Relative path in wich the train dataset is located
             test_path: Relative path in wich the test dataset is located
-            train_test: If train it'll load formated train, if test it load formated test
             formated_train_path: Relative path in wich the train dataset will be stored
             formated_test_path: Relative path in wich the test dataset will be stored
             attack_types: Names for the final class labels
-            attack_map: Maps the labels to each class
+            
             
         Args in my_env:
             batch_size: It represents the size of states and labels to be returned

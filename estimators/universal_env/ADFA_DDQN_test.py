@@ -2,9 +2,10 @@ import json
 import numpy as np
 import pandas as pd
 from keras.models import model_from_json
-from typeAD import RLenv
 import matplotlib.pyplot as plt
-from typeAD import huber_loss
+from ADFA_DDQN import huber_loss
+from network_classification import NetworkClassificationEnv
+
 
 import itertools
 from sklearn.metrics import f1_score
@@ -49,17 +50,29 @@ def plot_confusion_matrix(cm, classes,
 
 
 if __name__ == "__main__":
-    formated_test_path = "../../datasets/formated/formated_test_type.data"
+    formated_test_path = "../../datasets/formated/formated_test_ADFA.data"
 
 
-    with open("models/type_model.json", "r") as jfile:
+    with open("models/ADFA_DDQN.json", "r") as jfile:
         model = model_from_json(json.load(jfile))
-    model.load_weights("models/type_model.h5")
+    model.load_weights("models/ADFA_DDQN.h5")
 
     
     model.compile(loss=huber_loss,optimizer="sgd")
 
-    env = RLenv('test',formated_test_path = formated_test_path)
+    attack_map = {'Normal': 'Normal',
+                  'Generic': 'Generic',
+                  'Exploits': 'Exploits',
+                  'Fuzzers':'Fuzzers',
+                  'DoS':'DoS',
+                  'Reconnaissance':'Reconnaissance',
+                  'Analysis':'Analysis',
+                  'Backdoor':'Backdoor',
+                  'Shellcode':'Shellcode',
+                  'Worms':'Worms'
+                }
+
+    env = NetworkClassificationEnv('test',attack_map,formated_test_path = formated_test_path) 
     
     total_reward = 0
     
@@ -72,49 +85,31 @@ if __name__ == "__main__":
     actions = np.argmax(q,axis=1)        
     
     
-    
-    
-    
-    
-    true_labels += np.sum(labels).values
+    labs,true_labels = np.unique(labels,return_counts=True)
 
     for indx,a in enumerate(actions):
         estimated_labels[a] +=1              
-        if a == np.argmax(labels.iloc[indx].values):
+        if a == labels[indx]:
             total_reward += 1
             estimated_correct_labels[a] += 1
     
     
-    action_dummies = pd.get_dummies(actions)
-    posible_actions = np.arange(len(env.attack_types))
-    for non_existing_action in posible_actions:
-        if non_existing_action not in action_dummies.columns:
-            action_dummies[non_existing_action] = np.uint8(0)
-    
-
-    normal_f1_score = f1_score(labels['normal'].values,action_dummies[0].values)
-    dos_f1_score = f1_score(labels['DoS'].values,action_dummies[1].values)
-    probe_f1_score = f1_score(labels['Probe'].values,action_dummies[2].values)
-    r2l_f1_score = f1_score(labels['R2L'].values,action_dummies[3].values)
-    u2r_f1_score = f1_score(labels['U2R'].values,action_dummies[4].values)
-        
-    Accuracy = [normal_f1_score,dos_f1_score,probe_f1_score,r2l_f1_score,u2r_f1_score]
-    Mismatch = abs(estimated_correct_labels - true_labels)+abs(estimated_labels-estimated_correct_labels)
+    Accuracy = estimated_correct_labels / true_labels
+    Mismatch = estimated_labels - true_labels
 
     print('\r\nTotal reward: {} | Number of samples: {} | Accuracy = {}%'.format(total_reward,
           len(states),float(100*total_reward/len(states))))
-    outputs_df = pd.DataFrame(index = env.attack_types,columns = ["Estimated","Correct","Total","F1_score","Mismatch"])
+    outputs_df = pd.DataFrame(index = env.attack_types,columns = ["Estimated","Correct","Total","Acuracy"])
     for indx,att in enumerate(env.attack_types):
        outputs_df.iloc[indx].Estimated = estimated_labels[indx]
        outputs_df.iloc[indx].Correct = estimated_correct_labels[indx]
        outputs_df.iloc[indx].Total = true_labels[indx]
-       outputs_df.iloc[indx].F1_score = Accuracy[indx]*100
+       outputs_df.iloc[indx].Acuracy = Accuracy[indx]*100
        outputs_df.iloc[indx].Mismatch = abs(Mismatch[indx])
 
 
-        
+
     print(outputs_df)
-    
     #%%
     
     fig, ax = plt.subplots()
@@ -138,11 +133,11 @@ if __name__ == "__main__":
     plt.legend(('Correct estimated','False negative','False positive'))
     plt.tight_layout()
     #plt.show()
-    plt.savefig('results/test_type_improved.svg', format='svg', dpi=1000)
+    plt.savefig('results/ADFA_DDQN.svg', format='svg', dpi=1000)
 
     #%% Agregated precision
 
-    aggregated_data_test = np.argmax(labels.values,axis=1)
+    aggregated_data_test =labels
     
     print('Performance measures on Test data')
     print('Accuracy =  {:.4f}'.format(accuracy_score( aggregated_data_test,actions)))
@@ -156,4 +151,4 @@ if __name__ == "__main__":
     plt.figure()
     plot_confusion_matrix(cnf_matrix, classes=env.attack_types, normalize=True,
                           title='Normalized confusion matrix')
-    plt.savefig('results/confusion_matrix_type_imp.svg', format='svg', dpi=1000)
+    plt.savefig('results/confusion_matrix_ADFA_DDQN.svg', format='svg', dpi=1000)
