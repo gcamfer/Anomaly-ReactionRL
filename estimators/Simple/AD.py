@@ -264,9 +264,7 @@ if __name__ == "__main__":
     model.add(Dense(hidden_size, activation='relu'))
     model.add(Dense(num_actions))
     model.compile(sgd(lr=.2), "mse")
-    
-    plot_model(model,to_file='models/AD.png')
-    
+        
     reward_chain = []
     loss_chain = []
     
@@ -287,6 +285,7 @@ if __name__ == "__main__":
         # Define exploration to improve performance
         exploration = 1
         # Iteration in one episode
+        q = np.zeros([batch_size,num_actions])
         for i_iteration in range(iterations_episode):
             
             # get next action
