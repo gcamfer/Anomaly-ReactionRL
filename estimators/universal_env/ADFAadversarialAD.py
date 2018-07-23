@@ -20,7 +20,7 @@ from network_classification import NetworkClassificationEnv
 
 
 # Huber loss function        
-def huber_loss(y_true, y_pred, clip_value=1):
+def huber_loss(y_true, y_pred, clip_value=5):
     # Huber loss, see https://en.wikipedia.org/wiki/Huber_loss and
     # https://medium.com/@karpathy/yes-you-should-understand-backprop-e2f06eab496b
     # for details.
@@ -78,7 +78,7 @@ class QNetwork():
         
 #        optimizer = optimizers.SGD(learning_rate)
         # optimizer = optimizers.Adam(alpha=learning_rate)
-        optimizer = optimizers.Adam(0.0003)
+        optimizer = optimizers.Adam(0.0005)
         # optimizer = optimizers.RMSpropGraves(learning_rate, 0.95, self.momentum, 1e-2)
         
         # Compilation of the model with optimizer and loss
@@ -485,7 +485,7 @@ if __name__ == "__main__":
     def_hidden_size = 100
     def_hidden_layers = 2
     
-    def_learning_rate = .2
+    def_learning_rate = .3
     
     defender_agent = DefenderAgent(defender_valid_actions,env.observation_len,"EpsilonGreedy",
                           epoch_length = iterations_episode,
@@ -511,7 +511,7 @@ if __name__ == "__main__":
     attack_num_actions = len(attack_valid_actions)
 	
     att_epsilon = 1
-    min_epsilon = 0.75 # min value for exploration
+    min_epsilon = 0.99 # min value for exploration
 
     att_gamma = 0.001
     att_decay_rate = 0.99
