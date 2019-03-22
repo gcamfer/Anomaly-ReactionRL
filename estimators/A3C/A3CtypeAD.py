@@ -2,6 +2,8 @@
 Type anomaly detection file
 '''
 
+# Based on Denny Britz  A3C algorithm
+
 import tensorflow as tf
 
 import threading
