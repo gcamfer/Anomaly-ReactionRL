@@ -7,7 +7,7 @@ The dataset used is NSL-KDD with data of multiple anomalies
 
 Using deep Q-Learning with keras/tensorflow to generate the network
 
-Code associated to the paper: "Adversarial environment reinforcement learning algorithm for intrusion detection", G Caminero, M Lopez-Martin, B Carro, 
+Code associated with the paper: "Adversarial environment reinforcement learning algorithm for intrusion detection", G Caminero, M Lopez-Martin, B Carro, 
 Computer Networks, 2019
 ## Simple anomaly detection
 - Detects normal or anomaly
