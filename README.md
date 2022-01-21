@@ -6,6 +6,9 @@ Using Reinforcement Learning in order to detect anomalies and maybe a future res
 The dataset used is NSL-KDD with data of multiple anomalies
 
 Using deep Q-Learning with keras/tensorflow to generate the network
+
+Code associated to the paper: "Adversarial environment reinforcement learning algorithm for intrusion detection", G Caminero, M Lopez-Martin, B Carro, 
+Computer Networks, 2019
 ## Simple anomaly detection
 - Detects normal or anomaly
 - Train set in: [AD.py](https://github.com/gcamfer/Anomaly-ReactionRL/blob/master/estimators/Simple/AD.py)
