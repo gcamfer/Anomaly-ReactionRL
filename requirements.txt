@@ -1,4 +1,4 @@
-tensorflow==2.5.3
+tensorflow==2.6.4
 pandas==0.23.0
 numpy==1.21.0
 keras==2.2.4
